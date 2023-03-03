@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginView">
+    <fragment
+        android:id="@+id/loginView"
+        android:name="com.rat.ratatouille23.view.LoginView"
+        android:label="fragment_login_view"
+        tools:layout="@layout/fragment_login_view" >
+        <action
+            android:id="@+id/action_loginView_to_homeAmministratoreView"
+            app:destination="@id/homeAmministratoreView" />
+        <action
+            android:id="@+id/action_loginView_to_homeSupervisoreView"
+            app:destination="@id/homeSupervisoreView" />
+        <action
+            android:id="@+id/action_loginView_to_homeAddettoSalaView"
+            app:destination="@id/homeAddettoSalaView" />
+        <action
+            android:id="@+id/action_loginView_to_homeAddettoCucinaView"
+            app:destination="@id/homeAddettoCucinaView" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeAmministratoreView"
+        android:name="com.rat.ratatouille23.view.HomeAmministratoreView"
+        android:label="HomeAmministratoreView" />
+    <fragment
+        android:id="@+id/homeSupervisoreView"
+        android:name="com.rat.ratatouille23.view.HomeSupervisoreView"
+        android:label="HomeSupervisoreView" >
+        <action
+            android:id="@+id/action_homeSupervisoreView_to_dispensaView"
+            app:destination="@id/dispensaView" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeAddettoSalaView"
+        android:name="com.rat.ratatouille23.view.HomeAddettoSalaView"
+        android:label="HomeAddettoSalaView" />
+    <fragment
+        android:id="@+id/homeAddettoCucinaView"
+        android:name="com.rat.ratatouille23.view.HomeAddettoCucinaView"
+        android:label="HomeAddettoCucinaView" >
+        <action
+            android:id="@+id/action_homeAddettoCucinaView_to_dispensaView"
+            app:destination="@id/dispensaView" />
+    </fragment>
+    <fragment
+        android:id="@+id/dispensaView"
+        android:name="com.rat.ratatouille23.view.DispensaView"
+        android:label="fragment_dispensa_view"
+        tools:layout="@layout/fragment_dispensa_view" />
+</navigation>

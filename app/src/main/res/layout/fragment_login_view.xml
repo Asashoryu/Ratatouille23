@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.LoginFragment" >
+
+    <data>
+        <variable
+            name="loginViewModel"
+            type="com.rat.ratatouille23.viewmodel.LoginViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/nome_text"
+            android:layout_width="250dp"
+            android:layout_height="47dp"
+            android:hint="nome"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:padding="15dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.179" />
+
+        <EditText
+            android:id="@+id/password_text"
+            android:layout_width="250dp"
+            android:layout_height="47dp"
+            android:hint="password"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:padding="15dp"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nome_text"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="233dp"
+            android:layout_height="33dp"
+            android:onClick="@{() -> loginViewModel.login(nomeText.getText().toString(), passwordText.getText().toString())}"
+            android:text="login"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_text"
+            app:layout_constraintVertical_bias="0.584"
+            tools:ignore="HardcodedText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

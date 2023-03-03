@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.HomeSupervisoreView" >
+
+    <data>
+        <variable
+            name="homeSupervisoreViewModel"
+            type="com.rat.ratatouille23.viewmodel.HomeSupervisoreViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_menu"
+            android:layout_width="233dp"
+            android:layout_height="33dp"
+            android:text="menu"
+            android:onClick="@{() -> homeSupervisoreViewModel.setVaiAlMenu()}"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btn_dispensa"
+            android:layout_width="233dp"
+            android:layout_height="33dp"
+            android:text="dispensa"
+            android:onClick="@{() -> homeSupervisoreViewModel.setVaiAllaDispensa()}"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btn_conto"
+            android:layout_width="233dp"
+            android:layout_height="33dp"
+            android:text="conto"
+            android:onClick="@{() -> homeSupervisoreViewModel.setVaiAlConto()}"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btn_associa_ingredienti"
+            android:layout_width="233dp"
+            android:layout_height="33dp"
+            android:text="Associa ingredienti"
+            android:onClick="@{() -> homeSupervisoreViewModel.setVaiAdAssociaIngredienti()}"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+</layout>
