@@ -11,13 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rat.ratatouille23.R;
-import com.rat.ratatouille23.databinding.FragmentHomeAmministratoreViewBinding;
 import com.rat.ratatouille23.databinding.FragmentHomeSupervisoreViewBinding;
-import com.rat.ratatouille23.utility.NomeTipo;
-import com.rat.ratatouille23.viewmodel.HomeAmministratoreViewModel;
 import com.rat.ratatouille23.viewmodel.HomeSupervisoreViewModel;
 
-public class HomeSupervisoreView extends Fragment {
+public class HomeSupervisoreFragment extends Fragment {
 
     HomeSupervisoreViewModel homeSupervisoreViewModel;
     View fragmentView;
@@ -43,7 +40,7 @@ public class HomeSupervisoreView extends Fragment {
 
     public void osservaSeAndareAlMenu() {
         homeSupervisoreViewModel.vaiAlMenu.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
-            if (vaiAvanti.equals(NomeTipo.TRUE)) {
+            if (vaiAvanti) {
                 //TODO: naviga verso il menu
             }
         });
@@ -51,7 +48,7 @@ public class HomeSupervisoreView extends Fragment {
 
     public void osservaSeAndareAllaDispensa() {
         homeSupervisoreViewModel.vaiAllaDispensa.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
-            if (vaiAvanti.equals(NomeTipo.TRUE)) {
+            if (vaiAvanti) {
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_dispensaView);
             }
         });
@@ -59,7 +56,7 @@ public class HomeSupervisoreView extends Fragment {
 
     public void osservaSeAlConto() {
         homeSupervisoreViewModel.vaiAlConto.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
-            if (vaiAvanti.equals(NomeTipo.TRUE)) {
+            if (vaiAvanti) {
                 //TODO: naviga verso il conto
             }
         });
@@ -67,7 +64,7 @@ public class HomeSupervisoreView extends Fragment {
 
     public void osservaSeAssociareIngredienti() {
         homeSupervisoreViewModel.vaiAdAssociaIngredienti.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
-            if (vaiAvanti.equals(NomeTipo.TRUE)) {
+            if (vaiAvanti) {
                 //TODO: naviga verso gli ingredienti
             }
         });

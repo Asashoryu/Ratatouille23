@@ -3,32 +3,30 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.utility.NomeTipo;
-
 public class HomeAmministratoreViewModel extends ViewModel {
 
-    public MutableLiveData<String> vaiAlMenu = new MutableLiveData<>(NomeTipo.FALSE);
-    public MutableLiveData<String> vaiAlleStatistiche = new MutableLiveData<>(NomeTipo.FALSE);
-    public MutableLiveData<String> vaiAdAggiungiDipendente = new MutableLiveData<>(NomeTipo.FALSE);
-    public MutableLiveData<String> vaiAllaGestioneTavolo = new MutableLiveData<>(NomeTipo.FALSE);
+    public MutableLiveData<Boolean> vaiAlMenu = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> vaiAlleStatistiche = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> vaiAdAggiungiDipendente = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> vaiAllaGestioneTavolo = new MutableLiveData<>(false);
 
     public void setVaiAlMenu() {
-        vaiAlMenu.setValue(NomeTipo.TRUE);
-        vaiAlMenu.setValue(NomeTipo.FALSE);
+        vaiAlMenu.setValue(true);
+        vaiAlMenu.setValue(false);
     }
 
     public void setVaiAlleStatistiche() {
-        vaiAlleStatistiche.setValue(NomeTipo.TRUE);
-        vaiAlleStatistiche.setValue(NomeTipo.FALSE);
+        vaiAlleStatistiche.setValue(true);
+        vaiAlleStatistiche.setValue(false);
     }
 
     public void setVaiAdAggiungiDipendente() {
-        vaiAdAggiungiDipendente.setValue(NomeTipo.TRUE);
-        vaiAdAggiungiDipendente.setValue(NomeTipo.FALSE);
+        vaiAdAggiungiDipendente.setValue(true);
+        vaiAdAggiungiDipendente.setValue(false);
     }
 
     public void setVaiAllaGestioneTavolo() {
-        vaiAllaGestioneTavolo.setValue(NomeTipo.TRUE);
-        vaiAllaGestioneTavolo.setValue(NomeTipo.FALSE);
+        vaiAllaGestioneTavolo.setValue(true);
+        vaiAllaGestioneTavolo.setValue(false);
     }
 }

@@ -13,10 +13,9 @@ import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentLoginViewBinding;
-import com.rat.ratatouille23.utility.NomeTipo;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
 
-public class LoginView extends Fragment {
+public class LoginFragment extends Fragment {
 
     LoginViewModel loginViewModel;
     View fragmentView;
@@ -33,33 +32,48 @@ public class LoginView extends Fragment {
         loginBinding.setLoginViewModel(loginViewModel);
 
         osservaSeAndareAvanti();
+        osservaSeReimpostarePassword();
+        osservaMessaggioErrore();
 
         return fragmentView;
     }
 
+    public void osservaSeReimpostarePassword() {
+        loginViewModel.isVaiAReimpostaPassword.observe(getViewLifecycleOwner(), (isVaiAReimpostaPassword) -> {
+            if (isVaiAReimpostaPassword == true) {
+                loginViewModel.setFalseIsVaiAReimpostaPassword();
+                Navigation.findNavController(fragmentView).navigate(R.id.action_loginView_to_reimpostaPasswordFragment);
+            }
+        });
+    }
     public void osservaSeAndareAvanti() {
-        loginViewModel.loggato.observe(getViewLifecycleOwner(), (loggato) -> {
-            if (!loggato.equals(NomeTipo.FALSE)) {
-                if (loggato.equals(NomeTipo.AMMINISTRATORE)) {
-                    loginViewModel.setLoggatoFalse();
+        loginViewModel.isVaiAvanti.observe(getViewLifecycleOwner(), (isVaiAvanti) -> {
+            if (isVaiAvanti == true) {
+                if (loginViewModel.isUtenteAmministratore()) {
+                    loginViewModel.setFalseIsVaiAvanti();
                     Navigation.findNavController(fragmentView).navigate(R.id.action_loginView_to_homeAmministratoreView);
                 }
-                else if (loggato.equals(NomeTipo.SUPERVISORE)) {
-                    loginViewModel.setLoggatoFalse();
+                else if (loginViewModel.isUtenteSupervisore()) {
+                    loginViewModel.setFalseIsVaiAvanti();
                     Navigation.findNavController(fragmentView).navigate(R.id.action_loginView_to_homeSupervisoreView);
                 }
-                else if (loggato.equals(NomeTipo.ADDETTOSALA)) {
-                    loginViewModel.setLoggatoFalse();
+                else if (loginViewModel.isUtenteAddettoSala()) {
+                    loginViewModel.setFalseIsVaiAvanti();
                     Navigation.findNavController(fragmentView).navigate(R.id.action_loginView_to_homeAddettoSalaView);
                 }
-                else if (loggato.equals(NomeTipo.ADDETTOCUCINA)) {
-                    loginViewModel.setLoggatoFalse();
+                else if (loginViewModel.isUtenteAddettoCucina()) {
+                    loginViewModel.setFalseIsVaiAvanti();
                     Navigation.findNavController(fragmentView).navigate(R.id.action_loginView_to_homeAddettoCucinaView);
                 }
-                else {
-                    visualizzaToastConMessaggio(loggato);
-                    loginViewModel.setLoggatoFalse();
-                }
+            }
+        });
+    }
+
+    public void osservaMessaggioErrore() {
+        loginViewModel.messaggioLogin.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (loginViewModel.isNuovoMessaggioLogin()) {
+                visualizzaToastConMessaggio(loginViewModel.getMessaggioLogin());
+                loginViewModel.cancellaMessaggioLogin();
             }
         });
     }

@@ -1,46 +1,86 @@
 package com.rat.ratatouille23.viewmodel;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.rat.ratatouille23.R;
+import com.rat.ratatouille23.eccezioni.DipendenteNonTrovatoException;
+import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
-import com.rat.ratatouille23.utility.NomeTipo;
-
 
 public class LoginViewModel extends ViewModel {
 
-    private String nome;
-    private String password;
+    private Dipendente dipendente;
     private Repository repository;
 
-    public MutableLiveData<String> loggato = new MutableLiveData<>(NomeTipo.FALSE);
+    public MutableLiveData<Boolean> isVaiAvanti = new MutableLiveData<>(false);
+
+    public MutableLiveData<Boolean> isVaiAReimpostaPassword = new MutableLiveData<>(false);
+
+    public MutableLiveData<String> messaggioLogin = new MutableLiveData<>("");
 
     public LoginViewModel() {
         repository = Repository.getInstance();
         repository.setLoginViewModel(this);
     }
 
-    public void setLoggatoFalse() {
-        loggato.setValue(NomeTipo.FALSE);
-    }
-
-    public void setLoggato(String text) {
-        loggato.postValue(text);
-    }
-
     public void login(String nome, String password) {
         try {
             repository.login(nome, password);
-        } catch (Exception e) {
-            setLoggato(e.getMessage());
+            dipendente = repository.getDipendente();
+            if (dipendente.getReimpostata()) {
+                setIsVaiAvanti();
+            }
+            else {
+                setIsVaiAReimpostaPassword();
+            }
+        } catch (DipendenteNonTrovatoException dnte) {
+            dnte.printStackTrace();
+            setMessaggioLogin(dnte.getMessage());
         }
+    }
+
+    public void setMessaggioLogin(String nuovoMessaggioLogin) {
+        messaggioLogin.setValue(nuovoMessaggioLogin);
+    }
+
+    public String getMessaggioLogin() {
+        return messaggioLogin.getValue();
+    }
+
+    public Boolean isNuovoMessaggioLogin() {
+        return !getMessaggioLogin().equals("");
+    }
+
+    public void cancellaMessaggioLogin() {
+        messaggioLogin.setValue("");
+    }
+    public void setIsVaiAvanti() {
+        isVaiAvanti.setValue(true);
+    }
+    public void setFalseIsVaiAvanti() {
+        isVaiAvanti.setValue(false);
+    }
+
+    public void setIsVaiAReimpostaPassword() {
+        isVaiAReimpostaPassword.setValue(true);
+    }
+    public void setFalseIsVaiAReimpostaPassword() {
+        isVaiAReimpostaPassword.setValue(false);
+    }
+
+    public Boolean isUtenteAmministratore() {
+        return dipendente.getRuolo() == Dipendente.Ruolo.AMMINISTRATORE;
+    }
+
+    public Boolean isUtenteSupervisore() {
+        return dipendente.getRuolo() == Dipendente.Ruolo.SUPERVISORE;
+    }
+
+    public Boolean isUtenteAddettoSala() {
+        return dipendente.getRuolo() == Dipendente.Ruolo.ADDETTOSALA;
+    }
+
+    public Boolean isUtenteAddettoCucina() {
+        return dipendente.getRuolo() == Dipendente.Ruolo.ADDETTOCUCINA;
     }
 }

@@ -9,14 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeAddettoSalaViewBinding;
-import com.rat.ratatouille23.databinding.FragmentHomeSupervisoreViewBinding;
-import com.rat.ratatouille23.utility.NomeTipo;
 import com.rat.ratatouille23.viewmodel.HomeAddettoSalaViewModel;
-import com.rat.ratatouille23.viewmodel.HomeSupervisoreViewModel;
 
-public class HomeAddettoSalaView extends Fragment {
+public class HomeAddettoSalaFragment extends Fragment {
 
     HomeAddettoSalaViewModel homeAddettoSalaViewModel;
     View fragmentView;
@@ -39,7 +35,7 @@ public class HomeAddettoSalaView extends Fragment {
 
     public void osservaSeRegistrareOrdinazione() {
         homeAddettoSalaViewModel.vaiARegistraOrdinazione.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
-            if (vaiAvanti.equals(NomeTipo.TRUE)) {
+            if (vaiAvanti.equals(true)) {
                 //TODO: naviga verso la registrazione ordinazione
             }
         });
