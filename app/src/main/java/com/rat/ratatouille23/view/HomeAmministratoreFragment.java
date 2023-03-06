@@ -4,11 +4,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeAmministratoreViewBinding;
 import com.rat.ratatouille23.viewmodel.HomeAmministratoreViewModel;
 
@@ -39,7 +41,7 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAlMenu() {
         homeAmministratoreViewModel.vaiAlMenu.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                //TODO: naviga verso il menu
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_personalizzaMenuFragment);
             }
         });
     }

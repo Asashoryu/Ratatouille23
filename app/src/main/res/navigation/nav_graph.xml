@@ -28,7 +28,11 @@
     <fragment
         android:id="@+id/homeAmministratoreView"
         android:name="com.rat.ratatouille23.view.HomeAmministratoreFragment"
-        android:label="HomeAmministratoreView" />
+        android:label="HomeAmministratoreView" >
+        <action
+            android:id="@+id/action_homeAmministratoreView_to_personalizzaMenuFragment"
+            app:destination="@id/personalizzaMenuFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeSupervisoreView"
         android:name="com.rat.ratatouille23.view.HomeSupervisoreFragment"
@@ -36,6 +40,9 @@
         <action
             android:id="@+id/action_homeSupervisoreView_to_dispensaView"
             app:destination="@id/dispensaView" />
+        <action
+            android:id="@+id/action_homeSupervisoreView_to_personalizzaMenuFragment"
+            app:destination="@id/personalizzaMenuFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeAddettoSalaView"
@@ -68,4 +75,9 @@
         android:name="com.rat.ratatouille23.view.AggiungiIngredienteFragment"
         android:label="fragment_aggiungi_ingrediente"
         tools:layout="@layout/fragment_aggiungi_ingrediente" />
+    <fragment
+        android:id="@+id/personalizzaMenuFragment"
+        android:name="com.rat.ratatouille23.view.PersonalizzaMenuFragment"
+        android:label="fragment_personalizza_menu"
+        tools:layout="@layout/fragment_personalizza_menu" />
 </navigation>

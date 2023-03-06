@@ -24,8 +24,12 @@ public class DispensaViewModel extends ViewModel {
     }
 
     public void setListaIngredienti() {
-        listaIngredienti.setValue(repository.getIngredienti());
+        aggiornaListaIngredienti();
         repository.getIngredienti().forEach(ingrediente -> System.out.println(ingrediente.getNome()));
+    }
+
+    public void aggiornaListaIngredienti() {
+        listaIngredienti.setValue(repository.getIngredienti());
     }
 
     public void setVaiAdAggiungiIngrediente() {

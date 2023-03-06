@@ -35,6 +35,7 @@ public class DispensaFragment extends Fragment {
         dispensaBinding.setDispensaViewModel(dispensaViewModel);
 
         impostaIngredientiItemAdapter();
+
         osservaCambientoIngredienti();
         osservaSeAggiungereIngrediente();
 

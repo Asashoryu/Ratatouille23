@@ -2,12 +2,16 @@ package com.rat.ratatouille23.repository;
 
 import com.rat.ratatouille23.eccezioni.DipendenteNonTrovatoException;
 import com.rat.ratatouille23.eccezioni.ReimpostaPasswordException;
+import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.model.Menu;
+import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.view.AggiungiIngredienteFragment;
 import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
+import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
 import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
 
 import java.util.ArrayList;
@@ -17,6 +21,8 @@ public class Repository {
     private Dipendente dipendente;
 
     private ArrayList<Ingrediente> inventario;
+
+    private Menu menu;
     private static Repository questaRepository = null;
 
     private static LoginViewModel loginViewModel;
@@ -26,6 +32,8 @@ public class Repository {
     private static AggiungiIngredienteViewModel aggiungiIngredienteViewModel;
 
     private static DispensaViewModel dispensaViewModel;
+
+    private static PersonalizzaMenuViewModel personalizzaMenuViewModel;
     public Repository() {
 
     }
@@ -48,6 +56,8 @@ public class Repository {
     public void login(String nome, String password) throws DipendenteNonTrovatoException {
         // TODO: chiedi al backend i dati
         // TODO: inizializza tutti i dati presi dal backend nelle classi del model
+
+        menu = getMenuTest();
 
         dipendente = loginTest(nome, password);
     }
@@ -105,6 +115,49 @@ public class Repository {
         dispensaViewModel.setListaIngredienti();
     }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Menu getMenuTest() {
+        Menu menu = new Menu();
+        menu.setCategorie(getCategorieTest());
+        return menu;
+    }
+
+    public ArrayList<Categoria> getCategorieTest() {
+        ArrayList<Categoria> categorie = new ArrayList<>();
+        categorie.add(new Categoria("antipasti"));
+        categorie.get(0).setPortate(getPortateTest1());
+        categorie.add(new Categoria("primi"));
+        categorie.get(1).setPortate(getPortateTest2());
+        categorie.add(new Categoria("secondi"));
+        categorie.add(new Categoria("contorni"));
+        categorie.add(new Categoria("bevande"));
+        categorie.add(new Categoria("dolci"));
+
+        return categorie;
+    }
+
+    public ArrayList<Portata> getPortateTest1() {
+        ArrayList<Portata> portate = new ArrayList<>();
+        portate.add(new Portata("granchio", "235", null, null));
+        portate.add(new Portata("carne umana", "666", null, null));
+        portate.add(new Portata("lingua di bue", "70", null, null));
+        portate.add(new Portata("arancia meccanica", "88", null, null));
+        return portate;
+    }
+
+    public ArrayList<Portata> getPortateTest2() {
+        ArrayList<Portata> portate = new ArrayList<>();
+        portate.add(new Portata("pasta asciutta", "8", null, null));
+        portate.add(new Portata("parmigiana", "12", null, null));
+        return portate;
+    }
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
     public void setLoginViewModel(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;
     }
@@ -121,4 +174,7 @@ public class Repository {
     }
 
 
+    public void setPersonalizzaMenuViewModel(PersonalizzaMenuViewModel personalizzaMenuViewModel) {
+        this.personalizzaMenuViewModel = personalizzaMenuViewModel;
+    }
 }

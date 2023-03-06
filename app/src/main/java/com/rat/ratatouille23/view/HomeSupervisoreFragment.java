@@ -41,7 +41,7 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAndareAlMenu() {
         homeSupervisoreViewModel.vaiAlMenu.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                //TODO: naviga verso il menu
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_personalizzaMenuFragment);
             }
         });
     }
