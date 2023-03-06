@@ -2,20 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.AggiungiDipendenteView" >
+    tools:context=".view.AggiungiIngredienteFragment" >
 
     <data>
         <variable
-            name="aggiungiDipendenteViewModel"
-            type="com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel" />
+            name="aggiungiIngredienteViewModel"
+            type="com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -28,7 +26,7 @@
                 android:text="nome" />
 
             <EditText
-                android:id="@+id/edtxt_nome"
+                android:id="@+id/nome_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -48,7 +46,7 @@
                 android:text="costo"/>
 
             <EditText
-                android:id="@+id/edtxt_costo"
+                android:id="@+id/costo_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,7 +66,7 @@
                 android:text="quantita" />
 
             <EditText
-                android:id="@+id/edtxt_quantita"
+                android:id="@+id/quantita_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -76,7 +74,7 @@
                 android:inputType="textPersonName"/>
 
             <EditText
-                android:id="@+id/editTextNumber"
+                android:id="@+id/unitaMisura_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -96,7 +94,7 @@
                 android:text="descrizione" />
 
             <EditText
-                android:id="@+id/edtxt_descrizione"
+                android:id="@+id/descrizione_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -109,14 +107,15 @@
             android:id="@+id/btn_aggiungi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="aggiungi" />
+            android:text="aggiungi"
+            android:onClick="@{() -> aggiungiIngredienteViewModel.aggiungiIngrediente(nomeText.getText().toString(), costoText.getText().toString(), quantitaText.getText().toString(), unitaMisuraText.getText().toString(), descrizioneText.getText().toString())}" />
 
         <Button
             android:id="@+id/btn_annulla"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="annulla" />
-
+            android:text="annulla"
+            android:onClick="@{() -> aggiungiIngredienteViewModel.setTornaIndietro()}" />
 
     </LinearLayout>
 </layout>

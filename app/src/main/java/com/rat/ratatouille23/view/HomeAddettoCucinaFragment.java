@@ -12,10 +12,9 @@ import android.view.ViewGroup;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeAddettoCucinaViewBinding;
-import com.rat.ratatouille23.utility.NomeTipo;
 import com.rat.ratatouille23.viewmodel.HomeAddettoCucinaViewModel;
 
-public class HomeAddettoCucinaView extends Fragment {
+public class HomeAddettoCucinaFragment extends Fragment {
 
     HomeAddettoCucinaViewModel homeAddettoCucinaViewModel;
     View fragmentView;
@@ -39,7 +38,7 @@ public class HomeAddettoCucinaView extends Fragment {
 
     public void osservaSeAndareAllaDispensa() {
         homeAddettoCucinaViewModel.vaiAllaDispensa.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
-            if (vaiAvanti.equals(NomeTipo.TRUE)) {
+            if (vaiAvanti.equals(true)) {
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoCucinaView_to_dispensaView);
 
             }
@@ -48,7 +47,7 @@ public class HomeAddettoCucinaView extends Fragment {
 
     public void osservaSeAssociareIngredienti() {
         homeAddettoCucinaViewModel.vaiAdAssociaIngredienti.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
-            if (vaiAvanti.equals(NomeTipo.TRUE)) {
+            if (vaiAvanti.equals(true)) {
                 //TODO: naviga verso gli ingredienti
             }
         });

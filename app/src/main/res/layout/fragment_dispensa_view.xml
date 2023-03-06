@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.DispensaView" >
+    tools:context=".view.DispensaFragment" >
 
     <data>
         <variable
@@ -29,6 +29,7 @@
                 android:layout_height="33dp"
                 android:text="aggiungi ingrediente"
                 android:textColor="@android:color/black"
+                android:onClick="@{() -> dispensaViewModel.setVaiAdAggiungiIngrediente()}"
                 app:layout_constraintBottom_toTopOf="@+id/btn_rimuovi_ingrediente"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

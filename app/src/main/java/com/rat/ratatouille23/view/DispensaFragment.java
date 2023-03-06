@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,9 @@ import android.view.ViewGroup;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentDispensaViewBinding;
-import com.rat.ratatouille23.databinding.FragmentHomeAddettoCucinaViewBinding;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
-import com.rat.ratatouille23.viewmodel.HomeAddettoCucinaViewModel;
 
-public class DispensaView extends Fragment {
+public class DispensaFragment extends Fragment {
 
     DispensaViewModel dispensaViewModel;
     View fragmentView;
@@ -37,6 +36,7 @@ public class DispensaView extends Fragment {
 
         impostaIngredientiItemAdapter();
         osservaCambientoIngredienti();
+        osservaSeAggiungereIngrediente();
 
         return fragmentView;
     }
@@ -50,6 +50,15 @@ public class DispensaView extends Fragment {
         dispensaViewModel.listaIngredienti.observe(getViewLifecycleOwner(), listaIngredienti ->
         {
             ingredientiItemAdapter.setData(listaIngredienti);
+        });
+    }
+
+    public void osservaSeAggiungereIngrediente() {
+        dispensaViewModel.vaiAdAggiungiIngrediente.observe(getViewLifecycleOwner(), (isVaiAvanti) -> {
+            if (isVaiAvanti == true) {
+                dispensaViewModel.setFalseVaiAdAggiungiIngrediente();
+                Navigation.findNavController(fragmentView).navigate(R.id.action_dispensaView_to_aggiungiIngredienteFragment);
+            }
         });
     }
 }

@@ -6,7 +6,7 @@
     app:startDestination="@id/loginView">
     <fragment
         android:id="@+id/loginView"
-        android:name="com.rat.ratatouille23.view.LoginView"
+        android:name="com.rat.ratatouille23.view.LoginFragment"
         android:label="fragment_login_view"
         tools:layout="@layout/fragment_login_view" >
         <action
@@ -21,14 +21,17 @@
         <action
             android:id="@+id/action_loginView_to_homeAddettoCucinaView"
             app:destination="@id/homeAddettoCucinaView" />
+        <action
+            android:id="@+id/action_loginView_to_reimpostaPasswordFragment"
+            app:destination="@id/reimpostaPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeAmministratoreView"
-        android:name="com.rat.ratatouille23.view.HomeAmministratoreView"
+        android:name="com.rat.ratatouille23.view.HomeAmministratoreFragment"
         android:label="HomeAmministratoreView" />
     <fragment
         android:id="@+id/homeSupervisoreView"
-        android:name="com.rat.ratatouille23.view.HomeSupervisoreView"
+        android:name="com.rat.ratatouille23.view.HomeSupervisoreFragment"
         android:label="HomeSupervisoreView" >
         <action
             android:id="@+id/action_homeSupervisoreView_to_dispensaView"
@@ -36,11 +39,11 @@
     </fragment>
     <fragment
         android:id="@+id/homeAddettoSalaView"
-        android:name="com.rat.ratatouille23.view.HomeAddettoSalaView"
+        android:name="com.rat.ratatouille23.view.HomeAddettoSalaFragment"
         android:label="HomeAddettoSalaView" />
     <fragment
         android:id="@+id/homeAddettoCucinaView"
-        android:name="com.rat.ratatouille23.view.HomeAddettoCucinaView"
+        android:name="com.rat.ratatouille23.view.HomeAddettoCucinaFragment"
         android:label="HomeAddettoCucinaView" >
         <action
             android:id="@+id/action_homeAddettoCucinaView_to_dispensaView"
@@ -48,7 +51,21 @@
     </fragment>
     <fragment
         android:id="@+id/dispensaView"
-        android:name="com.rat.ratatouille23.view.DispensaView"
+        android:name="com.rat.ratatouille23.view.DispensaFragment"
         android:label="fragment_dispensa_view"
-        tools:layout="@layout/fragment_dispensa_view" />
+        tools:layout="@layout/fragment_dispensa_view" >
+        <action
+            android:id="@+id/action_dispensaView_to_aggiungiIngredienteFragment"
+            app:destination="@id/aggiungiIngredienteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reimpostaPasswordFragment"
+        android:name="com.rat.ratatouille23.view.ReimpostaPasswordFragment"
+        android:label="fragment_reimposta_password"
+        tools:layout="@layout/fragment_reimposta_password" />
+    <fragment
+        android:id="@+id/aggiungiIngredienteFragment"
+        android:name="com.rat.ratatouille23.view.AggiungiIngredienteFragment"
+        android:label="fragment_aggiungi_ingrediente"
+        tools:layout="@layout/fragment_aggiungi_ingrediente" />
 </navigation>

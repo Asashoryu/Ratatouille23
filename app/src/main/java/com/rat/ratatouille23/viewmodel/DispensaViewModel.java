@@ -14,6 +14,8 @@ public class DispensaViewModel extends ViewModel {
     Repository repository;
     public MutableLiveData<ArrayList<Ingrediente>> listaIngredienti = new MutableLiveData<ArrayList<Ingrediente>>();
 
+    public MutableLiveData<Boolean> vaiAdAggiungiIngrediente = new MutableLiveData<>(false);
+
     public DispensaViewModel() {
         repository = Repository.getInstance();
         repository.setDispensaViewModel(this);
@@ -24,5 +26,12 @@ public class DispensaViewModel extends ViewModel {
     public void setListaIngredienti() {
         listaIngredienti.setValue(repository.getIngredienti());
         repository.getIngredienti().forEach(ingrediente -> System.out.println(ingrediente.getNome()));
+    }
+
+    public void setVaiAdAggiungiIngrediente() {
+        vaiAdAggiungiIngrediente.setValue(true);
+    }
+    public void setFalseVaiAdAggiungiIngrediente() {
+        vaiAdAggiungiIngrediente.setValue(false);
     }
 }
