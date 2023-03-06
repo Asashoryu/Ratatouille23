@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.HomeAddettoCucinaFragment" >
 
@@ -9,28 +10,48 @@
             type="com.rat.ratatouille23.viewmodel.HomeAddettoCucinaViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/blue_dark">
 
-        <Button
+        <ImageView
+            android:id="@+id/titolo"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginHorizontal="15dp"
+            android:src="@drawable/titolo"
+            app:layout_constraintBottom_toTopOf="@+id/btn_dispensa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/btn_dispensa"
-            android:layout_width="233dp"
-            android:layout_height="33dp"
-            android:text="dispensa"
+            android:layout_width="220dp"
+            android:layout_height="115dp"
             android:onClick="@{() -> homeAddettoCucinaViewModel.setVaiAllaDispensa()}"
-            android:textColor="@android:color/black"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/dispenza" />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_associa_ingredienti"
-            android:layout_width="233dp"
-            android:layout_height="33dp"
-            android:text="Associa ingredienti"
+            android:layout_width="220dp"
+            android:layout_height="115dp"
             android:onClick="@{() -> homeAddettoCucinaViewModel.setVaiAdAssociaIngredienti()}"
-            android:textColor="@android:color/black"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/aggiungi_portata" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="50dp"
+            app:constraint_referenced_ids="btn_dispensa,btn_associa_ingredienti"
+            app:flow_horizontalStyle="spread"
+            app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titolo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
