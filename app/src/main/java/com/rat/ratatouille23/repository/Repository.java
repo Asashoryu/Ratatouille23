@@ -1,5 +1,6 @@
 package com.rat.ratatouille23.repository;
 
+import com.rat.ratatouille23.eccezioni.CategoriaNonTrovataException;
 import com.rat.ratatouille23.eccezioni.DipendenteNonTrovatoException;
 import com.rat.ratatouille23.eccezioni.ReimpostaPasswordException;
 import com.rat.ratatouille23.model.Categoria;
@@ -9,12 +10,17 @@ import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.view.AggiungiIngredienteFragment;
 import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
+import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
 import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
 import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Repository {
 
@@ -34,6 +40,8 @@ public class Repository {
     private static DispensaViewModel dispensaViewModel;
 
     private static PersonalizzaMenuViewModel personalizzaMenuViewModel;
+
+    private static AggiungiPortataViewModel aggiungiPortataViewModel;
     public Repository() {
 
     }
@@ -158,6 +166,27 @@ public class Repository {
         this.menu = menu;
     }
 
+    public void aggiungiPortataAllaCategoria(Portata portata, String nomeCategoria) throws CategoriaNonTrovataException {
+        Categoria categoria = getCategoriaDiNome(nomeCategoria);
+        aggiungiPortataAllaCategoria(portata, categoria);
+        personalizzaMenuViewModel.aggiornaListaPortate(categoria);
+    }
+
+    public Categoria getCategoriaDiNome(String nomeCategoria) throws CategoriaNonTrovataException {
+        List<Categoria> listaCategorieTrovate;
+        listaCategorieTrovate = menu.getCategorie().stream().filter(categoria -> categoria.getNome().equals(nomeCategoria)).collect(Collectors.toList());
+        if (listaCategorieTrovate.equals(Collections.emptyList())) {
+            throw new CategoriaNonTrovataException();
+        }
+        else {
+            return listaCategorieTrovate.get(0);
+        }
+    }
+
+    public void aggiungiPortataAllaCategoria(Portata portata, Categoria Categoria) {
+        Categoria.getPortate().add(portata);
+    }
+
     public void setLoginViewModel(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;
     }
@@ -176,5 +205,9 @@ public class Repository {
 
     public void setPersonalizzaMenuViewModel(PersonalizzaMenuViewModel personalizzaMenuViewModel) {
         this.personalizzaMenuViewModel = personalizzaMenuViewModel;
+    }
+
+    public void setAggiungiPortataViewModel(AggiungiPortataViewModel aggiungiPortataViewModel) {
+        this.aggiungiPortataViewModel = aggiungiPortataViewModel;
     }
 }

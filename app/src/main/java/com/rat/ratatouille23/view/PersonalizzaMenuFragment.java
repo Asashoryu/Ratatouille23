@@ -4,11 +4,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
 import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.adapter.PortateItemAdapter;
@@ -40,6 +42,9 @@ public class PersonalizzaMenuFragment extends Fragment {
 
         osservaCambientoCategorie();
         osservaCambientoPortate();
+
+        osservaSeAggiungerePortata();
+
         return fragmentView;
     }
 
@@ -66,6 +71,15 @@ public class PersonalizzaMenuFragment extends Fragment {
         personalizzaMenuViewModel.listaPortate.observe(getViewLifecycleOwner(), listaPortate ->
         {
             portateItemAdapter.setData(listaPortate);
+        });
+    }
+
+    public void osservaSeAggiungerePortata() {
+        personalizzaMenuViewModel.vaiAdAggiungiPortata.observe(getViewLifecycleOwner(), (isVaiAvanti) -> {
+            if (isVaiAvanti == true) {
+                personalizzaMenuViewModel.setFalseVaiAdAggiungiPortata();
+                Navigation.findNavController(fragmentView).navigate(R.id.action_personalizzaMenuFragment_to_aggiungiPortataFragment);
+            }
         });
     }
 }

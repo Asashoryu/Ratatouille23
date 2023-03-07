@@ -58,6 +58,7 @@
                 android:layout_height="33dp"
                 android:text="+ portata"
                 android:textColor="@android:color/black"
+                android:onClick="@{() -> personalizzaMenuViewModel.setVaiAdAggiungiPortata()}"
                 tools:ignore="HardcodedText" />
 
         </LinearLayout>

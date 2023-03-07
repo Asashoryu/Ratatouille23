@@ -7,6 +7,5 @@ public class Ratatouille23Exception extends Exception {
 
     public Ratatouille23Exception() {
         super();
-
     }
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.model.Categoria;
-import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
@@ -21,6 +21,8 @@ public class PersonalizzaMenuViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<Portata>> listaPortate = new MutableLiveData<ArrayList<Portata>>();
 
+    public MutableLiveData<Boolean> vaiAdAggiungiPortata = new MutableLiveData<>(false);
+
     public PersonalizzaMenuViewModel() {
         repository = Repository.getInstance();
         repository.setPersonalizzaMenuViewModel(this);
@@ -36,5 +38,12 @@ public class PersonalizzaMenuViewModel extends ViewModel {
     }
     public void aggiornaListaPortate(Categoria categoriaSelezionata) {
         listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
+    }
+
+    public void setVaiAdAggiungiPortata() {
+        vaiAdAggiungiPortata.setValue(true);
+    }
+    public void setFalseVaiAdAggiungiPortata() {
+        vaiAdAggiungiPortata.setValue(false);
     }
 }

@@ -79,5 +79,14 @@
         android:id="@+id/personalizzaMenuFragment"
         android:name="com.rat.ratatouille23.view.PersonalizzaMenuFragment"
         android:label="fragment_personalizza_menu"
-        tools:layout="@layout/fragment_personalizza_menu" />
+        tools:layout="@layout/fragment_personalizza_menu" >
+        <action
+            android:id="@+id/action_personalizzaMenuFragment_to_aggiungiPortataFragment"
+            app:destination="@id/aggiungiPortataFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aggiungiPortataFragment"
+        android:name="com.rat.ratatouille23.view.AggiungiPortataFragment"
+        android:label="fragment_aggiungi_portata"
+        tools:layout="@layout/fragment_aggiungi_portata" />
 </navigation>

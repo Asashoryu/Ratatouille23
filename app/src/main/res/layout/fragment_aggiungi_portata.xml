@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.AggiungiPortataFragment" >
+
+    <data>
+        <variable
+            name="aggiungiPortataViewModel"
+            type="com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="nome" />
+
+            <EditText
+                android:id="@+id/nome_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_costo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="costo"/>
+
+            <EditText
+                android:id="@+id/costo_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_quantita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="categoria" />
+
+            <EditText
+                android:id="@+id/categoria_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_lista_allergeni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="lista allergeni" />
+
+            <EditText
+                android:id="@+id/lista_allergeni_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_descrizione"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="descrizione" />
+
+            <EditText
+                android:id="@+id/descrizione_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_aggiungi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="aggiungi"
+            android:onClick="@{() -> aggiungiPortataViewModel.aggiungiPortata(nomeText.getText().toString(), costoText.getText().toString(), categoriaText.getText().toString(), descrizioneText.getText().toString())}" />
+
+        <Button
+            android:id="@+id/btn_annulla"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="annulla"
+            android:onClick="@{() -> aggiungiPortataViewModel.setTornaIndietro()}" />
+
+    </LinearLayout>
+</layout>
