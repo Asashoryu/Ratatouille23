@@ -12,15 +12,21 @@ public class Dipendente {
     };
 
     private String nome;
+
+    private String cognome;
+
+    private String username;
     private Ruolo ruolo = Ruolo.NONIMPOSTATO;
     private String password;
     private Boolean isReimpostata;
 
-    public Dipendente(String nome, String password, Boolean isReimpostata, Ruolo ruolo) {
+    public Dipendente(String nome, String cognome, String username, Ruolo ruolo, String password, Boolean isReimpostata) {
         setNome(nome);
+        setCognome(cognome);
+        setUsername(username);
+        setRuolo(ruolo);
         setPassword(password);
         setReimpostata(isReimpostata);
-        setRuolo(ruolo);
     }
 
     public void reimpostaPassword(String nuovaPassword) throws ReimpostaPasswordException {
@@ -62,5 +68,21 @@ public class Dipendente {
 
     private void setReimpostata(Boolean reimpostata) {
         isReimpostata = reimpostata;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

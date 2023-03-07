@@ -57,7 +57,7 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAggiungereDipendente() {
         homeAmministratoreViewModel.vaiAdAggiungiDipendente.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                //TODO: naviga verso aggiungi dipendente
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_aggiungiDipendenteFragment);
             }
         });
     }

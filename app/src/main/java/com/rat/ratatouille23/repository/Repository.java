@@ -9,6 +9,7 @@ import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.view.AggiungiIngredienteFragment;
+import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
@@ -42,6 +43,8 @@ public class Repository {
     private static PersonalizzaMenuViewModel personalizzaMenuViewModel;
 
     private static AggiungiPortataViewModel aggiungiPortataViewModel;
+
+    private static AggiungiDipendenteViewModel aggiungiDipendenteViewModel;
     public Repository() {
 
     }
@@ -61,30 +64,30 @@ public class Repository {
         this.dipendente = dipendente;
     }
 
-    public void login(String nome, String password) throws DipendenteNonTrovatoException {
+    public void login(String username, String password) throws DipendenteNonTrovatoException {
         // TODO: chiedi al backend i dati
         // TODO: inizializza tutti i dati presi dal backend nelle classi del model
 
         menu = getMenuTest();
 
-        dipendente = loginTest(nome, password);
+        dipendente = loginTest(username, password);
     }
 
-    public Dipendente loginTest(String nome, String password) throws DipendenteNonTrovatoException {
-        if (nome.equals("a") && password.equals("a")) {
-            return new Dipendente(nome, password, true, Dipendente.Ruolo.AMMINISTRATORE);
+    public Dipendente loginTest(String username, String password) throws DipendenteNonTrovatoException {
+        if (username.equals("a") && password.equals("a")) {
+            return new Dipendente("Joe", "Amministratore", username, Dipendente.Ruolo.AMMINISTRATORE, password, true);
         }
-        else if (nome.equals("s" )&& password.equals("s")) {
-            return new Dipendente(nome, password, true, Dipendente.Ruolo.SUPERVISORE);
+        else if (username.equals("s" )&& password.equals("s")) {
+            return new Dipendente("Joe", "Supervisore", username, Dipendente.Ruolo.SUPERVISORE, password, true);
         }
-        else if (nome.equals("as") && password.equals("as")) {
-            return new Dipendente(nome, password, true, Dipendente.Ruolo.ADDETTOSALA);
+        else if (username.equals("as") && password.equals("as")) {
+            return new Dipendente("Joe", "AddettoSala", username, Dipendente.Ruolo.ADDETTOSALA, password, true);
         }
-        else if (nome.equals("ac") && password.equals("ac")) {
-            return new Dipendente(nome, password, true, Dipendente.Ruolo.ADDETTOCUCINA);
+        else if (username.equals("ac") && password.equals("ac")) {
+            return new Dipendente("Joe", "AddettoCucina", username, Dipendente.Ruolo.ADDETTOCUCINA, password, true);
         }
-        else if (nome.equals("re") && password.equals("re")) {
-            return new Dipendente(nome, password, false, Dipendente.Ruolo.ADDETTOCUCINA);
+        else if (username.equals("re") && password.equals("re")) {
+            return new Dipendente("Joe", "AddettoCucinaNonImpostato", username, Dipendente.Ruolo.ADDETTOCUCINA, password, true);
         }
         else {
             throw new DipendenteNonTrovatoException();
@@ -120,6 +123,9 @@ public class Repository {
     public void aggiungiIngrediente(Ingrediente ingrediente) {
         //TODO: inserire l'ingrediente nel backend
         inventario.add(ingrediente);
+    }
+
+    public void aggiornaListaIngredienti() {
         dispensaViewModel.setListaIngredienti();
     }
 
@@ -183,6 +189,10 @@ public class Repository {
         }
     }
 
+    public void aggiungiDipendente(Dipendente dipendente) {
+        //TODO: inserire il dipendente nel backend
+    }
+
     public void aggiungiPortataAllaCategoria(Portata portata, Categoria Categoria) {
         Categoria.getPortate().add(portata);
     }
@@ -209,5 +219,9 @@ public class Repository {
 
     public void setAggiungiPortataViewModel(AggiungiPortataViewModel aggiungiPortataViewModel) {
         this.aggiungiPortataViewModel = aggiungiPortataViewModel;
+    }
+
+    public void setAggiungiDipendenteViewModel(AggiungiDipendenteViewModel aggiungiDipendenteViewModel) {
+        this.aggiungiDipendenteViewModel = aggiungiDipendenteViewModel;
     }
 }

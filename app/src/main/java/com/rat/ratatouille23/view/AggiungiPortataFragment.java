@@ -22,8 +22,6 @@ public class AggiungiPortataFragment extends Fragment {
     View fragmentView;
     FragmentAggiungiPortataBinding aggiungiPortataBinding;
 
-    IngredientiItemAdapter ingredientiItemAdapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

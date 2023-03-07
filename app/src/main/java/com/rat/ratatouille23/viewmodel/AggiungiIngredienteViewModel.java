@@ -25,7 +25,10 @@ public class AggiungiIngredienteViewModel extends ViewModel {
         ingrediente = null;
         ingrediente = new Ingrediente(nome, costo, quantita, unitaMisura, descrizione);
         System.err.println(nome + costo + quantita + unitaMisura + descrizione);
+
         repository.aggiungiIngrediente(ingrediente);
+        repository.aggiornaListaIngredienti();
+
         setTornaIndietro();
     }
 
