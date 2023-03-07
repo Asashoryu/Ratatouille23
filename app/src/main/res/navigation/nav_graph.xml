@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_homeAmministratoreView_to_personalizzaMenuFragment"
             app:destination="@id/personalizzaMenuFragment" />
+        <action
+            android:id="@+id/action_homeAmministratoreView_to_aggiungiDipendenteFragment"
+            app:destination="@id/aggiungiDipendenteFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeSupervisoreView"
@@ -89,4 +92,9 @@
         android:name="com.rat.ratatouille23.view.AggiungiPortataFragment"
         android:label="fragment_aggiungi_portata"
         tools:layout="@layout/fragment_aggiungi_portata" />
+    <fragment
+        android:id="@+id/aggiungiDipendenteFragment"
+        android:name="com.rat.ratatouille23.view.AggiungiDipendenteFragment"
+        android:label="fragment_aggiungi_dipendente"
+        tools:layout="@layout/fragment_aggiungi_dipendente" />
 </navigation>
