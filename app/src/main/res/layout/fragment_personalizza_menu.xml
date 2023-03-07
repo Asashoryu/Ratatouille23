@@ -10,58 +10,51 @@
             type="com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel" />
     </data>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:background="@color/blue_dark">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista_portate"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:layout_margin="25dp"
+            android:background="@drawable/border_custom"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/btn_aggiungi_portate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lista_categorie"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="top"
-                android:paddingVertical="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista_categorie"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="25dp"
+            android:paddingVertical="10dp"
+            android:background="@drawable/btn_yellow_custom"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_aggiungi_portate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lista_portate" />
 
-            <Button
-                android:id="@+id/btn_aggiungi_categorie"
-                android:layout_width="wrap_content"
-                android:layout_height="33dp"
-                android:text="+ categoria"
-                android:textColor="@android:color/black"
-                tools:ignore="HardcodedText" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/btn_aggiungi_portate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/btn_custom"
+            android:onClick="@{() -> personalizzaMenuViewModel.setVaiAdAggiungiPortata()}"
+            android:text="aggiungi portata"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="HardcodedText" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lista_portate"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="top"
-                android:paddingVertical="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            <Button
-                android:id="@+id/btn_aggiungi_portate"
-                android:layout_width="wrap_content"
-                android:layout_height="33dp"
-                android:text="+ portata"
-                android:textColor="@android:color/black"
-                android:onClick="@{() -> personalizzaMenuViewModel.setVaiAdAggiungiPortata()}"
-                tools:ignore="HardcodedText" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
