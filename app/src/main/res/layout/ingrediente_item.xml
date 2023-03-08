@@ -15,27 +15,46 @@
         android:layout_margin="1dp"
         app:cardElevation="4dp"
         app:cardCornerRadius="4dp" >
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@color/blue_dark" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="5dp"
+            android:paddingVertical="5dp"
+            android:background="@drawable/btn_yellow_custom" >
+
             <TextView
                 android:id="@+id/item_nome_ingrediente"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:padding="8dp"
-                android:text="@{ingrediente.nome}"/>
+                android:text="@{ingrediente.nome}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/item_quantità_ingrediente"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:gravity="end"
                 android:padding="8dp"
-                android:text="@{ingrediente.quantita}"/>
+                android:text="@{ingrediente.quantita}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
 
     </androidx.cardview.widget.CardView>
 </layout>

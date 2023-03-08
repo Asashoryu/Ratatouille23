@@ -9,43 +9,63 @@
             name="dispensaViewModel"
             type="com.rat.ratatouille23.viewmodel.DispensaViewModel" />
     </data>
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/blue_dark">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lista_ingredienti"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="top"
+            android:layout_margin="25dp"
+            android:background="@drawable/border_custom"
+            android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layout_constraintBottom_toTopOf="@+id/flow4"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="25dp">
 
-            <Button
-                android:id="@+id/btn_aggiungi_ingrediente"
-                android:layout_width="233dp"
-                android:layout_height="33dp"
-                android:text="aggiungi ingrediente"
-                android:textColor="@android:color/black"
-                android:onClick="@{() -> dispensaViewModel.setVaiAdAggiungiIngrediente()}"
-                app:layout_constraintBottom_toTopOf="@+id/btn_rimuovi_ingrediente"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="HardcodedText" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lista_ingredienti"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:paddingVertical="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <Button
-                android:id="@+id/btn_rimuovi_ingrediente"
-                android:layout_width="233dp"
-                android:layout_height="33dp"
-                android:text="rimuovi ingrediente"
-                android:textColor="@android:color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="HardcodedText" />
+        </FrameLayout>
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_aggiungi_ingrediente"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_yellow_custom"
+            android:onClick="@{() -> dispensaViewModel.setVaiAdAggiungiIngrediente()}"
+            android:text="aggiungi ingrediente"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btn_rimuovi_ingrediente"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_yellow_custom"
+            android:text="rimuovi ingrediente"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="25dp"
+            app:constraint_referenced_ids="btn_aggiungi_ingrediente,btn_rimuovi_ingrediente"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
