@@ -21,11 +21,7 @@
             android:layout_height="wrap_content"
             android:text="nome"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/txt_costo"
-            app:layout_constraintEnd_toStartOf="@+id/nome_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/nome_text"
@@ -34,11 +30,7 @@
             android:layout_weight="1"
             android:background="@drawable/et_custom"
             android:ems="10"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@+id/costo_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/txt_nome"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/txt_costo"
@@ -46,24 +38,23 @@
             android:layout_height="wrap_content"
             android:text="costo"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/txt_categoria"
-            app:layout_constraintEnd_toStartOf="@+id/costo_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_nome" />
+            android:textSize="20dp" />
 
-        <EditText
-            android:id="@+id/costo_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/et_custom"
-            android:ems="10"
-            android:inputType="numberDecimal"
-            app:layout_constraintBottom_toTopOf="@+id/categoria_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/txt_costo"
-            app:layout_constraintTop_toBottomOf="@id/nome_text" />
+        <FrameLayout
+            android:id="@+id/costo_frame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/costo_text"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/et_custom"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/txt_categoria"
@@ -71,11 +62,7 @@
             android:layout_height="wrap_content"
             android:text="categoria"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/txt_lista_allergeni"
-            app:layout_constraintEnd_toStartOf="@+id/categoria_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_costo" />
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/categoria_text"
@@ -84,11 +71,7 @@
             android:layout_weight="1"
             android:background="@drawable/et_custom"
             android:ems="10"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@+id/lista_allergeni_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/txt_categoria"
-            app:layout_constraintTop_toBottomOf="@id/costo_text" />
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/txt_lista_allergeni"
@@ -96,11 +79,7 @@
             android:layout_height="wrap_content"
             android:text="lista allergeni"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/txt_descrizione"
-            app:layout_constraintEnd_toStartOf="@+id/lista_allergeni_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_categoria" />
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/lista_allergeni_text"
@@ -109,11 +88,7 @@
             android:layout_weight="1"
             android:background="@drawable/et_custom"
             android:ems="10"
-            android:inputType="textMultiLine"
-            app:layout_constraintBottom_toTopOf="@+id/descrizione_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/txt_lista_allergeni"
-            app:layout_constraintTop_toBottomOf="@id/categoria_text" />
+            android:inputType="textMultiLine" />
 
         <TextView
             android:id="@+id/txt_descrizione"
@@ -121,11 +96,7 @@
             android:layout_height="wrap_content"
             android:text="descrizione"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/descrizione_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_lista_allergeni" />
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/descrizione_text"
@@ -134,11 +105,7 @@
             android:layout_weight="1"
             android:background="@drawable/et_custom"
             android:ems="10"
-            android:inputType="textMultiLine"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/txt_descrizione"
-            app:layout_constraintTop_toBottomOf="@id/lista_allergeni_text" />
+            android:inputType="textMultiLine" />
 
         <Button
             android:id="@+id/btn_aggiungi"
@@ -180,7 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:constraint_referenced_ids="nome_text,costo_text,categoria_text,lista_allergeni_text,descrizione_text"
+            app:constraint_referenced_ids="nome_text,costo_frame,categoria_text,lista_allergeni_text,descrizione_text"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/flow_txt"
