@@ -8,14 +8,17 @@ import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.view.AggiungiIngredienteFragment;
 import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
+import com.rat.ratatouille23.viewmodel.OrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
 import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
+import com.rat.ratatouille23.viewmodel.ScegliTavoloOrdinazioneViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +31,10 @@ public class Repository {
     private Dipendente dipendente;
 
     private ArrayList<Ingrediente> inventario;
+
+    private ArrayList<Tavolo> tavoli;
+
+    private Tavolo tavoloSelezionato;
 
     private Menu menu;
     private static Repository questaRepository = null;
@@ -45,6 +52,11 @@ public class Repository {
     private static AggiungiPortataViewModel aggiungiPortataViewModel;
 
     private static AggiungiDipendenteViewModel aggiungiDipendenteViewModel;
+
+    private static ScegliTavoloOrdinazioneViewModel scegliTavoloOrdinazioneViewModel;
+
+    private static OrdinazioneViewModel ordinazioneViewModel;
+
     public Repository() {
 
     }
@@ -69,6 +81,8 @@ public class Repository {
         // TODO: inizializza tutti i dati presi dal backend nelle classi del model
 
         menu = getMenuTest();
+
+        tavoli = getTavoliTest();
 
         dipendente = loginTest(username, password);
     }
@@ -118,6 +132,21 @@ public class Repository {
         ingredienti.add(new Ingrediente("Burro", "1 kg"));
 
         return ingredienti;
+    }
+
+    public ArrayList<Tavolo> getTavoliTest() {
+        ArrayList<Tavolo> tavoli = new ArrayList<>();
+        tavoli.add(new Tavolo("1", true));
+        tavoli.add(new Tavolo("2", true));
+        tavoli.add(new Tavolo("3", true));
+        tavoli.add(new Tavolo("4", true));
+        tavoli.add(new Tavolo("5", true));
+        tavoli.add(new Tavolo("6", true));
+        tavoli.add(new Tavolo("7", true));
+        tavoli.add(new Tavolo("8", true));
+        tavoli.add(new Tavolo("9", true));
+
+        return tavoli;
     }
 
     public void aggiungiIngrediente(Ingrediente ingrediente) {
@@ -197,6 +226,18 @@ public class Repository {
         Categoria.getPortate().add(portata);
     }
 
+    public ArrayList<Tavolo> getTavoli() {
+        return tavoli;
+    }
+
+    public void setTavoloSelezionato(Tavolo tavolo) {
+        this.tavoloSelezionato = tavolo;
+    }
+
+    public Tavolo getTavoloSelezionato() {
+        return tavoloSelezionato;
+    }
+
     public void setLoginViewModel(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;
     }
@@ -223,5 +264,13 @@ public class Repository {
 
     public void setAggiungiDipendenteViewModel(AggiungiDipendenteViewModel aggiungiDipendenteViewModel) {
         this.aggiungiDipendenteViewModel = aggiungiDipendenteViewModel;
+    }
+
+    public void setScegliTavoloOrdinazioneViewModel(ScegliTavoloOrdinazioneViewModel scegliTavoloOrdinazioneViewModel) {
+        this.scegliTavoloOrdinazioneViewModel = scegliTavoloOrdinazioneViewModel;
+    }
+
+    public void setOrdinazioneViewModel(OrdinazioneViewModel ordinazioneViewModel) {
+        this.ordinazioneViewModel = ordinazioneViewModel;
     }
 }

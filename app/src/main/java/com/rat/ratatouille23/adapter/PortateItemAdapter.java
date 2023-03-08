@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rat.ratatouille23.adapter.PortateItemAdapter;
 import com.rat.ratatouille23.databinding.PortataItemBinding;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.Portata;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,11 @@ public class PortateItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private ArrayList<Portata> data = new ArrayList<>();
 
+    private OnPortataCliccata onPortataCliccata;
+
+    public PortateItemAdapter(OnPortataCliccata onPortataCliccata) {
+        this.onPortataCliccata = onPortataCliccata;
+    }
     public void setData(ArrayList<Portata> data) {
         this.data = data;
         notifyDataSetChanged();
@@ -25,6 +31,7 @@ public class PortateItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         PortataItemBinding portataBinding;
+        OnPortataCliccata onPortataCliccata;
 
         public ViewHolder(@NonNull PortataItemBinding binding) {
             super(binding.getRoot());
@@ -37,16 +44,19 @@ public class PortateItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return new PortateItemAdapter.ViewHolder(binding);
         }
 
+        public void aggiungiAzione(OnPortataCliccata onPortataCliccata) {
+            this.onPortataCliccata = onPortataCliccata;
+        }
+
         public void bind(Portata portata) {
             portataBinding.setPortata(portata);
 
             portataBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    System.err.println("il valore dell'portata cliccato è " + portata);
-                    if (portata != null) {
-                        System.out.println(portata.getNome());
-                    }
+                    System.err.println("il valore dell'portata cliccato è " + portata.getNome());
+                    onPortataCliccata.azione(portata);
+                    System.err.println("item portate adapter finito " + portata.getNome());
                 }
             });
         }
@@ -56,7 +66,10 @@ public class PortateItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public PortateItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new view, which defines the UI of the list item
-        return PortateItemAdapter.ViewHolder.inflateFrom(parent);
+        ViewHolder viewHolder;
+        viewHolder = PortateItemAdapter.ViewHolder.inflateFrom(parent);
+        viewHolder.aggiungiAzione(onPortataCliccata);
+        return viewHolder;
     }
 
     @Override
@@ -68,5 +81,9 @@ public class PortateItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public interface OnPortataCliccata {
+        public void azione(Portata portata);
     }
 }

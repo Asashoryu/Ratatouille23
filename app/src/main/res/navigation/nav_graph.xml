@@ -50,7 +50,11 @@
     <fragment
         android:id="@+id/homeAddettoSalaView"
         android:name="com.rat.ratatouille23.view.HomeAddettoSalaFragment"
-        android:label="HomeAddettoSalaView" />
+        android:label="HomeAddettoSalaView" >
+        <action
+            android:id="@+id/action_homeAddettoSalaView_to_scegliTavoloOrdinazioneFragment"
+            app:destination="@id/scegliTavoloOrdinazioneFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeAddettoCucinaView"
         android:name="com.rat.ratatouille23.view.HomeAddettoCucinaFragment"
@@ -97,4 +101,18 @@
         android:name="com.rat.ratatouille23.view.AggiungiDipendenteFragment"
         android:label="fragment_aggiungi_dipendente"
         tools:layout="@layout/fragment_aggiungi_dipendente" />
+    <fragment
+        android:id="@+id/ordinazioneFragment"
+        android:name="com.rat.ratatouille23.view.OrdinazioneFragment"
+        android:label="fragment_ordinazione"
+        tools:layout="@layout/fragment_ordinazione" />
+    <fragment
+        android:id="@+id/scegliTavoloOrdinazioneFragment"
+        android:name="com.rat.ratatouille23.view.ScegliTavoloOrdinazioneFragment"
+        android:label="fragment_scegli_tavolo_ordinazione"
+        tools:layout="@layout/fragment_scegli_tavolo_ordinazione" >
+        <action
+            android:id="@+id/action_scegliTavoloOrdinazioneFragment_to_ordinazioneFragment"
+            app:destination="@id/ordinazioneFragment" />
+    </fragment>
 </navigation>
