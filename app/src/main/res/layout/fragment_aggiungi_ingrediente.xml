@@ -10,112 +10,154 @@
             type="com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/blue_dark">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/txt_nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/txt_nome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="nome" />
+            android:text="nome"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
-            <EditText
-                android:id="@+id/nome_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/nome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/txt_costo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="costo"/>
+            android:background="@drawable/et_custom"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txt_costo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="costo"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <FrameLayout
+            android:id="@+id/costo_frame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
 
             <EditText
                 android:id="@+id/costo_text"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/et_custom"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"/>
+                android:inputType="numberDecimal" />
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/txt_quantita"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/txt_quantita"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="quantita" />
+            android:text="quantita"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/quantita_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
 
             <EditText
                 android:id="@+id/quantita_text"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/et_custom"
                 android:ems="10"
-                android:inputType="textPersonName"/>
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/unitaMisura_text"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/et_custom"
                 android:ems="10"
-                android:inputType="number" />
+                android:inputType="number"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/quantita_text"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/txt_descrizione"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/txt_descrizione"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="descrizione" />
+            android:text="descrizione"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
-            <EditText
-                android:id="@+id/descrizione_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName"/>
-
-        </LinearLayout>
+        <EditText
+            android:id="@+id/descrizione_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/et_custom"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/btn_aggiungi"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="aggiungi"
-            android:onClick="@{() -> aggiungiIngredienteViewModel.aggiungiIngrediente(nomeText.getText().toString(), costoText.getText().toString(), quantitaText.getText().toString(), unitaMisuraText.getText().toString(), descrizioneText.getText().toString())}" />
+            android:onClick="@{() -> aggiungiIngredienteViewModel.aggiungiIngrediente(nomeText.getText().toString(), costoText.getText().toString(), quantitaText.getText().toString(), unitaMisuraText.getText().toString(), descrizioneText.getText().toString())}"
+            android:text="aggiungi" />
 
         <Button
             android:id="@+id/btn_annulla"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="annulla"
-            android:onClick="@{() -> aggiungiIngredienteViewModel.setTornaIndietro()}" />
+            android:onClick="@{() -> aggiungiIngredienteViewModel.setTornaIndietro()}"
+            android:text="annulla" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="25dp"
+            app:constraint_referenced_ids="btn_aggiungi,btn_annulla"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="txt_nome,txt_costo,txt_quantita,txt_descrizione"
+            app:layout_constraintBottom_toTopOf="@+id/flow_button"
+            app:layout_constraintEnd_toStartOf="@id/flow_et"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_et"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="nome_text,costo_frame,quantita_layout,descrizione_text"
+            app:layout_constraintBottom_toTopOf="@+id/flow_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/flow_txt"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

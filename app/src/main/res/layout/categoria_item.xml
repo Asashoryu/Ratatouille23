@@ -10,21 +10,21 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="4dp" >
+        android:layout_marginHorizontal="10dp"
+        android:paddingHorizontal="2dp">
         <LinearLayout
+            android:background="@color/vanilla"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
             <TextView
                 android:id="@+id/item_nome_ingrediente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:padding="8dp"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:paddingHorizontal="8dp"
                 android:text="@{categoria.nome}"/>
 
         </LinearLayout>
