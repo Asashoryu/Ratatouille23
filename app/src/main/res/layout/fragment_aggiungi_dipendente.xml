@@ -10,125 +10,145 @@
             type="com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@color/blue_dark">
 
         <TextView
             android:id="@+id/txt_nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="nome" />
+            android:text="nome"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/nome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/et_custom"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/txt_cognome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="cognome"/>
+            android:text="cognome"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/cognome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/et_custom"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <TextView
             android:id="@+id/txt_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username" />
+            android:text="username"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/username_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/et_custom"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <TextView
             android:id="@+id/txt_ruolo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ruolo" />
+            android:text="ruolo"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/ruolo_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/et_custom"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <TextView
             android:id="@+id/txt_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="password" />
+            android:text="password"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/password_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/et_custom"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_aggiungi"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:onClick="@{() -> aggiungiDipendenteViewModel.aggiungiDipendente(nomeText.getText().toString(), cognomeText.getText().toString(), usernameText.getText().toString(), ruoloText.getText().toString(), passwordText.getText().toString())}"
+            android:text="aggiungi"
+            android:textColor="@color/black" />
 
-    <Button
-        android:id="@+id/btn_aggiungi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="aggiungi"
-        android:onClick="@{() -> aggiungiDipendenteViewModel.aggiungiDipendente(nomeText.getText().toString(), cognomeText.getText().toString(), usernameText.getText().toString(), ruoloText.getText().toString(), passwordText.getText().toString())}" />
+        <Button
+            android:id="@+id/btn_annulla"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:onClick="@{() -> aggiungiDipendenteViewModel.setTornaIndietro()}"
+            android:text="annulla"
+            android:textColor="@color/black" />
 
-    <Button
-        android:id="@+id/btn_annulla"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="annulla"
-        android:onClick="@{() -> aggiungiDipendenteViewModel.setTornaIndietro()}" />
-    </LinearLayout>
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="25dp"
+            app:constraint_referenced_ids="btn_aggiungi,btn_annulla"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="txt_nome,txt_cognome,txt_username,txt_ruolo,txt_password"
+            app:layout_constraintBottom_toTopOf="@+id/flow_button"
+            app:layout_constraintEnd_toStartOf="@id/flow_et"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_et"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="nome_text,cognome_text,username_text,ruolo_text,password_text"
+            app:layout_constraintBottom_toTopOf="@+id/flow_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_username"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
