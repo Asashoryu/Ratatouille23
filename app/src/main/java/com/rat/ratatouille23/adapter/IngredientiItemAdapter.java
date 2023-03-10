@@ -9,12 +9,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rat.ratatouille23.databinding.IngredienteItemBinding;
 import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.model.Ingrediente;
 
 import java.util.ArrayList;
 
 public class IngredientiItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<Ingrediente> data = new ArrayList<>();
+
+    private OnIngredienteCliccato onIngredienteCliccato;
+
+    public IngredientiItemAdapter(OnIngredienteCliccato onIngredienteCliccato) {
+        this.onIngredienteCliccato = onIngredienteCliccato;
+    }
 
     public void setData(ArrayList<Ingrediente> data) {
         this.data = data;
@@ -25,6 +32,8 @@ public class IngredientiItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         IngredienteItemBinding ingredienteBinding;
 
+        OnIngredienteCliccato onIngredienteCliccato;
+
         public ViewHolder(@NonNull IngredienteItemBinding binding) {
             super(binding.getRoot());
             this.ingredienteBinding = binding;
@@ -34,6 +43,10 @@ public class IngredientiItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             @NonNull IngredienteItemBinding binding = IngredienteItemBinding.inflate(layoutInflater, parent, false);
             return new IngredientiItemAdapter.ViewHolder(binding);
+        }
+
+        public void aggiungiAzione(OnIngredienteCliccato onIngredienteCliccato) {
+            this.onIngredienteCliccato = onIngredienteCliccato;
         }
 
         public void bind(Ingrediente ingrediente) {
@@ -55,7 +68,10 @@ public class IngredientiItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public IngredientiItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new view, which defines the UI of the list item
-        return IngredientiItemAdapter.ViewHolder.inflateFrom(parent);
+        IngredientiItemAdapter.ViewHolder viewHolder;
+        viewHolder = IngredientiItemAdapter.ViewHolder.inflateFrom(parent);
+        viewHolder.aggiungiAzione(onIngredienteCliccato);
+        return viewHolder;
     }
 
     @Override
@@ -67,5 +83,9 @@ public class IngredientiItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public interface OnIngredienteCliccato {
+        public void azione(Ingrediente ingrediente);
     }
 }

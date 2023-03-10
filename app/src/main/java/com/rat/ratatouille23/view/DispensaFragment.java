@@ -43,7 +43,7 @@ public class DispensaFragment extends Fragment {
     }
 
     public void impostaIngredientiItemAdapter() {
-        ingredientiItemAdapter = new IngredientiItemAdapter();
+        ingredientiItemAdapter = new IngredientiItemAdapter((ingrediente)-> {});
         dispensaBinding.listaIngredienti.setAdapter(ingredientiItemAdapter);
     }
 

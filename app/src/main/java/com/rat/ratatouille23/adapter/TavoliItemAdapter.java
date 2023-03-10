@@ -16,7 +16,7 @@ public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private ArrayList<Tavolo> data = new ArrayList<>();
 
-    private static TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato;
+    private OnTavoloCliccato onTavoloCliccato;
 
     public TavoliItemAdapter(TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato) {
         this.onTavoloCliccato = onTavoloCliccato;
@@ -31,6 +31,8 @@ public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         TavoloItemBinding tavoloBinding;
 
+        TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato;
+
         public ViewHolder(@NonNull TavoloItemBinding binding) {
             super(binding.getRoot());
             this.tavoloBinding = binding;
@@ -42,6 +44,10 @@ public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return new TavoliItemAdapter.ViewHolder(binding);
         }
 
+        public void aggiungiAzione(TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato) {
+            this.onTavoloCliccato = onTavoloCliccato;
+        }
+
         public void bind(Tavolo tavolo) {
             tavoloBinding.setTavolo(tavolo);
 
@@ -49,7 +55,7 @@ public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View view) {
                     System.err.println("il valore dell'tavolo cliccato è " + tavolo);
-                    onTavoloCliccato.naviga(tavolo);
+                    onTavoloCliccato.azione(tavolo);
                 }
             });
         }
@@ -59,7 +65,10 @@ public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public TavoliItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new view, which defines the UI of the list item
-        return TavoliItemAdapter.ViewHolder.inflateFrom(parent);
+        TavoliItemAdapter.ViewHolder viewHolder;
+        viewHolder = TavoliItemAdapter.ViewHolder.inflateFrom(parent);
+        viewHolder.aggiungiAzione(onTavoloCliccato);
+        return viewHolder;
     }
 
     @Override
@@ -75,6 +84,6 @@ public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnTavoloCliccato {
-        public void naviga(Tavolo tavolo);
+        public void azione(Tavolo tavolo);
     }
 }
