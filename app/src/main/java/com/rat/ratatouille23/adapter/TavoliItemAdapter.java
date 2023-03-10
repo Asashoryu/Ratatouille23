@@ -7,41 +7,80 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rat.ratatouille23.databinding.TavoloDisponibileItemBinding;
 import com.rat.ratatouille23.databinding.TavoloItemBinding;
+import com.rat.ratatouille23.databinding.TavoloOccupatoItemBinding;
 import com.rat.ratatouille23.model.Tavolo;
 
 import java.util.ArrayList;
 
 public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<Tavolo> data = new ArrayList<>();
+    private ArrayList<Tavolo> tavoli = new ArrayList<>();
 
     private OnTavoloCliccato onTavoloCliccato;
+
+    private final int OCCUPATO = 1;
+    private final int DISPONIBILE = 2;
 
     public TavoliItemAdapter(TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato) {
         this.onTavoloCliccato = onTavoloCliccato;
     }
 
-    public void setData(ArrayList<Tavolo> data) {
-        this.data = data;
+    public void setData(ArrayList<Tavolo> tavoli) {
+        this.tavoli = tavoli;
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class TavoloDisponibileViewHolder extends RecyclerView.ViewHolder {
 
-        TavoloItemBinding tavoloBinding;
+        TavoloDisponibileItemBinding tavoloBinding;
 
         TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato;
 
-        public ViewHolder(@NonNull TavoloItemBinding binding) {
+        public TavoloDisponibileViewHolder(@NonNull TavoloDisponibileItemBinding binding) {
             super(binding.getRoot());
             this.tavoloBinding = binding;
         }
 
-        public static TavoliItemAdapter.ViewHolder inflateFrom(ViewGroup parent) {
+        public static TavoliItemAdapter.TavoloDisponibileViewHolder inflateFrom(ViewGroup parent) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            @NonNull TavoloItemBinding binding = TavoloItemBinding.inflate(layoutInflater, parent, false);
-            return new TavoliItemAdapter.ViewHolder(binding);
+            @NonNull TavoloDisponibileItemBinding binding = TavoloDisponibileItemBinding.inflate(layoutInflater, parent, false);
+            return new TavoliItemAdapter.TavoloDisponibileViewHolder(binding);
+        }
+
+        public void aggiungiAzione(TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato) {
+            this.onTavoloCliccato = onTavoloCliccato;
+        }
+
+        public void bind(Tavolo tavolo) {
+            tavoloBinding.setTavolo(tavolo);
+
+            tavoloBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    System.err.println("il valore dell'tavolo cliccato è " + tavolo);
+                    onTavoloCliccato.azione(tavolo);
+                }
+            });
+        }
+    }
+
+    public static class TavoloOccupatoViewHolder extends RecyclerView.ViewHolder {
+
+        TavoloOccupatoItemBinding tavoloBinding;
+
+        TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato;
+
+        public TavoloOccupatoViewHolder(@NonNull TavoloOccupatoItemBinding binding) {
+            super(binding.getRoot());
+            this.tavoloBinding = binding;
+        }
+
+        public static TavoliItemAdapter.TavoloOccupatoViewHolder inflateFrom(ViewGroup parent) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            @NonNull TavoloOccupatoItemBinding binding = TavoloOccupatoItemBinding.inflate(layoutInflater, parent, false);
+            return new TavoliItemAdapter.TavoloOccupatoViewHolder(binding);
         }
 
         public void aggiungiAzione(TavoliItemAdapter.OnTavoloCliccato onTavoloCliccato) {
@@ -63,24 +102,48 @@ public class TavoliItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @NonNull
     @Override
-    public TavoliItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new view, which defines the UI of the list item
-        TavoliItemAdapter.ViewHolder viewHolder;
-        viewHolder = TavoliItemAdapter.ViewHolder.inflateFrom(parent);
-        viewHolder.aggiungiAzione(onTavoloCliccato);
-        return viewHolder;
+        if (viewType == DISPONIBILE) {
+            TavoliItemAdapter.TavoloDisponibileViewHolder viewHolder;
+            viewHolder = TavoliItemAdapter.TavoloDisponibileViewHolder.inflateFrom(parent);
+            viewHolder.aggiungiAzione(onTavoloCliccato);
+            return viewHolder;
+        }
+        else if (viewType == OCCUPATO) {
+            TavoliItemAdapter.TavoloOccupatoViewHolder viewHolder;
+            viewHolder = TavoliItemAdapter.TavoloOccupatoViewHolder.inflateFrom(parent);
+            viewHolder.aggiungiAzione(onTavoloCliccato);
+            return viewHolder;
+        }
+        return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Tavolo item = data.get(position);
-        TavoliItemAdapter.ViewHolder binding = (TavoliItemAdapter.ViewHolder) holder;
-        binding.bind(item);
+        Tavolo item = tavoli.get(position);
+        if (holder.getItemViewType() == DISPONIBILE) {
+            TavoliItemAdapter.TavoloDisponibileViewHolder binding = (TavoliItemAdapter.TavoloDisponibileViewHolder) holder;
+            binding.bind(item);
+        }
+        else if (holder.getItemViewType() == OCCUPATO) {
+            TavoliItemAdapter.TavoloOccupatoViewHolder binding = (TavoliItemAdapter.TavoloOccupatoViewHolder) holder;
+            binding.bind(item);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return tavoli.size();
+    }
+
+    public int getItemViewType(int position) {
+        if (tavoli.get(position).getDisponibile() == true) {
+            return DISPONIBILE;
+        }
+        else {
+            return OCCUPATO;
+        }
     }
 
     public interface OnTavoloCliccato {

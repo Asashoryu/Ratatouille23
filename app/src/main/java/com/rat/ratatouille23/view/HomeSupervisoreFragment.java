@@ -57,7 +57,7 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAlConto() {
         homeSupervisoreViewModel.vaiAlConto.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                //TODO: naviga verso il conto
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_scegliTavoloVisualizzaContoFragment);
             }
         });
     }

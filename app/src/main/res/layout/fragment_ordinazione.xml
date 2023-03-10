@@ -15,17 +15,19 @@
         android:layout_height="match_parent"
         android:background="@color/blue_dark" >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@id/constraintLayout"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lista_portate_conto"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="25dp"
                 android:layout_weight="1"
                 android:background="@color/grey_light"
@@ -36,79 +38,73 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/txt_costo_totale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="60dp"
+                android:background="@color/grey_light"
+                android:text="@{ordinazioneViewModel.costoTotaleConto.toString()}">
+            </TextView>
+
             <Button
                 android:id="@+id/btn_salva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/btn_custom"
                 android:onClick="@{() -> ordinazioneViewModel.salvaOrdinazione()}"
                 android:text="salva"
                 android:textColor="@android:color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="HardcodedText" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/constraintLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout2">
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@id/frame_portate"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lista_portate"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="25dp"
-                android:background="@drawable/border_custom"
-                android:paddingHorizontal="20dp"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
                 android:paddingVertical="10dp"
-                app:layout_constraintBottom_toTopOf="@id/frame_categorie"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/lista_portate"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@+id/lista_categorie" />
-
-            </FrameLayout>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@+id/lista_categorie" />
 
             <FrameLayout
                 android:id="@+id/frame_categorie"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="25dp"
-                android:padding="10dp"
                 android:background="@drawable/btn_yellow_custom"
+                android:padding="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frame_portate" >
+                app:layout_constraintTop_toBottomOf="@id/frame_portate">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lista_categorie"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                 />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/lista_categorie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             </FrameLayout>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -6,11 +6,11 @@ import java.util.List;
 
 public class Portata {
     private String nome;
-    private String costo;
+    private Float costo;
     private String descrizione;
     private List<Allergene> allergeni;
 
-    public Portata(String nome, String costo, String descrizione, ArrayList<Allergene> allergeni) {
+    public Portata(String nome, Float costo, String descrizione, ArrayList<Allergene> allergeni) {
         setNome(nome);
         setCosto(costo);
         setDescrizione(descrizione);
@@ -26,11 +26,11 @@ public class Portata {
         this.nome = nome;
     }
 
-    public String getCosto() {
+    public Float getCosto() {
         return costo;
     }
 
-    public void setCosto(String costo) {
+    public void setCosto(Float costo) {
         this.costo = costo;
     }
 

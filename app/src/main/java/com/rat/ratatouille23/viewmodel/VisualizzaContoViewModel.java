@@ -3,7 +3,6 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
@@ -12,19 +11,14 @@ import com.rat.ratatouille23.repository.Repository;
 
 import java.util.ArrayList;
 
-public class OrdinazioneViewModel extends ViewModel {
+public class VisualizzaContoViewModel extends ViewModel {
+    Repository repository;
 
-    private Repository repository;
+    Tavolo tavolo;
 
-    private Tavolo tavolo;
+    Menu menu;
 
-    private Menu menu;
-
-    private Ordinazione ordinazione;
-
-    public MutableLiveData<ArrayList<Categoria>> listaCategorie = new MutableLiveData<ArrayList<Categoria>>();
-
-    public MutableLiveData<ArrayList<Portata>> listaPortate = new MutableLiveData<ArrayList<Portata>>();
+    Ordinazione ordinazione;
 
     public MutableLiveData<ArrayList<Portata>> listaPortateConto = new MutableLiveData<ArrayList<Portata>>();
 
@@ -32,27 +26,15 @@ public class OrdinazioneViewModel extends ViewModel {
 
     public MutableLiveData<Float> costoTotaleConto = new MutableLiveData<>(0.0f);
 
-    public OrdinazioneViewModel() {
+    public VisualizzaContoViewModel() {
         repository = Repository.getInstance();
-        repository.setOrdinazioneViewModel(this);
+        repository.setVisualizzaContoViewModel(this);
 
         menu = repository.getMenu();
         tavolo = repository.getTavoloSelezionato();
-
         ordinazione = tavolo.getOrdinazione();
-
-        ordinazione.setTavolo(repository.getTavoloSelezionato());
-        aggiornaListaCategorie();
         aggiornaListaPortateConto();
         aggiornaCostoTotaleConto();
-    }
-
-    public void aggiornaListaCategorie() {
-        listaCategorie.setValue(menu.getCategorie());
-        menu.getCategorie().forEach(categoria -> {System.out.println(categoria.getNome());});
-    }
-    public void aggiornaListaPortate(Categoria categoriaSelezionata) {
-        listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
     }
 
     public void aggiornaListaPortateConto() {
@@ -60,20 +42,15 @@ public class OrdinazioneViewModel extends ViewModel {
         System.err.println("aggiornamento lista portate conto fatto");
     }
 
-    public void aggiungiPortataAllOrdinazione(Portata portata) {
-        ordinazione.aggiungiPortata(portata);
-        aggiornaCostoTotaleConto();
-        System.err.println("aggiornamento portata al conto fatto");
-    }
-
     public void aggiornaCostoTotaleConto() {
         costoTotaleConto.setValue(ordinazione.getCostoTotalePortate());
         System.err.println("aggiornamento costo totale conto fatto");
     }
 
-    public void salvaOrdinazione() {
-        tavolo.occupaTavoloConOrdinazione(ordinazione);
-        setTornaIndietro();
+    public void salvaPDF() {
+    }
+
+    public void chiudiConto() {
     }
 
     public void setTornaIndietro() {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
+import com.rat.ratatouille23.adapter.PortateContoItemAdapter;
 import com.rat.ratatouille23.adapter.PortateItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentOrdinazioneBinding;
 import com.rat.ratatouille23.viewmodel.OrdinazioneViewModel;
@@ -25,7 +27,7 @@ public class OrdinazioneFragment extends Fragment {
 
     PortateItemAdapter portateItemAdapter;
 
-    PortateItemAdapter portateContoItemAdapter;
+    PortateContoItemAdapter portateContoItemAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +46,10 @@ public class OrdinazioneFragment extends Fragment {
         osservaCambientoCategorie();
         osservaCambientoPortate();
         osservaCambientoPortateConto();
+
+        osservaCambiamentoCostoTotaleConto();
+
+        osservaSeTornareIndietro();
 
         return fragmentView;
     }
@@ -66,7 +72,7 @@ public class OrdinazioneFragment extends Fragment {
     }
 
     public void ImpostaPortateContoItemAdapter() {
-        portateContoItemAdapter = new PortateItemAdapter((portata) -> {});
+        portateContoItemAdapter = new PortateContoItemAdapter((portata) -> {});
         ordinazioneBinding.listaPortateConto.setAdapter(portateContoItemAdapter);
     }
 
@@ -88,6 +94,22 @@ public class OrdinazioneFragment extends Fragment {
         ordinazioneViewModel.listaPortateConto.observe(getViewLifecycleOwner(), listaPortateConto ->
         {
             portateContoItemAdapter.setData(listaPortateConto);
+        });
+    }
+
+    public void osservaCambiamentoCostoTotaleConto() {
+        ordinazioneViewModel.costoTotaleConto.observe(getViewLifecycleOwner(), costoTotaleConto ->
+        {
+            ordinazioneBinding.txtCostoTotale.setText(costoTotaleConto.toString());
+        });
+    }
+
+    public void osservaSeTornareIndietro() {
+        ordinazioneViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                ordinazioneViewModel.setFalseTornaIndietro();
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
         });
     }
 }

@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_homeSupervisoreView_to_personalizzaMenuFragment"
             app:destination="@id/personalizzaMenuFragment" />
+        <action
+            android:id="@+id/action_homeSupervisoreView_to_scegliTavoloVisualizzaContoFragment"
+            app:destination="@id/scegliTavoloVisualizzaContoFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeAddettoSalaView"
@@ -115,4 +118,18 @@
             android:id="@+id/action_scegliTavoloOrdinazioneFragment_to_ordinazioneFragment"
             app:destination="@id/ordinazioneFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/scegliTavoloVisualizzaContoFragment"
+        android:name="com.rat.ratatouille23.view.ScegliTavoloVisualizzaContoFragment"
+        android:label="fragment_scegli_tavolo_visualizza_conto"
+        tools:layout="@layout/fragment_scegli_tavolo_visualizza_conto" >
+        <action
+            android:id="@+id/action_scegliTavoloVisualizzaContoFragment_to_visualizzaContoFragment"
+            app:destination="@id/visualizzaContoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/visualizzaContoFragment"
+        android:name="com.rat.ratatouille23.view.VisualizzaContoFragment"
+        android:label="fragment_visualizza_conto"
+        tools:layout="@layout/fragment_visualizza_conto" />
 </navigation>

@@ -6,7 +6,8 @@ public class Ordinazione {
     Tavolo tavolo;
     ArrayList<Portata> portate;
 
-    public Ordinazione() {
+    public Ordinazione(Tavolo tavolo) {
+        setTavolo(tavolo);
         portate = new ArrayList<>();
     }
 
@@ -32,5 +33,13 @@ public class Ordinazione {
 
     public void setPortate(ArrayList<Portata> portate) {
         this.portate = portate;
+    }
+
+    public Float getCostoTotalePortate() {
+        Float costoTotaleConto = 0f;
+        for (Portata portata : portate) {
+            costoTotaleConto+= portata.getCosto();
+        }
+        return costoTotaleConto;
     }
 }

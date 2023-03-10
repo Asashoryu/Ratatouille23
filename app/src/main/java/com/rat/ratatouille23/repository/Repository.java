@@ -7,9 +7,11 @@ import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.model.Menu;
+import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.view.AggiungiIngredienteFragment;
+import com.rat.ratatouille23.view.ScegliTavoloVisualizzaContoFragment;
 import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
@@ -19,12 +21,17 @@ import com.rat.ratatouille23.viewmodel.OrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
 import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
 import com.rat.ratatouille23.viewmodel.ScegliTavoloOrdinazioneViewModel;
+import com.rat.ratatouille23.viewmodel.ScegliTavoloVisualizzaContoViewModel;
+import com.rat.ratatouille23.viewmodel.VisualizzaContoViewModel;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import kotlin.random.AbstractPlatformRandom;
 
 public class Repository {
 
@@ -35,6 +42,8 @@ public class Repository {
     private ArrayList<Tavolo> tavoli;
 
     private Tavolo tavoloSelezionato;
+
+    ArrayList<Ordinazione> ordinazioni;
 
     private Menu menu;
     private static Repository questaRepository = null;
@@ -55,10 +64,16 @@ public class Repository {
 
     private static ScegliTavoloOrdinazioneViewModel scegliTavoloOrdinazioneViewModel;
 
+    private static ScegliTavoloVisualizzaContoViewModel scegliTavoloVisualizzaContoViewModel;
+
     private static OrdinazioneViewModel ordinazioneViewModel;
 
-    public Repository() {
+    private static VisualizzaContoViewModel visualizzaContoViewModel;
 
+    public Repository() {
+        menu = getMenuTest();
+        tavoli = getTavoliTest();
+        ordinazioni = new ArrayList<>();
     }
 
     public static Repository getInstance() {
@@ -79,10 +94,6 @@ public class Repository {
     public void login(String username, String password) throws DipendenteNonTrovatoException {
         // TODO: chiedi al backend i dati
         // TODO: inizializza tutti i dati presi dal backend nelle classi del model
-
-        menu = getMenuTest();
-
-        tavoli = getTavoliTest();
 
         dipendente = loginTest(username, password);
     }
@@ -184,17 +195,17 @@ public class Repository {
 
     public ArrayList<Portata> getPortateTest1() {
         ArrayList<Portata> portate = new ArrayList<>();
-        portate.add(new Portata("granchio", "235", null, null));
-        portate.add(new Portata("carne umana", "666", null, null));
-        portate.add(new Portata("lingua di bue", "70", null, null));
-        portate.add(new Portata("arancia meccanica", "88", null, null));
+        portate.add(new Portata("granchio", 235f, null, null));
+        portate.add(new Portata("carne umana", 666f, null, null));
+        portate.add(new Portata("lingua di bue", 70f, null, null));
+        portate.add(new Portata("arancia meccanica", 88f, null, null));
         return portate;
     }
 
     public ArrayList<Portata> getPortateTest2() {
         ArrayList<Portata> portate = new ArrayList<>();
-        portate.add(new Portata("pasta asciutta", "8", null, null));
-        portate.add(new Portata("parmigiana", "12", null, null));
+        portate.add(new Portata("pasta asciutta", 8f, null, null));
+        portate.add(new Portata("parmigiana", 12f, null, null));
         return portate;
     }
     public void setMenu(Menu menu) {
@@ -238,6 +249,12 @@ public class Repository {
         return tavoloSelezionato;
     }
 
+
+    public void addOrdinazione(Ordinazione ordinazione) {
+        ordinazioni.add(ordinazione);
+        ordinazioni.forEach(ordinazione_lambda -> System.out.println(ordinazione_lambda.getPortate()));
+    }
+
     public void setLoginViewModel(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;
     }
@@ -272,5 +289,13 @@ public class Repository {
 
     public void setOrdinazioneViewModel(OrdinazioneViewModel ordinazioneViewModel) {
         this.ordinazioneViewModel = ordinazioneViewModel;
+    }
+
+    public void setScegliTavoloVisualizzaContoViewModel(ScegliTavoloVisualizzaContoViewModel scegliTavoloVisualizzaContoViewModel) {
+        this.scegliTavoloVisualizzaContoViewModel = scegliTavoloVisualizzaContoViewModel;
+    }
+
+    public void setVisualizzaContoViewModel(VisualizzaContoViewModel visualizzaContoViewModel) {
+        this.visualizzaContoViewModel = visualizzaContoViewModel;
     }
 }

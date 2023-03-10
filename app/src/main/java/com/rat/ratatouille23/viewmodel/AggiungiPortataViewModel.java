@@ -29,7 +29,7 @@ public class AggiungiPortataViewModel extends ViewModel {
     public void aggiungiPortata(String nome, String costo, String categoria, String descrizione) {
         try {
             portata = null;
-            repository.aggiungiPortataAllaCategoria(new Portata(nome, costo, descrizione, listaAllergeniSelezionati), categoria);
+            repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, listaAllergeniSelezionati), categoria);
             System.err.println(nome + costo + categoria + descrizione);
             setTornaIndietro();
         } catch (PersonalizzaMenuException e) {
