@@ -10,71 +10,91 @@
             type="com.rat.ratatouille23.viewmodel.VisualizzaContoViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blue_dark"
-        android:orientation="vertical">
+        android:background="@color/blue_dark">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lista_portate_conto"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:layout_weight="1"
+            android:layout_height="0dp"
             android:background="@color/grey_light"
-            android:paddingVertical="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/btn_salva"
+            android:layout_margin="50dp"
+            app:layout_constraintBottom_toTopOf="@id/flow_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/txt_costo_totale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_light"
-            android:layout_marginHorizontal="60dp"
-            android:text="@{visualizzaContoViewModel.costoTotaleConto.toString()}">
-        </TextView>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_pdf"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lista_portate_conto"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="@drawable/btn_custom"
-                android:onClick="@{() -> visualizzaContoViewModel.salvaPDF()}"
-                android:text="pdf"
-                android:textColor="@android:color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="25dp"
+                android:layout_weight="1"
+                android:background="@color/grey_light"
+                android:paddingVertical="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btn_chiudi_conto"
+            <TextView
+                android:id="@+id/txt_costo_totale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="@drawable/btn_custom"
-                android:onClick="@{() -> visualizzaContoViewModel.chiudiConto()}"
-                android:text="chiudi conto"
-                android:textColor="@android:color/black"
+                android:layout_marginHorizontal="60dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_light"
+                android:text="@{visualizzaContoViewModel.costoTotaleConto.toString()}"
+                android:textColor="@color/black"
+                android:textSize="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/txt_totale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_light"
+                android:text="Totale €"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/txt_costo_totale"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btn_pdf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:onClick="@{() -> visualizzaContoViewModel.salvaPDF()}"
+            android:text="pdf"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btn_chiudi_conto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:onClick="@{() -> visualizzaContoViewModel.chiudiConto()}"
+            android:text="chiudi conto"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="btn_pdf,btn_chiudi_conto"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
