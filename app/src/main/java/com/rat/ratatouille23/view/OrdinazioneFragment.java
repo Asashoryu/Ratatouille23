@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
+import com.rat.ratatouille23.adapter.PortateContoItemAdapter;
 import com.rat.ratatouille23.adapter.PortateItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentOrdinazioneBinding;
 import com.rat.ratatouille23.viewmodel.OrdinazioneViewModel;
@@ -25,7 +26,7 @@ public class OrdinazioneFragment extends Fragment {
 
     PortateItemAdapter portateItemAdapter;
 
-    PortateItemAdapter portateContoItemAdapter;
+    PortateContoItemAdapter portateContoItemAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +67,7 @@ public class OrdinazioneFragment extends Fragment {
     }
 
     public void ImpostaPortateContoItemAdapter() {
-        portateContoItemAdapter = new PortateItemAdapter((portata) -> {});
+        portateContoItemAdapter = new PortateContoItemAdapter((portata) -> {});
         ordinazioneBinding.listaPortateConto.setAdapter(portateContoItemAdapter);
     }
 
