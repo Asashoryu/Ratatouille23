@@ -10,19 +10,35 @@
             type="com.rat.ratatouille23.viewmodel.ScegliTavoloOrdinazioneViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/blue_dark" >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lista_tavoli"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:paddingVertical="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="50dp"
+            android:padding="20dp"
+            android:background="@drawable/border_custom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lista_tavoli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:paddingVertical="10dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3" />
+
+        </FrameLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
