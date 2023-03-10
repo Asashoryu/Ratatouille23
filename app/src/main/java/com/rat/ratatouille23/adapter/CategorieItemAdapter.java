@@ -21,7 +21,7 @@ public class CategorieItemAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private ArrayList<Categoria> data = new ArrayList<>();
 
-    private static OnCategoriaCliccata onCategoriaCliccata;
+    private OnCategoriaCliccata onCategoriaCliccata;
 
     public CategorieItemAdapter(OnCategoriaCliccata onCategoriaCliccata) {
         this.onCategoriaCliccata = onCategoriaCliccata;
@@ -36,6 +36,8 @@ public class CategorieItemAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         CategoriaItemBinding categoriaBinding;
 
+        OnCategoriaCliccata onCategoriaCliccata;
+
         public ViewHolder(@NonNull CategoriaItemBinding binding) {
             super(binding.getRoot());
             this.categoriaBinding = binding;
@@ -47,6 +49,10 @@ public class CategorieItemAdapter extends RecyclerView.Adapter<RecyclerView.View
             return new CategorieItemAdapter.ViewHolder(binding);
         }
 
+        public void aggiungiAzione(CategorieItemAdapter.OnCategoriaCliccata onCategoriaCliccata) {
+            this.onCategoriaCliccata = onCategoriaCliccata;
+        }
+
         public void bind(Categoria categoria) {
             categoriaBinding.setCategoria(categoria);
 
@@ -54,7 +60,7 @@ public class CategorieItemAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onClick(View view) {
                     System.err.println("il valore della categoria cliccato è " + categoria);
-                    onCategoriaCliccata.aggiornaProdotti(categoria);
+                    onCategoriaCliccata.azione(categoria);
                 }
             });
         }
@@ -64,7 +70,10 @@ public class CategorieItemAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public CategorieItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new view, which defines the UI of the list item
-        return CategorieItemAdapter.ViewHolder.inflateFrom(parent);
+        CategorieItemAdapter.ViewHolder viewHolder;
+        viewHolder = CategorieItemAdapter.ViewHolder.inflateFrom(parent);
+        viewHolder.aggiungiAzione(onCategoriaCliccata);
+        return viewHolder;
     }
 
     @Override
@@ -80,6 +89,6 @@ public class CategorieItemAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public interface OnCategoriaCliccata {
-        public void aggiornaProdotti(Categoria categoria);
+        public void azione(Categoria categoria);
     }
 }
