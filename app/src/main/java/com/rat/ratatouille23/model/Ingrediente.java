@@ -3,20 +3,16 @@ package com.rat.ratatouille23.model;
 public class Ingrediente {
 
     private String nome;
-    private String quantita;
+    private Float quantita;
 
     private String unitaMisura;
 
-    private String costo;
+    private Float costo;
 
     private String descrizione;
 
-    public Ingrediente(String nome, String quantita) {
-        setNome(nome);
-        setQuantita(quantita);
-    }
 
-    public Ingrediente(String nome, String costo, String quantita, String unitaMisura, String descrizione) {
+    public Ingrediente(String nome, Float costo, Float quantita, String unitaMisura, String descrizione) {
         setNome(nome);
         setCosto(costo);
         setQuantita(quantita);
@@ -32,11 +28,11 @@ public class Ingrediente {
         this.nome = nome;
     }
 
-    public String getQuantita() {
+    public Float getQuantita() {
         return quantita;
     }
 
-    public void setQuantita(String quantita) {
+    public void setQuantita(Float quantita) {
         this.quantita = quantita;
     }
 
@@ -48,11 +44,11 @@ public class Ingrediente {
         this.unitaMisura = unitaMisura;
     }
 
-    public String getCosto() {
+    public Float getCosto() {
         return costo;
     }
 
-    public void setCosto(String costo) {
+    public void setCosto(Float costo) {
         this.costo = costo;
     }
 

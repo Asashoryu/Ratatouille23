@@ -15,7 +15,9 @@ import com.rat.ratatouille23.view.ScegliTavoloVisualizzaContoFragment;
 import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
+import com.rat.ratatouille23.viewmodel.AssociaIngredientiViewModel;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
+import com.rat.ratatouille23.viewmodel.IndicaQuantitaViewModel;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
 import com.rat.ratatouille23.viewmodel.OrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
@@ -23,6 +25,7 @@ import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
 import com.rat.ratatouille23.viewmodel.ScegliTavoloOrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.ScegliTavoloVisualizzaContoViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaContoViewModel;
+import com.rat.ratatouille23.viewmodel.VisualizzaMenuViewModel;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -31,17 +34,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import kotlin.random.AbstractPlatformRandom;
-
 public class Repository {
 
     private Dipendente dipendente;
 
-    private ArrayList<Ingrediente> inventario;
+    private ArrayList<Ingrediente> dispensa;
 
     private ArrayList<Tavolo> tavoli;
 
     private Tavolo tavoloSelezionato;
+
+    private Portata portataSelezionata;
+
+    private Ingrediente ingredienteSelezionato;
 
     ArrayList<Ordinazione> ordinazioni;
 
@@ -69,6 +74,12 @@ public class Repository {
     private static OrdinazioneViewModel ordinazioneViewModel;
 
     private static VisualizzaContoViewModel visualizzaContoViewModel;
+
+    private static VisualizzaMenuViewModel visualizzaMenuViewModel;
+
+    private static AssociaIngredientiViewModel associaIngredientiViewModel;
+
+    private static IndicaQuantitaViewModel indicaQuantitaViewModel;
 
     public Repository() {
         menu = getMenuTest();
@@ -127,20 +138,36 @@ public class Repository {
 
     public ArrayList<Ingrediente> getIngredienti() {
         // TODO: recupera gli ingredienti da qualche parte
-        if (inventario == null) {
-            inventario = getIngredientiTest();
+        if (dispensa == null) {
+            dispensa = getIngredientiTest();
         }
-        return inventario;
+        return dispensa;
+    }
+
+    public ArrayList<Ingrediente> getIngredientiNonAssociatiAllaPortata(Portata portata) {
+        ArrayList<Ingrediente> ingredientiPortata;
+        ArrayList<Ingrediente> ingredientiNonPortata;
+
+        ingredientiPortata = portata.getIngredienti();
+        ingredientiNonPortata = new ArrayList<>();
+
+        for (Ingrediente ingredienteDispensa : dispensa) {
+            if (ingredientiPortata.stream().filter(ingredientePortata -> ingredienteDispensa.getNome().equals(ingredientePortata.getNome())).collect(Collectors.toList()).isEmpty()) {
+                ingredientiNonPortata.add(ingredienteDispensa);
+            }
+        }
+
+        return ingredientiNonPortata;
     }
 
     public ArrayList<Ingrediente> getIngredientiTest() {
         ArrayList<Ingrediente> ingredienti = new ArrayList<>();
-        ingredienti.add(new Ingrediente("Farina", "4.5 kg"));
-        ingredienti.add(new Ingrediente("Cocco", "530 gr"));
-        ingredienti.add(new Ingrediente("Latte", "12 L"));
-        ingredienti.add(new Ingrediente("Pasta", "15 kg"));
-        ingredienti.add(new Ingrediente("Riso", "10 kg"));
-        ingredienti.add(new Ingrediente("Burro", "1 kg"));
+        ingredienti.add(new Ingrediente("Farina", 100f, 4.5f, "kg", "nessuna"));
+        ingredienti.add(new Ingrediente("Cocco", 100f, 530f, "kg", "descrizione farlocca"));
+        ingredienti.add(new Ingrediente("Latte", 100f, 12f, "L", "descrizione barocca"));
+        ingredienti.add(new Ingrediente("Pasta", 100f, 15f, "kg", "descrizione testa di cocca"));
+        ingredienti.add(new Ingrediente("Riso", 100f, 10f, "kg", "descrizione albicocca"));
+        ingredienti.add(new Ingrediente("Burro", 100f, 1f, "kg", "descrizione sei una oca"));
 
         return ingredienti;
     }
@@ -162,7 +189,11 @@ public class Repository {
 
     public void aggiungiIngrediente(Ingrediente ingrediente) {
         //TODO: inserire l'ingrediente nel backend
-        inventario.add(ingrediente);
+        dispensa.add(ingrediente);
+    }
+
+    public void aggiungiIngredienteAllaPortataSelezionata(Ingrediente ingrediente, Float quantita) {
+        associaIngredientiViewModel.aggiungiIngredienteAllaPortata(ingrediente, quantita);
     }
 
     public void aggiornaListaIngredienti() {
@@ -249,6 +280,22 @@ public class Repository {
         return tavoloSelezionato;
     }
 
+    public void setPortataSelezionata(Portata portata) {
+        portataSelezionata = portata;
+    }
+
+    public Portata getPortataSelezionata() {
+        return portataSelezionata;
+    }
+
+    public void setIngredienteSelezionato(Ingrediente ingrediente) {
+        ingredienteSelezionato = ingrediente;
+    }
+
+    public Ingrediente getIngredienteSelezionato() {
+        return ingredienteSelezionato;
+    }
+
 
     public void addOrdinazione(Ordinazione ordinazione) {
         ordinazioni.add(ordinazione);
@@ -297,5 +344,17 @@ public class Repository {
 
     public void setVisualizzaContoViewModel(VisualizzaContoViewModel visualizzaContoViewModel) {
         this.visualizzaContoViewModel = visualizzaContoViewModel;
+    }
+
+    public void setVisualizzaMenuViewModel(VisualizzaMenuViewModel visualizzaMenuViewModel) {
+        this.visualizzaMenuViewModel = visualizzaMenuViewModel;
+    }
+
+    public void setAssociaIngredientiViewModel(AssociaIngredientiViewModel associaIngredientiViewModel) {
+        this.associaIngredientiViewModel = associaIngredientiViewModel;
+    }
+
+    public void setIndicaQuantitaViewModel(IndicaQuantitaViewModel indicaQuantitaViewModel) {
+        this.indicaQuantitaViewModel = indicaQuantitaViewModel;
     }
 }

@@ -65,7 +65,7 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAssociareIngredienti() {
         homeSupervisoreViewModel.vaiAdAssociaIngredienti.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                //TODO: naviga verso gli ingredienti
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_visualizzaMenuFragment3);
             }
         });
     }

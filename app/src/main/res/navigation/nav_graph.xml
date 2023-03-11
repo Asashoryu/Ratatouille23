@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_homeAmministratoreView_to_aggiungiDipendenteFragment"
             app:destination="@id/aggiungiDipendenteFragment" />
+        <action
+            android:id="@+id/action_homeAmministratoreView_to_visualizzaMenuFragment"
+            app:destination="@id/visualizzaMenuFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeSupervisoreView"
@@ -49,6 +52,9 @@
         <action
             android:id="@+id/action_homeSupervisoreView_to_scegliTavoloVisualizzaContoFragment"
             app:destination="@id/scegliTavoloVisualizzaContoFragment" />
+        <action
+            android:id="@+id/action_homeSupervisoreView_to_visualizzaMenuFragment3"
+            app:destination="@id/visualizzaMenuFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeAddettoSalaView"
@@ -65,6 +71,9 @@
         <action
             android:id="@+id/action_homeAddettoCucinaView_to_dispensaView"
             app:destination="@id/dispensaView" />
+        <action
+            android:id="@+id/action_homeAddettoCucinaView_to_visualizzaMenuFragment"
+            app:destination="@id/visualizzaMenuFragment" />
     </fragment>
     <fragment
         android:id="@+id/dispensaView"
@@ -132,4 +141,26 @@
         android:name="com.rat.ratatouille23.view.VisualizzaContoFragment"
         android:label="fragment_visualizza_conto"
         tools:layout="@layout/fragment_visualizza_conto" />
+    <fragment
+        android:id="@+id/visualizzaMenuFragment"
+        android:name="com.rat.ratatouille23.view.VisualizzaMenuFragment"
+        android:label="fragment_visualizza_menu"
+        tools:layout="@layout/fragment_visualizza_menu" >
+        <action
+            android:id="@+id/action_visualizzaMenuFragment_to_associaIngredientiFragment"
+            app:destination="@id/associaIngredientiFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/indicaQuantitaIngredienteFragment"
+        android:name="com.rat.ratatouille23.view.IndicaQuantitaIngredienteFragment"
+        android:label="IndicaQuantitaIngredienteFragment" />
+    <fragment
+        android:id="@+id/associaIngredientiFragment"
+        android:name="com.rat.ratatouille23.view.AssociaIngredientiFragment"
+        android:label="fragment_associa_ingredienti"
+        tools:layout="@layout/fragment_associa_ingredienti" >
+        <action
+            android:id="@+id/action_associaIngredientiFragment_to_indicaQuantitaIngredienteFragment"
+            app:destination="@id/indicaQuantitaIngredienteFragment" />
+    </fragment>
 </navigation>
