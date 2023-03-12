@@ -9,9 +9,8 @@ import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.model.Tavolo;
-import com.rat.ratatouille23.view.AggiungiIngredienteFragment;
-import com.rat.ratatouille23.view.ScegliTavoloVisualizzaContoFragment;
 import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
@@ -26,10 +25,9 @@ import com.rat.ratatouille23.viewmodel.ScegliTavoloOrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.ScegliTavoloVisualizzaContoViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaContoViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaMenuViewModel;
+import com.rat.ratatouille23.viewmodel.VisualizzaStatisticheViewModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,9 +46,11 @@ public class Repository {
 
     private Ingrediente ingredienteSelezionato;
 
-    ArrayList<Ordinazione> ordinazioni;
+    ArrayList<Ordinazione> ordinazioniAperte;
 
     private Menu menu;
+
+    private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
     private static Repository questaRepository = null;
 
     private static LoginViewModel loginViewModel;
@@ -81,10 +81,13 @@ public class Repository {
 
     private static IndicaQuantitaViewModel indicaQuantitaViewModel;
 
-    public Repository() {
+    private static VisualizzaStatisticheViewModel visualizzaStatisticheViewModel;
+
+    private Repository() {
         menu = getMenuTest();
         tavoli = getTavoliTest();
-        ordinazioni = new ArrayList<>();
+        ordinazioniAperte = new ArrayList<>();
+        storicoOrdinazioniChiuse = StoricoOrdinazioniChiuse.getInstance();
     }
 
     public static Repository getInstance() {
@@ -298,8 +301,39 @@ public class Repository {
 
 
     public void addOrdinazione(Ordinazione ordinazione) {
-        ordinazioni.add(ordinazione);
-        ordinazioni.forEach(ordinazione_lambda -> System.out.println(ordinazione_lambda.getPortate()));
+        ordinazioniAperte.add(ordinazione);
+        ordinazioniAperte.forEach(ordinazione_lambda -> System.out.println(ordinazione_lambda.getPortate()));
+    }
+
+    public StoricoOrdinazioniChiuse getStoricoOrdinazioniChiuse() {
+        if (storicoOrdinazioniChiuse.getOrdinazioni().isEmpty()) {
+            getStoricoOrdinazioniChiuseTest();
+        }
+        return storicoOrdinazioniChiuse;
+    }
+
+    public void getStoricoOrdinazioniChiuseTest() {
+        Ordinazione o1 = new Ordinazione(tavoli.get(4));
+        Ordinazione o2 = new Ordinazione(tavoli.get(2));
+        Ordinazione o3 = new Ordinazione(tavoli.get(5));
+        Ordinazione o4 = new Ordinazione(tavoli.get(6));
+
+        o1.aggiungiPortata(new Portata("spaghetti", 70f, null, null));
+        o1.aggiungiPortata(new Portata("ciccetti", 6f, null, null));
+        o1.aggiungiPortata(new Portata("crocchette", 54f, null, null));
+
+        o2.aggiungiPortata(new Portata("polpette", 62f, null, null));
+        o2.aggiungiPortata(new Portata("arachidi", 35f, null, null));
+
+        o3.aggiungiPortata(new Portata("cicciobombetti", 6f, null, null));
+        o3.aggiungiPortata(new Portata("pere", 70f, null, null));
+
+        o4.aggiungiPortata(new Portata("bruciacchietti", 30f, null, null));
+
+        storicoOrdinazioniChiuse.chiudiOrdinazione(o1);
+        storicoOrdinazioniChiuse.chiudiOrdinazione(o2);
+        storicoOrdinazioniChiuse.chiudiOrdinazione(o3);
+        storicoOrdinazioniChiuse.chiudiOrdinazione(o4);
     }
 
     public void setLoginViewModel(LoginViewModel loginViewModel) {
@@ -356,5 +390,9 @@ public class Repository {
 
     public void setIndicaQuantitaViewModel(IndicaQuantitaViewModel indicaQuantitaViewModel) {
         this.indicaQuantitaViewModel = indicaQuantitaViewModel;
+    }
+
+    public void setVisualizzaStatisticheViewModel(VisualizzaStatisticheViewModel visualizzaStatisticheViewModel) {
+        this.visualizzaStatisticheViewModel = visualizzaStatisticheViewModel;
     }
 }

@@ -49,7 +49,7 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAlleStatistiche() {
         homeAmministratoreViewModel.vaiAlleStatistiche.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                //TODO: naviga verso le statistiche
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_visualizzaStatisticheFragment);
             }
         });
     }
