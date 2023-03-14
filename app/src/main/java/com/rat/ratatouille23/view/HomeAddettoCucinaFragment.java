@@ -48,7 +48,7 @@ public class HomeAddettoCucinaFragment extends Fragment {
     public void osservaSeAssociareIngredienti() {
         homeAddettoCucinaViewModel.vaiAdAssociaIngredienti.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti.equals(true)) {
-                //TODO: naviga verso gli ingredienti
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoCucinaView_to_visualizzaMenuFragment);
             }
         });
     }

@@ -6,13 +6,29 @@ public class Ordinazione {
     Tavolo tavolo;
     ArrayList<Portata> portate;
 
+    Float costoTotalePortate;
+
+    Boolean isChiusa;
+
+    String minutaggioChiusuraConto;
+
     public Ordinazione(Tavolo tavolo) {
         setTavolo(tavolo);
         portate = new ArrayList<>();
+        costoTotalePortate = 0.0f;
+        isChiusa = false;
     }
 
     public void aggiungiPortata(Portata portata) {
         portate.add(portata);
+        costoTotalePortate += portata.getCosto();
+    }
+
+    public void aggiornaCostoTotalePortate() {
+        Float costoTotalePortate = 0f;
+        for (Portata portata : portate) {
+            costoTotalePortate+= portata.getCosto();
+        }
     }
 
     public void rimuoviPortata(Portata portata) {
@@ -35,11 +51,27 @@ public class Ordinazione {
         this.portate = portate;
     }
 
+    public void setCostoTotalePortate(Float costoTotalePortate) {
+        this.costoTotalePortate = costoTotalePortate;
+    }
+
     public Float getCostoTotalePortate() {
-        Float costoTotaleConto = 0f;
-        for (Portata portata : portate) {
-            costoTotaleConto+= portata.getCosto();
-        }
-        return costoTotaleConto;
+        return costoTotalePortate;
+    }
+
+    public Boolean getChiusa() {
+        return isChiusa;
+    }
+
+    public void setChiusa(Boolean chiusa) {
+        isChiusa = chiusa;
+    }
+
+    public String getMinutaggioChiusuraConto() {
+        return minutaggioChiusuraConto;
+    }
+
+    public void setMinutaggioChiusuraConto(String minutaggioChiusuraConto) {
+        this.minutaggioChiusuraConto = minutaggioChiusuraConto;
     }
 }

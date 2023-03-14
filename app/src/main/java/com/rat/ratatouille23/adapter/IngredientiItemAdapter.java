@@ -56,9 +56,7 @@ public class IngredientiItemAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 @Override
                 public void onClick(View view) {
                     System.err.println("il valore dell'ingrediente cliccato è " + ingrediente);
-                    if (ingrediente != null) {
-                        System.out.println(ingrediente.getNome());
-                    }
+                    onIngredienteCliccato.azione(ingrediente);
                 }
             });
         }

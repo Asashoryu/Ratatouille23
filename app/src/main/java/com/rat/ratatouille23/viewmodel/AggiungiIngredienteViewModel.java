@@ -23,7 +23,7 @@ public class AggiungiIngredienteViewModel extends ViewModel {
 
     public void aggiungiIngrediente(String nome, String costo, String quantita, String unitaMisura, String descrizione) {
         ingrediente = null;
-        ingrediente = new Ingrediente(nome, costo, quantita, unitaMisura, descrizione);
+        ingrediente = new Ingrediente(nome, Float.parseFloat(costo), Float.parseFloat(quantita), unitaMisura, descrizione);
         System.err.println(nome + costo + quantita + unitaMisura + descrizione);
 
         repository.aggiungiIngrediente(ingrediente);
