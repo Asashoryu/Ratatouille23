@@ -43,14 +43,27 @@
                     android:id="@+id/item_quantità_ingrediente"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:padding="8dp"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="2dp"
                     android:text="@{ingrediente.quantita.toString()}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/unita_misura"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/unita_misura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:paddingVertical="8dp"
+                    android:text="@{ingrediente.unitaMisura}"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

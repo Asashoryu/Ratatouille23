@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.VisualizzaStatisticheFragment" >
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:background="@color/blue_dark"
         android:orientation="vertical">
-        
+
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bar_chart"
@@ -40,4 +40,4 @@
             android:text="annulla" />
 
     </LinearLayout>
-    </layout>
+</layout>
