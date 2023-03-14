@@ -113,8 +113,9 @@ public class Repository {
         }
         else if (username.equals("re") && password.equals("re")) {
             return new Dipendente("Joe", "AddettoCucinaNonImpostato", username, Dipendente.Ruolo.ADDETTOCUCINA, password, true);
-        }
-        else {
+        } else if (username.equals("rp") && password.equals("rp")) {
+            return new Dipendente("Joe", "Reimposta", username,Dipendente.Ruolo.NONIMPOSTATO, password, false);
+        } else {
             throw new DipendenteNonTrovatoException();
         }
     }

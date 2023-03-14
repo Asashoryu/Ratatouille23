@@ -30,6 +30,8 @@ public class ReimpostaPasswordFragment extends Fragment {
         reimpostaPasswordViewModel = new ViewModelProvider(this).get(ReimpostaPasswordViewModel.class);
         reimpostaPasswordBinding.setReimpostaPasswordViewModel(reimpostaPasswordViewModel);
 
+        reimpostaPasswordViewModel.setUserText();
+
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
 
