@@ -28,6 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/et_custom"
+            android:textSize="25dp"
+            android:paddingHorizontal="5dp"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName" />
@@ -46,6 +48,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/et_custom"
             android:layout_weight="1"
+            android:textSize="25dp"
+            android:paddingHorizontal="5dp"
             android:ems="10"
             android:inputType="textPersonName" />
 
@@ -63,6 +67,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/et_custom"
             android:layout_weight="1"
+            android:textSize="25dp"
+            android:paddingHorizontal="5dp"
             android:ems="10"
             android:inputType="textPersonName" />
 
@@ -80,6 +86,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/et_custom"
             android:layout_weight="1"
+            android:textSize="25dp"
+            android:paddingHorizontal="5dp"
             android:ems="10"
             android:inputType="textPersonName" />
 
@@ -97,6 +105,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/et_custom"
             android:layout_weight="1"
+            android:textSize="25dp"
+            android:paddingHorizontal="5dp"
             android:ems="10"
             android:inputType="textPersonName" />
 

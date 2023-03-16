@@ -27,6 +27,9 @@
             android:id="@+id/nome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="5dp"
+            android:maxLength="20"
+            android:textSize="25dp"
             android:layout_weight="1"
             android:background="@drawable/et_custom"
             android:ems="10"
@@ -49,7 +52,9 @@
                 android:id="@+id/costo_text"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
                 android:layout_weight="1"
+                android:textSize="25dp"
                 android:background="@drawable/et_custom"
                 android:ems="10"
                 android:inputType="numberDecimal" />
@@ -64,14 +69,18 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <EditText
+        <TextView
             android:id="@+id/categoria_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingHorizontal="5dp"
+            android:maxLength="100"
+            android:text="Antipasto"
+            android:textSize="25dp"
+            android:textColor="@color/black"
             android:background="@drawable/et_custom"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:ems="10" />
 
         <TextView
             android:id="@+id/txt_lista_allergeni"
@@ -86,6 +95,9 @@
             android:layout_width="wrap_content"
             android:layout_height= "wrap_content"
             android:layout_weight="1"
+            android:paddingHorizontal="5dp"
+            android:maxLength="20"
+            android:textSize="25dp"
             android:background="@drawable/et_custom"
             android:ems="10"
             android:inputType="textMultiLine" />
@@ -103,6 +115,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingHorizontal="5dp"
+            android:maxLength="20"
+            android:textSize="25dp"
             android:background="@drawable/et_custom"
             android:ems="10"
             android:inputType="textMultiLine" />
