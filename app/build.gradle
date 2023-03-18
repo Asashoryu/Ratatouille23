@@ -63,4 +63,7 @@ dependencies {
 
     //grafici
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //ArrayUtils dipendenza
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }

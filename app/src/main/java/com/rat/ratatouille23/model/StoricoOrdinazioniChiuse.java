@@ -27,6 +27,12 @@ public class StoricoOrdinazioniChiuse {
         storico.add(ordinazione);
     }
 
+    public void chiudiOrdinazioneInUTC(Ordinazione ordinazione, String UTC) {
+        ordinazione.setChiusa(true);
+        ordinazione.setMinutaggioChiusuraConto(UTC);
+        storico.add(ordinazione);
+    }
+
     private String getMinutaggioAdesso() {
         return Long.toString(Instant.now().toEpochMilli());
     }

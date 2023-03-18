@@ -1,11 +1,22 @@
 package com.rat.ratatouille23.viewmodel;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.model.Ingrediente;
+import com.github.mikephil.charting.data.Entry;
+import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.repository.Repository;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 public class VisualizzaStatisticheViewModel extends ViewModel {
     Repository repository;
@@ -17,13 +28,79 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioVisualizzaStatistiche = new MutableLiveData<>("");
 
+    public MutableLiveData<List<Entry>> entries = new MutableLiveData<>();
+
     public VisualizzaStatisticheViewModel() {
         repository = Repository.getInstance();
         repository.setVisualizzaStatisticheViewModel(this);
 
         storicoOrdinazioniChiuse = repository.getStoricoOrdinazioniChiuse();
-        storicoOrdinazioniChiuse = repository.getStoricoOrdinazioniChiuse();
     }
+
+    public LiveData<List<Entry>> getEntries() {
+        return entries;
+    }
+
+    public void loadEntries(int year) {
+        List<Entry> entryList = new ArrayList<>();
+        String tempoOrdinazione;
+
+        // Replace the following loop with code that fetches real data from a database or API
+        for (Ordinazione ordinazione : storicoOrdinazioniChiuse.getOrdinazioni()) {
+            tempoOrdinazione = ordinazione.getMinutaggioChiusuraConto();
+            int yearOfOrder = getYearFromUTC(tempoOrdinazione);
+            if (yearOfOrder == year) {
+                int dayOfYear = getOffsetDayOfYear(tempoOrdinazione);
+                entryList.add(new Entry(ordinazione.getCostoTotalePortate(), dayOfYear));
+                System.err.println("X: " + ordinazione.getCostoTotalePortate() + ", Y: " + dayOfYear);
+            }
+        }
+
+        entries.setValue(entryList);
+    }
+
+    private int getYearFromUTC(String utcValue) {
+        long timestamp = Long.parseLong(utcValue);
+        Date date = new Date(timestamp * 1000);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        return year;
+    }
+
+    public int getOffsetDayOfYear(String utcValue) {
+        long timestamp = Long.parseLong(utcValue);
+        Date date = new Date(timestamp * 1000);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(date);
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        return dayOfYear;
+    }
+
+
+    public boolean checkEntryExists(float xCoordinate) {
+        if (entries == null) {
+            return false;
+        }
+        for (Entry entry : entries.getValue()) {
+            if (entry.getX() == xCoordinate) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public float getYCoordinateFromXCoordinate(float xCoordinate) {
+        for (Entry entry : entries.getValue()) {
+            if (entry.getX() == xCoordinate) {
+                return entry.getY();
+            }
+        }
+        return -1; // If entry with given x-coordinate is not found, return -1 or any other appropriate value
+    }
+
 
 
     public void setTornaIndietro() {

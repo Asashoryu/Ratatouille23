@@ -18,19 +18,94 @@
 
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bar_chart"
+            android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1">
 
         </com.github.mikephil.charting.charts.BarChart>
 
 
-        <Button
-            android:id="@+id/btn_aggiungi"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="aggiungi" />
+            android:background="@color/blue_dark"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/dal_value"
+                android:background="@android:color/background_light"
+                android:paddingRight="10dp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/al_value"
+                android:background="@android:color/background_light"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/max_value"
+                android:background="@android:color/background_light"
+                android:paddingRight="10dp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+            <TextView
+                android:id="@+id/min_value"
+                android:background="@android:color/background_light"
+                android:paddingRight="10dp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+            <TextView
+                android:id="@+id/median_value"
+                android:background="@android:color/background_light"
+                android:paddingRight="10dp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+
+            <TextView
+                android:id="@+id/somma_value"
+                android:background="@android:color/background_light"
+                android:paddingRight="10dp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select year:" />
+
+            <Spinner
+                android:id="@+id/yearSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:entries="@array/year_array" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_annulla"

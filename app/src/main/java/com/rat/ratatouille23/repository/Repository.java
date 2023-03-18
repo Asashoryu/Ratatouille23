@@ -88,6 +88,7 @@ public class Repository {
         tavoli = getTavoliTest();
         ordinazioniAperte = new ArrayList<>();
         storicoOrdinazioniChiuse = StoricoOrdinazioniChiuse.getInstance();
+        setStoricoOrdinazioniChiuseTest();
     }
 
     public static Repository getInstance() {
@@ -308,16 +309,18 @@ public class Repository {
 
     public StoricoOrdinazioniChiuse getStoricoOrdinazioniChiuse() {
         if (storicoOrdinazioniChiuse.getOrdinazioni().isEmpty()) {
-            getStoricoOrdinazioniChiuseTest();
+            setStoricoOrdinazioniChiuseTest();
         }
         return storicoOrdinazioniChiuse;
     }
 
-    public void getStoricoOrdinazioniChiuseTest() {
+    public void setStoricoOrdinazioniChiuseTest() {
         Ordinazione o1 = new Ordinazione(tavoli.get(4));
         Ordinazione o2 = new Ordinazione(tavoli.get(2));
         Ordinazione o3 = new Ordinazione(tavoli.get(5));
         Ordinazione o4 = new Ordinazione(tavoli.get(6));
+        Ordinazione o5 = new Ordinazione(tavoli.get(1));
+        Ordinazione o6 = new Ordinazione(tavoli.get(3));
 
         o1.aggiungiPortata(new Portata("spaghetti", 70f, null, null));
         o1.aggiungiPortata(new Portata("ciccetti", 6f, null, null));
@@ -331,11 +334,21 @@ public class Repository {
 
         o4.aggiungiPortata(new Portata("bruciacchietti", 30f, null, null));
 
-        storicoOrdinazioniChiuse.chiudiOrdinazione(o1);
-        storicoOrdinazioniChiuse.chiudiOrdinazione(o2);
-        storicoOrdinazioniChiuse.chiudiOrdinazione(o3);
-        storicoOrdinazioniChiuse.chiudiOrdinazione(o4);
+        o5.aggiungiPortata(new Portata("cotoletta", 45f, null, null));
+        o5.aggiungiPortata(new Portata("patatine", 22f, null, null));
+        o5.aggiungiPortata(new Portata("birra", 5f, null, null));
+
+        o6.aggiungiPortata(new Portata("insalata", 20f, null, null));
+        o6.aggiungiPortata(new Portata("pane", 2f, null, null));
+
+        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o1, "1660317380");
+        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o2, "1653162104");
+        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o3, "1661574673");
+        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o4, "1646092196");
+        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o5, "1664552085");
+        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o6, "1651950123");
     }
+
 
     public void setLoginViewModel(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;
