@@ -24,6 +24,7 @@ import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
 import com.rat.ratatouille23.viewmodel.ScegliTavoloOrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.ScegliTavoloVisualizzaContoViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaContoViewModel;
+import com.rat.ratatouille23.viewmodel.VisualizzaIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaMenuViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaStatisticheViewModel;
 
@@ -83,6 +84,8 @@ public class Repository {
 
     private static VisualizzaStatisticheViewModel visualizzaStatisticheViewModel;
 
+    private static VisualizzaIngredienteViewModel visualizzaIngredienteViewModel;
+
     private Repository() {
         menu = getMenuTest();
         tavoli = getTavoliTest();
@@ -127,7 +130,7 @@ public class Repository {
             return new Dipendente("Joe", "AddettoCucina", username, Dipendente.Ruolo.ADDETTOCUCINA, password, true);
         }
         else if (username.equals("re") && password.equals("re")) {
-            return new Dipendente("Joe", "AddettoCucinaNonImpostato", username, Dipendente.Ruolo.ADDETTOCUCINA, password, true);
+            return new Dipendente("Joe", "AddettoCucinaNonImpostato", username, Dipendente.Ruolo.ADDETTOCUCINA, password, false);
         } else if (username.equals("rp") && password.equals("rp")) {
             return new Dipendente("Joe", "Reimposta", username,Dipendente.Ruolo.NONIMPOSTATO, password, false);
         } else {
@@ -195,6 +198,12 @@ public class Repository {
     public void aggiungiIngrediente(Ingrediente ingrediente) {
         //TODO: inserire l'ingrediente nel backend
         dispensa.add(ingrediente);
+    }
+
+    public void eliminaIngredienteSelezionato() {
+        if (ingredienteSelezionato != null) {
+            dispensa.remove(ingredienteSelezionato);
+        }
     }
 
     public void aggiungiIngredienteAllaPortataSelezionata(Ingrediente ingrediente, Float quantita) {
@@ -408,5 +417,9 @@ public class Repository {
 
     public void setVisualizzaStatisticheViewModel(VisualizzaStatisticheViewModel visualizzaStatisticheViewModel) {
         this.visualizzaStatisticheViewModel = visualizzaStatisticheViewModel;
+    }
+
+    public void setVisualizzaIngredienteViewModel(VisualizzaIngredienteViewModel visualizzaIngredienteViewModel) {
+        this.visualizzaIngredienteViewModel = visualizzaIngredienteViewModel;
     }
 }

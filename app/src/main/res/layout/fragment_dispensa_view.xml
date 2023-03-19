@@ -47,21 +47,12 @@
             android:textColor="@android:color/black"
             tools:ignore="HardcodedText" />
 
-        <Button
-            android:id="@+id/btn_rimuovi_ingrediente"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_yellow_custom"
-            android:text="rimuovi ingrediente"
-            android:textColor="@android:color/black"
-            tools:ignore="HardcodedText" />
-
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="25dp"
-            app:constraint_referenced_ids="btn_aggiungi_ingrediente,btn_rimuovi_ingrediente"
+            app:constraint_referenced_ids="btn_aggiungi_ingrediente"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

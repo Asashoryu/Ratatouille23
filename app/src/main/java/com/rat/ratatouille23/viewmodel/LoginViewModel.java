@@ -24,20 +24,35 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String nome, String password) {
-        try {
-            repository.login(nome, password);
-            dipendente = repository.getDipendente();
-            if (dipendente.getReimpostata()) {
-                setIsVaiAvanti();
+        if (isLoginInputValido(nome, password)) {
+            try {
+                repository.login(nome, password);
+                dipendente = repository.getDipendente();
+                if (dipendente.getReimpostata()) {
+                    setIsVaiAvanti();
+                }
+                else {
+                    setIsVaiAReimpostaPassword();
+                }
+            } catch (DipendenteNonTrovatoException dnte) {
+                dnte.printStackTrace();
+                setMessaggioLogin(dnte.getMessage());
             }
-            else {
-                setIsVaiAReimpostaPassword();
-            }
-        } catch (DipendenteNonTrovatoException dnte) {
-            dnte.printStackTrace();
-            setMessaggioLogin(dnte.getMessage());
         }
     }
+
+    private boolean isLoginInputValido(String nome, String password) {
+        if (nome == null || nome.isEmpty()) {
+            setMessaggioLogin("Il nome non può essere vuoto");
+            return false;
+        }
+        if (password == null || password.isEmpty()) {
+            setMessaggioLogin("La password non può essere vuota");
+            return false;
+        }
+        return true;
+    }
+
 
     public void setMessaggioLogin(String nuovoMessaggioLogin) {
         messaggioLogin.setValue(nuovoMessaggioLogin);

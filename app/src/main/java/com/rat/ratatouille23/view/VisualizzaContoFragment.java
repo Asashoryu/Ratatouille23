@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
@@ -39,6 +40,8 @@ public class VisualizzaContoFragment extends Fragment {
 
         osservaCambientoPortateConto();
 
+        osservaMessaggioErrore();
+
         return fragmentView;
     }
 
@@ -52,5 +55,18 @@ public class VisualizzaContoFragment extends Fragment {
         {
             portateContoItemAdapter.setData(listaPortateConto);
         });
+    }
+
+    public void osservaMessaggioErrore() {
+        visualizzaContoViewModel.messaggioVisualizzaConto.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (visualizzaContoViewModel.isNuovoMessaggioVisualizzaConto()) {
+                visualizzaToastConMessaggio(visualizzaContoViewModel.getMessaggioVisualizzaConto());
+                visualizzaContoViewModel.cancellaMessaggioVisualizzaConto();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(visualizzaContoBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
 }

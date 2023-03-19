@@ -86,6 +86,9 @@
         <action
             android:id="@+id/action_dispensaView_to_aggiungiIngredienteFragment"
             app:destination="@id/aggiungiIngredienteFragment" />
+        <action
+            android:id="@+id/action_dispensaView_to_visualizzaIngredienteFragment"
+            app:destination="@id/visualizzaIngredienteFragment" />
     </fragment>
     <fragment
         android:id="@+id/reimpostaPasswordFragment"
@@ -171,4 +174,9 @@
         android:name="com.rat.ratatouille23.view.VisualizzaStatisticheFragment"
         android:label="fragment_visualizza_statistiche"
         tools:layout="@layout/fragment_visualizza_statistiche" />
+    <fragment
+        android:id="@+id/visualizzaIngredienteFragment"
+        android:name="com.rat.ratatouille23.view.VisualizzaIngredienteFragment"
+        android:label="fragment_visualizza_ingrediente"
+        tools:layout="@layout/fragment_visualizza_ingrediente" />
 </navigation>

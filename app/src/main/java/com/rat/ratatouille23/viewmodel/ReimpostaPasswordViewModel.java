@@ -1,5 +1,7 @@
 package com.rat.ratatouille23.viewmodel;
 
+import android.text.TextUtils;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -33,7 +35,8 @@ public class ReimpostaPasswordViewModel extends ViewModel {
         tornaIndietro.setValue(false);
     }
 
-    public void reimpostaPassword(String vecchiaPassword, String nuovaPassword) {
+    public void reimpostaPassword(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) {
+        if (isReimpostaInputValido(vecchiaPassword, nuovaPassword, confermaNuovaPassword))
         try {
             repository.reimpostaPassword(vecchiaPassword, nuovaPassword);
             setTornaIndietro();
@@ -41,6 +44,101 @@ public class ReimpostaPasswordViewModel extends ViewModel {
             setMessaggioReimpostaPassword(e.getMessage());
         }
     }
+
+    public boolean isReimpostaInputValido(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) {
+        if (TextUtils.isEmpty(vecchiaPassword)) {
+            setMessaggioReimpostaPassword("Inserisci la vecchia password");
+            return false;
+        }
+
+        if (!dipendente.getPassword().equals(vecchiaPassword)) {
+            setMessaggioReimpostaPassword("La vecchia password non è corretta");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(nuovaPassword)) {
+            setMessaggioReimpostaPassword("Inserisci la nuova password");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(confermaNuovaPassword)) {
+            setMessaggioReimpostaPassword("Inserisci la conferma della nuova password");
+            return false;
+        }
+
+        if (!nuovaPassword.equals(confermaNuovaPassword)) {
+            setMessaggioReimpostaPassword("Le nuove password non corrispondono");
+            return false;
+        }
+
+        if (!isStrongPassword(nuovaPassword)) {
+            setMessaggioReimpostaPassword("La nuova password non è abbastanza forte");
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isStrongPassword(String password) {
+        // Controlla che la password abbia almeno 8 caratteri
+        if (password.length() < 8) {
+            return false;
+        }
+
+        // Controlla che la password contenga almeno una lettera minuscola
+        boolean hasLowercase = false;
+        for (int i = 0; i < password.length(); i++) {
+            if (Character.isLowerCase(password.charAt(i))) {
+                hasLowercase = true;
+                break;
+            }
+        }
+        if (!hasLowercase) {
+            return false;
+        }
+
+        // Controlla che la password contenga almeno una lettera maiuscola
+        boolean hasUppercase = false;
+        for (int i = 0; i < password.length(); i++) {
+            if (Character.isUpperCase(password.charAt(i))) {
+                hasUppercase = true;
+                break;
+            }
+        }
+        if (!hasUppercase) {
+            return false;
+        }
+
+        // Controlla che la password contenga almeno un numero
+        boolean hasNumber = false;
+        for (int i = 0; i < password.length(); i++) {
+            if (Character.isDigit(password.charAt(i))) {
+                hasNumber = true;
+                break;
+            }
+        }
+        if (!hasNumber) {
+            return false;
+        }
+
+        // Controlla che la password contenga almeno un carattere speciale
+        boolean hasSpecialChar = false;
+        String specialChars = "~!@#$%^&*()_+`-={}|[]\\:\";'<>?,./";
+        for (int i = 0; i < password.length(); i++) {
+            if (specialChars.contains(String.valueOf(password.charAt(i)))) {
+                hasSpecialChar = true;
+                break;
+            }
+        }
+        if (!hasSpecialChar) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
 
     public void setMessaggioReimpostaPassword(String nuovoMessaggioReimpostaPassword) {
         messaggioReimpostaPassword.setValue(nuovoMessaggioReimpostaPassword);

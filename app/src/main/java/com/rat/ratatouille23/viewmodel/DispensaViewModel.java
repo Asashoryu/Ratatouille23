@@ -38,4 +38,8 @@ public class DispensaViewModel extends ViewModel {
     public void setFalseVaiAdAggiungiIngrediente() {
         vaiAdAggiungiIngrediente.setValue(false);
     }
+
+    public void impostaIngredienteSelezionato(Ingrediente ingrediente) {
+        repository.setIngredienteSelezionato(ingrediente);
+    }
 }

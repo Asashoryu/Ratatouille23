@@ -43,7 +43,10 @@ public class DispensaFragment extends Fragment {
     }
 
     public void impostaIngredientiItemAdapter() {
-        ingredientiItemAdapter = new IngredientiItemAdapter((ingrediente)-> {});
+        ingredientiItemAdapter = new IngredientiItemAdapter((ingrediente)-> {
+            Navigation.findNavController(fragmentView).navigate(R.id.action_dispensaView_to_visualizzaIngredienteFragment);
+            dispensaViewModel.impostaIngredienteSelezionato(ingrediente);
+        });
         dispensaBinding.listaIngredienti.setAdapter(ingredientiItemAdapter);
     }
 

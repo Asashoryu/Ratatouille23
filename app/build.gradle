@@ -66,4 +66,7 @@ dependencies {
 
     //ArrayUtils dipendenza
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    //IText per la generazione di PDF
+    implementation 'com.itextpdf:itextpdf:5.5.13.2'
 }
