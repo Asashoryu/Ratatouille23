@@ -20,11 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginHorizontal="15dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginTop="20dp"
             android:maxHeight="60dp"
             android:minHeight="50dp"
             android:src="@drawable/titolo"
-            app:layout_constraintBottom_toTopOf="@+id/nome_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,51 +35,83 @@
             android:layout_marginHorizontal="50dp"
             android:background="@drawable/et_custom"
             android:hint="nickname"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:maxWidth="480dp"
             android:minWidth="300dp"
             android:paddingHorizontal="15dp"
-            app:layout_constraintBottom_toTopOf="@+id/password_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login"
             app:layout_constraintTop_toBottomOf="@+id/titolo"
-            app:layout_constraintVertical_bias="0.2" />
+            tools:layout_editor_absoluteX="50dp" />
 
         <EditText
             android:id="@+id/password_text"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/et_custom"
             android:hint="password"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:maxWidth="380dp"
             android:paddingHorizontal="15dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/black"
+            android:textSize="20dp"
             app:layout_constraintTop_toBottomOf="@+id/nome_text"
-            app:layout_constraintVertical_bias="0.15" />
+            tools:layout_editor_absoluteX="50dp" />
 
         <Button
             android:id="@+id/btn_login"
             android:layout_width="200dp"
             android:layout_height="56dp"
             android:layout_marginHorizontal="100dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/btn_custom"
-            android:text="LOG IN"
             android:onClick="@{() -> loginViewModel.login(nomeText.getText().toString(), passwordText.getText().toString())}"
+            android:text="LOG IN"
             android:textColor="@color/black"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/error_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="700dp"
+            android:layout_margin="50dp"
+            android:padding="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/nome_text"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_text" />
+            app:layout_constraintTop_toBottomOf="@+id/titolo">
+
+            <TextView
+                android:id="@+id/error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="500dp"
+                android:textColor="@color/white"
+                android:textSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/error_sign"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:visibility="invisible"
+                android:src="@drawable/warning_sign"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/error_message"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

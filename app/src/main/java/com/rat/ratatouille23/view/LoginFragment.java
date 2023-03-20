@@ -72,13 +72,16 @@ public class LoginFragment extends Fragment {
     public void osservaMessaggioErrore() {
         loginViewModel.messaggioLogin.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (loginViewModel.isNuovoMessaggioLogin()) {
-                visualizzaToastConMessaggio(loginViewModel.getMessaggioLogin());
+                loginBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
+                loginBinding.errorMessage.setText(loginViewModel.getMessaggioLogin());
+                loginBinding.errorSign.setVisibility(View.VISIBLE);
+                //visualizzaToastConMessaggio(loginViewModel.getMessaggioLogin());
                 loginViewModel.cancellaMessaggioLogin();
             }
         });
     }
 
-    public void visualizzaToastConMessaggio(String messaggio) {
+    /*public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(loginBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
-    }
+    }*/
 }
