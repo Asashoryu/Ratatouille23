@@ -13,11 +13,13 @@ public class Dish {
     @Column(name="nome")
     private String name;
     @Column(name="prezzo")
-    private Float price;
+    private float price;
     @Column(name="categoria")
     private String category;
     @Column(name="allergie")
     private String allergy;
+    @Column(name="ordinabile")
+    private boolean ordiniabile;
     @Column(name="description")
     private String descritpion;
 
@@ -33,11 +35,12 @@ public class Dish {
     public Dish() {
     }
 
-    public Dish(String name, Float price, String category, String allergy, String descritpion,List<Ordered_Dish> ordered_dishes,List<Make_Dish> make_dishes) {
+    public Dish(String name, float price, String category, String allergy, boolean ordiniabile, String descritpion, List<Ordered_Dish> ordered_dishes, List<Make_Dish> made_dishes) {
         this.name = name;
         this.price = price;
         this.category = category;
         this.allergy = allergy;
+        this.ordiniabile = ordiniabile;
         this.descritpion = descritpion;
         this.ordered_dishes = ordered_dishes;
         this.made_dishes = made_dishes;
@@ -51,14 +54,21 @@ public class Dish {
         this.name = name;
     }
 
-    public Float getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
+    public boolean isOrdiniabile() {
+        return ordiniabile;
+    }
+
+    public void setOrdiniabile(boolean ordiniabile) {
+        this.ordiniabile = ordiniabile;
+    }
 
     public String getCategory() {
         return category;
