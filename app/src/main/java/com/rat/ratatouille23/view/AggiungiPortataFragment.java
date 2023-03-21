@@ -51,16 +51,13 @@ public class AggiungiPortataFragment extends Fragment {
     public void osservaMessaggioErrore() {
         aggiungiPortataViewModel.messaggioAggiungiPortata.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (aggiungiPortataViewModel.isNuovoMessaggioAggiungiPortata()) {
-                aggiungiPortataBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
-                aggiungiPortataBinding.errorMessage.setText(messaggio);
-                aggiungiPortataBinding.errorSign.setVisibility(View.VISIBLE);
-                //visualizzaToastConMessaggio(messaggio);
+                visualizzaToastConMessaggio(messaggio);
                 aggiungiPortataViewModel.cancellaMessaggioAggiungiPortata();
             }
         });
     }
 
-    /*public void visualizzaToastConMessaggio(String messaggio) {
+    public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(aggiungiPortataBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
-    }*/
+    }
 }

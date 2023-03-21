@@ -44,8 +44,10 @@ public class ScegliTavoloVisualizzaContoFragment extends Fragment {
 
     public void impostaTavoliItemAdapter() {
         tavoliItemAdapter = new TavoliItemAdapter( (tavolo) -> {
-            scegliTavoloVisualizzaContoViewModel.impostaTavoloSelezionato(tavolo);
-            Navigation.findNavController(fragmentView).navigate(R.id.action_scegliTavoloVisualizzaContoFragment_to_visualizzaContoFragment);
+            if (!tavolo.getDisponibile()) {
+                scegliTavoloVisualizzaContoViewModel.impostaTavoloSelezionato(tavolo);
+                Navigation.findNavController(fragmentView).navigate(R.id.action_scegliTavoloVisualizzaContoFragment_to_visualizzaContoFragment);
+            }
         });
         scegliTavoloVisualizzaContoBinding.listaTavoli.setAdapter(tavoliItemAdapter);
     }
