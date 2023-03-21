@@ -91,22 +91,30 @@ public class VisualizzaStatisticheFragment extends Fragment {
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
 
+        impostaSpinnerAnniCheImpostaGrafico();
+
+
+
+        return fragmentView;
+    }
+
+    public void impostaSpinnerAnniCheImpostaGrafico() {
         // Define the spinner
         Spinner yearSpinner = visualizzaStatisticheBinding.yearSpinner;
 
-// Create an ArrayAdapter to populate the spinner
+        // Create an ArrayAdapter to populate the spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
                 R.array.year_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(adapter);
 
-// Set the initial year to the first item in the spinner
+        // Set the initial year to the first item in the spinner
         int initialYear = Integer.parseInt(yearSpinner.getSelectedItem().toString());
 
-// Set the chart for the initial year
+        // Set the chart for the initial year
         impostaBarChart6(initialYear);
 
-// Update the chart when a new year is selected in the spinner
+        // Update the chart when a new year is selected in the spinner
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -119,8 +127,6 @@ public class VisualizzaStatisticheFragment extends Fragment {
                 // Do nothing
             }
         });
-
-        return fragmentView;
     }
 
     public static boolean isLeapYear(int year) {

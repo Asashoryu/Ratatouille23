@@ -15,7 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class VisualizzaStatisticheViewModel extends ViewModel {
@@ -45,15 +47,27 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
         List<Entry> entryList = new ArrayList<>();
         String tempoOrdinazione;
 
+        storicoOrdinazioniChiuse.getOrdinazioni().forEach(ordinazione -> System.out.println(ordinazione.getCostoTotalePortate()));
+
         // Replace the following loop with code that fetches real data from a database or API
+        Map<Integer, Float> dailyTotals = new HashMap<>();
         for (Ordinazione ordinazione : storicoOrdinazioniChiuse.getOrdinazioni()) {
             tempoOrdinazione = ordinazione.getMinutaggioChiusuraConto();
             int yearOfOrder = getYearFromUTC(tempoOrdinazione);
             if (yearOfOrder == year) {
                 int dayOfYear = getOffsetDayOfYear(tempoOrdinazione);
-                entryList.add(new Entry(ordinazione.getCostoTotalePortate(), dayOfYear));
-                System.err.println("X: " + ordinazione.getCostoTotalePortate() + ", Y: " + dayOfYear);
+                float costoPortate = ordinazione.getCostoTotalePortate();
+                if (dailyTotals.containsKey(dayOfYear)) {
+                    costoPortate += dailyTotals.get(dayOfYear);
+                }
+                dailyTotals.put(dayOfYear, costoPortate);
             }
+        }
+
+        // Convert the daily totals to a list of entries
+        for (Map.Entry<Integer, Float> entry : dailyTotals.entrySet()) {
+            entryList.add(new Entry(entry.getKey(), entry.getValue()));
+            System.err.println("Y: " + entry.getValue() + ", X: " + entry.getKey());
         }
 
         entries.setValue(entryList);

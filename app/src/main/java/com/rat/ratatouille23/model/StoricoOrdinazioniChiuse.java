@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class StoricoOrdinazioniChiuse {
-    private ArrayList<Ordinazione> storico;
+    private ArrayList<Ordinazione> ordinazioni;
 
     private static StoricoOrdinazioniChiuse questoStoricoOrdinazioniChiuse;
 
     private StoricoOrdinazioniChiuse() {
-        storico = new ArrayList<>();
+        ordinazioni = new ArrayList<>();
     }
 
     public static StoricoOrdinazioniChiuse getInstance() {
@@ -24,26 +24,27 @@ public class StoricoOrdinazioniChiuse {
     public void chiudiOrdinazione(Ordinazione ordinazione) {
         ordinazione.setChiusa(true);
         ordinazione.setMinutaggioChiusuraConto(getMinutaggioAdesso());
-        storico.add(ordinazione);
+        ordinazione.getTavolo().liberaTavoloDaOrdinazione();
+        ordinazioni.add(ordinazione);
     }
 
     public void chiudiOrdinazioneInUTC(Ordinazione ordinazione, String UTC) {
         ordinazione.setChiusa(true);
         ordinazione.setMinutaggioChiusuraConto(UTC);
-        storico.add(ordinazione);
+        ordinazione.getTavolo().liberaTavoloDaOrdinazione();
+        ordinazioni.add(ordinazione);
     }
 
-    private String getMinutaggioAdesso() {
-        return Long.toString(Instant.now().toEpochMilli());
+    public String getMinutaggioAdesso() {
+        return Long.toString(Instant.now().getEpochSecond());
     }
 
     public ArrayList<Ordinazione> getOrdinazioni() {
-        return storico;
+        return ordinazioni;
     }
 
     public void setOrdinazioni(ArrayList<Ordinazione> ordinazioni) {
-        this.storico = ordinazioni;
+        this.ordinazioni = ordinazioni;
     }
-
 
 }
