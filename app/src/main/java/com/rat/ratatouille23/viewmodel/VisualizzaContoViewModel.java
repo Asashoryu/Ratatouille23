@@ -1,7 +1,17 @@
 package com.rat.ratatouille23.viewmodel;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -20,19 +30,23 @@ import com.rat.ratatouille23.repository.Repository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
 public class VisualizzaContoViewModel extends ViewModel {
-    Repository repository;
+    private Repository repository;
 
-    Tavolo tavolo;
+    private Tavolo tavolo;
 
-    Menu menu;
+    private Menu menu;
 
-    Ordinazione ordinazione;
+    private Ordinazione ordinazione;
 
+    private Context context;
     public MutableLiveData<ArrayList<Portata>> listaPortateConto = new MutableLiveData<ArrayList<Portata>>();
 
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
@@ -52,6 +66,10 @@ public class VisualizzaContoViewModel extends ViewModel {
         aggiornaCostoTotaleConto();
     }
 
+    public void setFragmentContext(Context context) {
+        this.context = context;
+    }
+
     public void aggiornaListaPortateConto() {
         listaPortateConto.setValue(ordinazione.getPortate());
         System.err.println("aggiornamento lista portate conto fatto");
@@ -63,17 +81,18 @@ public class VisualizzaContoViewModel extends ViewModel {
     }
 
     public void salvaPDF() {
-        generateOrderPdf();
+        generateOrderPdf(context);
     }
 
-    public void generateOrderPdf() {
-
+    public void generateOrderPdf(Context context) {
         // Create a new document using iText library
         Document document = new Document();
         try {
-            // Set the file path and create the file
-            String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/order.pdf";
-            File file = new File(filePath);
+            // Set the file path and create the file with a unique name
+            String tableName = ordinazione.getTavolo().getNome();
+            String fileName = "order_" + tableName + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm")) + ".pdf";
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File file = new File(downloadsDir, fileName);
             FileOutputStream fos = new FileOutputStream(file);
 
             // Create a PdfWriter instance to write to the document
@@ -83,8 +102,8 @@ public class VisualizzaContoViewModel extends ViewModel {
             document.open();
             document.add(new Paragraph("Order Details"));
             document.add(new Paragraph(" "));
-            document.add(new Paragraph("Order ID: " +  new Random().nextInt((1500 - 100) + 1) + 100));
-            document.add(new Paragraph("Tavolo: " + ordinazione.getTavolo().getNome()));
+            document.add(new Paragraph("Order ID: " + new Random().nextInt((1500 - 100) + 1) + 100));
+            document.add(new Paragraph("Tavolo: " + tableName));
             document.add(new Paragraph("Portate:"));
 
             for (Portata portata : ordinazione.getPortate()) {
@@ -98,6 +117,9 @@ public class VisualizzaContoViewModel extends ViewModel {
 
             // Show a success message to the user
             setMessaggioVisualizzaConto("PDF saved to Downloads folder.");
+
+            // Notify the media scanner about the new file so that it can be indexed
+            MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()}, null, null);
 
         } catch (IOException | DocumentException e) {
             // Handle any exceptions that occur during PDF creation

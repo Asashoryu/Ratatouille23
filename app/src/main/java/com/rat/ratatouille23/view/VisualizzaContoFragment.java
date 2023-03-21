@@ -35,6 +35,7 @@ public class VisualizzaContoFragment extends Fragment {
         fragmentView = visualizzaContoBinding.getRoot();
 
         visualizzaContoViewModel = new ViewModelProvider(this).get(VisualizzaContoViewModel.class);
+        visualizzaContoViewModel.setFragmentContext(getContext());
         visualizzaContoBinding.setVisualizzaContoViewModel(visualizzaContoViewModel);
 
         ImpostaPortateContoItemAdapter();
