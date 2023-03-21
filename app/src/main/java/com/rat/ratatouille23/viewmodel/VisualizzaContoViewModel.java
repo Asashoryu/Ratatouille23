@@ -13,6 +13,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.repository.Repository;
 
@@ -105,9 +106,9 @@ public class VisualizzaContoViewModel extends ViewModel {
         }
     }
 
-
-
     public void chiudiConto() {
+        repository.getStoricoOrdinazioniChiuse().chiudiOrdinazione(ordinazione);
+        setTornaIndietro();
     }
 
     public void setTornaIndietro() {

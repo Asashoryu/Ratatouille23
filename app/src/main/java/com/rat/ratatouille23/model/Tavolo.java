@@ -17,6 +17,11 @@ public class Tavolo {
         setDisponibile(false);
     }
 
+    public void liberaTavoloDaOrdinazione() {
+        setOrdinazione(new Ordinazione(this));
+        setDisponibile(true);
+    }
+
     public String getNome() {
         return nome;
     }

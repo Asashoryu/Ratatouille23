@@ -46,9 +46,6 @@ public class Repository {
     private Portata portataSelezionata;
 
     private Ingrediente ingredienteSelezionato;
-
-    ArrayList<Ordinazione> ordinazioniAperte;
-
     private Menu menu;
 
     private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
@@ -89,7 +86,6 @@ public class Repository {
     private Repository() {
         menu = getMenuTest();
         tavoli = getTavoliTest();
-        ordinazioniAperte = new ArrayList<>();
         storicoOrdinazioniChiuse = StoricoOrdinazioniChiuse.getInstance();
         setStoricoOrdinazioniChiuseTest();
     }
@@ -310,12 +306,6 @@ public class Repository {
         return ingredienteSelezionato;
     }
 
-
-    public void addOrdinazione(Ordinazione ordinazione) {
-        ordinazioniAperte.add(ordinazione);
-        ordinazioniAperte.forEach(ordinazione_lambda -> System.out.println(ordinazione_lambda.getPortate()));
-    }
-
     public StoricoOrdinazioniChiuse getStoricoOrdinazioniChiuse() {
         if (storicoOrdinazioniChiuse.getOrdinazioni().isEmpty()) {
             setStoricoOrdinazioniChiuseTest();
@@ -324,12 +314,12 @@ public class Repository {
     }
 
     public void setStoricoOrdinazioniChiuseTest() {
-        Ordinazione o1 = new Ordinazione(tavoli.get(4));
-        Ordinazione o2 = new Ordinazione(tavoli.get(2));
-        Ordinazione o3 = new Ordinazione(tavoli.get(5));
-        Ordinazione o4 = new Ordinazione(tavoli.get(6));
-        Ordinazione o5 = new Ordinazione(tavoli.get(1));
-        Ordinazione o6 = new Ordinazione(tavoli.get(3));
+        Ordinazione o1 = tavoli.get(4).getOrdinazione();
+        Ordinazione o2 = tavoli.get(2).getOrdinazione();
+        Ordinazione o3 = tavoli.get(5).getOrdinazione();
+        Ordinazione o4 = tavoli.get(6).getOrdinazione();
+        Ordinazione o5 = tavoli.get(1).getOrdinazione();
+        Ordinazione o6 = tavoli.get(3).getOrdinazione();
 
         o1.aggiungiPortata(new Portata("spaghetti", 70f, null, null));
         o1.aggiungiPortata(new Portata("ciccetti", 6f, null, null));
@@ -355,9 +345,8 @@ public class Repository {
         storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o3, "1661574673");
         storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o4, "1646092196");
         storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o5, "1664552085");
-        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o6, "1651950123");
+        storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o6, "1696638510");
     }
-
 
     public void setLoginViewModel(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;

@@ -69,4 +69,8 @@ dependencies {
 
     //IText per la generazione di PDF
     implementation 'com.itextpdf:itextpdf:5.5.13.2'
+
+
+    // Retrofit dipendenza
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,8 @@ public class VisualizzaContoFragment extends Fragment {
 
         osservaMessaggioErrore();
 
+        osservaSeTornareIndietro();
+
         return fragmentView;
     }
 
@@ -68,5 +71,14 @@ public class VisualizzaContoFragment extends Fragment {
 
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(visualizzaContoBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
+    public void osservaSeTornareIndietro() {
+        visualizzaContoViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                visualizzaContoViewModel.setFalseTornaIndietro();
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
     }
 }
