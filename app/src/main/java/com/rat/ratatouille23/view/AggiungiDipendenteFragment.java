@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentAggiungiDipendenteBinding;
 import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
 
@@ -49,13 +50,16 @@ public class AggiungiDipendenteFragment extends Fragment {
     public void osservaMessaggioErrore() {
         aggiungiDipendenteViewModel.messaggioAggiungiDipendente.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (aggiungiDipendenteViewModel.isNuovoMessaggioAggiungiDipendente()) {
-                visualizzaToastConMessaggio(messaggio);
+                aggiungiDipendenteBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
+                aggiungiDipendenteBinding.errorMessage.setText(messaggio);
+                aggiungiDipendenteBinding.errorSign.setVisibility(View.VISIBLE);
+                //visualizzaToastConMessaggio(messaggio);
                 aggiungiDipendenteViewModel.cancellaMessaggioAggiungiDipendente();
             }
         });
     }
 
-    public void visualizzaToastConMessaggio(String messaggio) {
+    /*public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(aggiungiDipendenteBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
-    }
+    }*/
 }

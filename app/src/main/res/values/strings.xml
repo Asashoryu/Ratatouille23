@@ -28,4 +28,13 @@
         <item>2011</item>
         <item>2010</item>
     </string-array>
+
+    <string-array name="categorie">
+        <item>Antipasto</item>
+        <item>Primo</item>
+        <item>Secondo</item>
+        <item>Contorno</item>
+        <item>Dolce</item>
+        <item>Bevanda</item>
+    </string-array>
 </resources>

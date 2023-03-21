@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.eccezioni.PersonalizzaMenuException;
 import com.rat.ratatouille23.model.Allergene;
+import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
 
@@ -16,6 +17,8 @@ public class AggiungiPortataViewModel extends ViewModel {
     Portata portata;
 
     ArrayList<Allergene> listaAllergeniSelezionati;
+
+    public MutableLiveData<ArrayList<Categoria>> listaCategorie = new MutableLiveData<ArrayList<Categoria>>();
 
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
