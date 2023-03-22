@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.PortataOrdine;
 import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.repository.Repository;
@@ -47,7 +48,7 @@ public class VisualizzaContoViewModel extends ViewModel {
     private Ordinazione ordinazione;
 
     private Context context;
-    public MutableLiveData<ArrayList<Portata>> listaPortateConto = new MutableLiveData<ArrayList<Portata>>();
+    public MutableLiveData<ArrayList<PortataOrdine>> listaPortateConto = new MutableLiveData<ArrayList<PortataOrdine>>();
 
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
@@ -71,12 +72,12 @@ public class VisualizzaContoViewModel extends ViewModel {
     }
 
     public void aggiornaListaPortateConto() {
-        listaPortateConto.setValue(ordinazione.getPortate());
+        listaPortateConto.setValue(ordinazione.getPortateOrdine());
         System.err.println("aggiornamento lista portate conto fatto");
     }
 
     public void aggiornaCostoTotaleConto() {
-        costoTotaleConto.setValue(ordinazione.getCostoTotalePortate());
+        costoTotaleConto.setValue(ordinazione.getCostoTotalePortateOrdine());
         System.err.println("aggiornamento costo totale conto fatto");
     }
 
@@ -106,10 +107,10 @@ public class VisualizzaContoViewModel extends ViewModel {
             document.add(new Paragraph("Tavolo: " + tableName));
             document.add(new Paragraph("Portate:"));
 
-            for (Portata portata : ordinazione.getPortate()) {
-                document.add(new Paragraph(portata.getNome() + " " + portata.getCosto()));
+            for (PortataOrdine portataOrdine : ordinazione.getPortateOrdine()) {
+                document.add(new Paragraph(portataOrdine.getPortata().getNome() + " x" + portataOrdine.getQuantita() + " " + portataOrdine.getCostoTotalePortataOrdine()));
             }
-            document.add(new Paragraph("Total: " + ordinazione.getCostoTotalePortate()));
+            document.add(new Paragraph("Total: " + ordinazione.getCostoTotalePortateOrdine()));
 
             // Close the document and file output stream
             document.close();

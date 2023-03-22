@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="portata"
-            type="com.rat.ratatouille23.model.Portata" />
+            name="portataOrdine"
+            type="com.rat.ratatouille23.model.PortataOrdine" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -15,34 +15,47 @@
         android:background="@color/grey_light"
         android:layout_margin="5dp" >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/grey_light"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/nome_portata"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/grey_light"
-                android:text="@{portata.nome}"
+                android:layout_marginStart="10dp"
+
+                android:text="@{portataOrdine.portata.nome}"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                />
 
             <TextView
                 android:id="@+id/costo_portata"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/grey_light"
-                android:text="@{portata.costo.toString()}"
+                android:layout_marginStart="10dp"
+
+                android:text="@{portataOrdine.portata.costo.toString()}"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                />
+
+            <TextView
+                android:id="@+id/quantita_portata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_light"
+                android:layout_marginStart="10dp"
+
+                android:text="@{portataOrdine.quantita.toString()}"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                 />\
 
             <TextView
                 android:id="@+id/euro_txt"
@@ -50,14 +63,13 @@
                 android:layout_height="wrap_content"
                 android:background="@color/grey_light"
                 android:layout_marginStart="10dp"
-                android:text="€"
+                android:text="@{portataOrdine.costoTotalePortataOrdine.toString()}"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                app:layout_constraintEnd_toStartOf= "@id/costo_portata"
-                app:layout_constraintTop_toTopOf="parent"/>
+                />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

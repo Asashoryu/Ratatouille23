@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Ordinazione {
     Tavolo tavolo;
-    ArrayList<Portata> portate;
+    ArrayList<PortataOrdine> portateOrdine;
 
-    Float costoTotalePortate;
+    Float costoTotalePortateOrdine;
 
     Boolean isChiusa;
 
@@ -14,25 +14,95 @@ public class Ordinazione {
 
     public Ordinazione(Tavolo tavolo) {
         setTavolo(tavolo);
-        portate = new ArrayList<>();
-        costoTotalePortate = 0.0f;
+        portateOrdine = new ArrayList<>();
+        costoTotalePortateOrdine = 0.0f;
         isChiusa = false;
     }
 
-    public void aggiungiPortata(Portata portata) {
-        portate.add(portata);
-        costoTotalePortate += portata.getCosto();
-    }
+    public void incrementaPortata(Portata portata) {
 
-    public void aggiornaCostoTotalePortate() {
-        Float costoTotalePortate = 0f;
-        for (Portata portata : portate) {
-            costoTotalePortate+= portata.getCosto();
+        boolean trovato = false;
+
+        // Check if the product already exists in an existing PortataOrdine object
+        for (PortataOrdine portataOrdine : portateOrdine) {
+            if (portataOrdine.getPortata().equals(portata)) {
+                // If the product exists, increment the quantity of the existing PortataOrdine object
+                portataOrdine.incrementaQuantita();
+                trovato = true;
+            }
         }
+
+        if (trovato == false) {
+            // If the product does not exist, create a new PortataOrdine object and add it to the list
+            PortataOrdine newPortataOrdine = new PortataOrdine(this, portata);
+            portateOrdine.add(newPortataOrdine);
+        }
+
+        aggiornaCostoTotalePortateOrdine();
     }
 
-    public void rimuoviPortata(Portata portata) {
-        portate.remove(portata);
+    public void aggiornaCostoTotalePortateOrdine() {
+        // Iterate through the list of PortataOrdine objects and sum up the costs
+        float totalCost = 0;
+        for (PortataOrdine portataOrdine : portateOrdine) {
+            totalCost += portataOrdine.getQuantita() * portataOrdine.getPortata().getCosto();
+        }
+
+        // Update the costoTotalePortateOrdine attribute
+        costoTotalePortateOrdine = totalCost;
+    }
+
+
+    public void decrementaPortataOrdine(PortataOrdine portataOrdine) {
+        // Iterate through the list of PortataOrdine objects
+        for (int i = 0; i < portateOrdine.size(); i++) {
+            PortataOrdine currentPortataOrdine = portateOrdine.get(i);
+
+            // Check if the current PortataOrdine object is equal to the given object
+            if (currentPortataOrdine.equals(portataOrdine)) {
+                // If the quantity of the PortataOrdine object is 1, remove it from the list
+                if (currentPortataOrdine.getQuantita() == 1) {
+                    portateOrdine.remove(i);
+                } else {
+                    // Otherwise, decrement the quantity by 1
+                    currentPortataOrdine.decrementaQuantita();
+                }
+                return;
+            }
+        }
+
+        // If the PortataOrdine object is not found, throw an exception
+        throw new IllegalArgumentException("PortataOrdine not found in the order.");
+    }
+
+
+    public void decrementaPortata(Portata portata) {
+        // Iterate through the list of PortataOrdine objects
+        for (int i = 0; i < portateOrdine.size(); i++) {
+            PortataOrdine portataOrdine = portateOrdine.get(i);
+
+            // Check if the current PortataOrdine object contains the given product
+            if (portataOrdine.getPortata().equals(portata)) {
+                // If the quantity of the PortataOrdine object is 1, remove it from the list
+                if (portataOrdine.getQuantita() == 1) {
+                    portateOrdine.remove(i);
+                } else {
+                    // Otherwise, decrement the quantity by 1
+                    portataOrdine.decrementaQuantita();
+                }
+                aggiornaCostoTotalePortateOrdine();
+                return;
+            }
+        }
+
+        // If the product is not found, throw an exception
+        throw new IllegalArgumentException("Product not found in the order.");
+    }
+
+    public void rimuoviPortataOrdine(PortataOrdine portataOrdine) {
+        portateOrdine.remove(portataOrdine);
+
+        aggiornaCostoTotalePortateOrdine();
     }
 
     public Tavolo getTavolo() {
@@ -43,20 +113,20 @@ public class Ordinazione {
         this.tavolo = tavolo;
     }
 
-    public ArrayList<Portata> getPortate() {
-        return portate;
+    public ArrayList<PortataOrdine> getPortateOrdine() {
+        return portateOrdine;
     }
 
-    public void setPortate(ArrayList<Portata> portate) {
-        this.portate = portate;
+    public void setPortateOrdine(ArrayList<PortataOrdine> portateOrdine) {
+        this.portateOrdine = portateOrdine;
     }
 
-    public void setCostoTotalePortate(Float costoTotalePortate) {
-        this.costoTotalePortate = costoTotalePortate;
+    public void setCostoTotalePortateOrdine(Float costoTotalePortateOrdine) {
+        this.costoTotalePortateOrdine = costoTotalePortateOrdine;
     }
 
-    public Float getCostoTotalePortate() {
-        return costoTotalePortate;
+    public Float getCostoTotalePortateOrdine() {
+        return costoTotalePortateOrdine;
     }
 
     public Boolean getChiusa() {

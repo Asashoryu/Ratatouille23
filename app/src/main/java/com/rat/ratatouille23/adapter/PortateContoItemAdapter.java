@@ -8,32 +8,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rat.ratatouille23.databinding.PortataContoItemBinding;
-import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.PortataOrdine;
 
 import java.util.ArrayList;
 
 public class PortateContoItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<Portata> data = new ArrayList<>();
+    private ArrayList<PortataOrdine> data = new ArrayList<>();
 
-    private PortateContoItemAdapter.OnPortataContoCliccata onPortataContoCliccata;
+    private PortateContoItemAdapter.OnPortataOrdineContoCliccata onPortataOrdineContoCliccata;
 
-    public PortateContoItemAdapter(PortateContoItemAdapter.OnPortataContoCliccata onPortataContoCliccata) {
-        this.onPortataContoCliccata = onPortataContoCliccata;
+    public PortateContoItemAdapter(PortateContoItemAdapter.OnPortataOrdineContoCliccata onPortataOrdineContoCliccata) {
+        this.onPortataOrdineContoCliccata = onPortataOrdineContoCliccata;
     }
-    public void setData(ArrayList<Portata> data) {
+    public void setData(ArrayList<PortataOrdine> data) {
         this.data = data;
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        PortataContoItemBinding portataContoBinding;
-        PortateContoItemAdapter.OnPortataContoCliccata onPortataContoCliccata;
+        PortataContoItemBinding portataOrdineContoBinding;
+        PortateContoItemAdapter.OnPortataOrdineContoCliccata onPortataOrdineContoCliccata;
 
         public ViewHolder(@NonNull PortataContoItemBinding binding) {
             super(binding.getRoot());
-            this.portataContoBinding = binding;
+            this.portataOrdineContoBinding = binding;
         }
 
         public static PortateContoItemAdapter.ViewHolder inflateFrom(ViewGroup parent) {
@@ -42,19 +42,17 @@ public class PortateContoItemAdapter extends RecyclerView.Adapter<RecyclerView.V
             return new PortateContoItemAdapter.ViewHolder(binding);
         }
 
-        public void aggiungiAzione(PortateContoItemAdapter.OnPortataContoCliccata onPortataContoCliccata) {
-            this.onPortataContoCliccata = onPortataContoCliccata;
+        public void aggiungiAzione(PortateContoItemAdapter.OnPortataOrdineContoCliccata onPortataOrdineContoCliccata) {
+            this.onPortataOrdineContoCliccata = onPortataOrdineContoCliccata;
         }
 
-        public void bind(Portata portata) {
-            portataContoBinding.setPortata(portata);
+        public void bind(PortataOrdine portataOrdine) {
+            portataOrdineContoBinding.setPortataOrdine(portataOrdine);
 
-            portataContoBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            portataOrdineContoBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    System.err.println("il valore dell'portata cliccato è " + portata.getNome());
-                    onPortataContoCliccata.azione(portata);
-                    System.err.println("item portate adapter finito " + portata.getNome());
+                    onPortataOrdineContoCliccata.azione(portataOrdine);
                 }
             });
         }
@@ -66,13 +64,13 @@ public class PortateContoItemAdapter extends RecyclerView.Adapter<RecyclerView.V
         // Create a new view, which defines the UI of the list item
         PortateContoItemAdapter.ViewHolder viewHolder;
         viewHolder = PortateContoItemAdapter.ViewHolder.inflateFrom(parent);
-        viewHolder.aggiungiAzione(onPortataContoCliccata);
+        viewHolder.aggiungiAzione(onPortataOrdineContoCliccata);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Portata item = data.get(position);
+        PortataOrdine item = data.get(position);
         PortateContoItemAdapter.ViewHolder binding = (PortateContoItemAdapter.ViewHolder) holder;
         binding.bind(item);
     }
@@ -81,7 +79,7 @@ public class PortateContoItemAdapter extends RecyclerView.Adapter<RecyclerView.V
         return data.size();
     }
 
-    public interface OnPortataContoCliccata {
-        public void azione(Portata portata);
+    public interface OnPortataOrdineContoCliccata {
+        void azione(PortataOrdine portataOrdine);
     }
 }

@@ -47,7 +47,7 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
         List<Entry> entryList = new ArrayList<>();
         String tempoOrdinazione;
 
-        storicoOrdinazioniChiuse.getOrdinazioni().forEach(ordinazione -> System.out.println(ordinazione.getCostoTotalePortate()));
+        storicoOrdinazioniChiuse.getOrdinazioni().forEach(ordinazione -> System.out.println(ordinazione.getCostoTotalePortateOrdine()));
 
         // Replace the following loop with code that fetches real data from a database or API
         Map<Integer, Float> dailyTotals = new HashMap<>();
@@ -56,7 +56,7 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
             int yearOfOrder = getYearFromUTC(tempoOrdinazione);
             if (yearOfOrder == year) {
                 int dayOfYear = getOffsetDayOfYear(tempoOrdinazione);
-                float costoPortate = ordinazione.getCostoTotalePortate();
+                float costoPortate = ordinazione.getCostoTotalePortateOrdine();
                 if (dailyTotals.containsKey(dayOfYear)) {
                     costoPortate += dailyTotals.get(dayOfYear);
                 }
