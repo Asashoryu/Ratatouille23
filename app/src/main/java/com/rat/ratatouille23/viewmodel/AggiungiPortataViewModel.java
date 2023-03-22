@@ -16,9 +16,13 @@ public class AggiungiPortataViewModel extends ViewModel {
 
     Portata portata;
 
+    Categoria categoriaSelezionata;
+
     ArrayList<Allergene> listaAllergeniSelezionati;
 
-    public MutableLiveData<ArrayList<Categoria>> listaCategorie = new MutableLiveData<ArrayList<Categoria>>();
+    public int indiceCategoria = 0;
+
+    public ArrayList<String> nomiCategorie = new ArrayList<String>();
 
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
@@ -27,6 +31,7 @@ public class AggiungiPortataViewModel extends ViewModel {
     public AggiungiPortataViewModel() {
         repository = Repository.getInstance();
         repository.setAggiungiPortataViewModel(this);
+        repository.getMenu().getCategorie().forEach(categoria -> nomiCategorie.add(categoria.getNome()));
     }
 
     public void aggiungiPortata(String nome, String costo, String categoria, String descrizione) {
@@ -62,5 +67,13 @@ public class AggiungiPortataViewModel extends ViewModel {
 
     public void cancellaMessaggioAggiungiPortata() {
         messaggioAggiungiPortata.setValue("");
+    }
+
+    public void setCategoriaSelezionata (Categoria categoria) {
+        categoriaSelezionata = categoria;
+    }
+
+    public Categoria getCategoriaSelezionata () {
+        return categoriaSelezionata;
     }
 }

@@ -70,13 +70,14 @@
             android:textSize="20dp" />
 
         <Spinner
-            android:id="@+id/categoria_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/categoria_spinner"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:paddingHorizontal="5dp"
             android:maxLength="100"
-            android:entries="@array/categorie"
+            android:entries="@{aggiungiPortataViewModel.nomiCategorie}"
+            android:selectedItemPosition="@{aggiungiPortataViewModel.indiceCategoria}"
             android:textSize="25dp"
             android:textColor="@color/black"
             android:background="@drawable/et_custom"
@@ -126,7 +127,7 @@
             android:id="@+id/btn_aggiungi"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> aggiungiPortataViewModel.aggiungiPortata(nomeText.getText().toString(), costoText.getText().toString(), categoriaText.getText().toString(), descrizioneText.getText().toString())}"
+            android:onClick="@{() -> aggiungiPortataViewModel.aggiungiPortata(nomeText.getText().toString(), costoText.getText().toString(), aggiungiPortataViewModel.getCategoriaSelezionata().getNome().toString() , descrizioneText.getText().toString())}"
             android:text="aggiungi" />
 
         <Button
@@ -162,7 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:constraint_referenced_ids="nome_text,costo_frame,categoria_text,lista_allergeni_text,descrizione_text"
+            app:constraint_referenced_ids="nome_text,costo_frame,categoria_spinner,lista_allergeni_text,descrizione_text"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/flow_txt"
