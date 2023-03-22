@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_homeAmministratoreView_to_visualizzaStatisticheFragment"
             app:destination="@id/visualizzaStatisticheFragment" />
+        <action
+            android:id="@+id/action_homeAmministratoreView_to_modificaTavoliFragment"
+            app:destination="@id/modificaTavoliFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeSupervisoreView"
@@ -179,4 +182,9 @@
         android:name="com.rat.ratatouille23.view.VisualizzaIngredienteFragment"
         android:label="fragment_visualizza_ingrediente"
         tools:layout="@layout/fragment_visualizza_ingrediente" />
+    <fragment
+        android:id="@+id/modificaTavoliFragment"
+        android:name="com.rat.ratatouille23.view.ModificaTavoliFragment"
+        android:label="fragment_modifica_tavoli"
+        tools:layout="@layout/fragment_modifica_tavoli" />
 </navigation>

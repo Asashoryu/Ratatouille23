@@ -18,6 +18,7 @@ import com.rat.ratatouille23.viewmodel.AssociaIngredientiViewModel;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
 import com.rat.ratatouille23.viewmodel.IndicaQuantitaViewModel;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
+import com.rat.ratatouille23.viewmodel.ModificaTavoliViewModel;
 import com.rat.ratatouille23.viewmodel.OrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
 import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
@@ -30,6 +31,7 @@ import com.rat.ratatouille23.viewmodel.VisualizzaStatisticheViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,6 +84,8 @@ public class Repository {
     private static VisualizzaStatisticheViewModel visualizzaStatisticheViewModel;
 
     private static VisualizzaIngredienteViewModel visualizzaIngredienteViewModel;
+
+    private static ModificaTavoliViewModel modificaTavoliViewModel;
 
     private Repository() {
         menu = getMenuTest();
@@ -348,6 +352,56 @@ public class Repository {
         storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o6, "1696638510");
     }
 
+    public void rimuoviTavolo(Tavolo tavolo) {
+        // TODO: rimuovi il tavolo dal backend
+        tavoli.remove(tavolo);
+        modificaTavoliViewModel.aggiornaListaTavoli();
+    }
+
+    public void aggiungiTavoloInOrdine() {
+        // TODO: aggiungi il tavolo al backend
+        // Determine the minimum available index for the new tavolo's name
+        int nextAvailableIndex = 1;
+        for (Tavolo tavolo : tavoli) {
+            int tavoloIndex = 0;
+            try {
+                tavoloIndex = Integer.parseInt(tavolo.getNome());
+            } catch (NumberFormatException e) {
+                // Ignore tavoli with non-integer names
+            }
+            if (tavoloIndex == nextAvailableIndex) {
+                nextAvailableIndex++;
+            } else if (tavoloIndex > nextAvailableIndex) {
+                break;
+            }
+        }
+
+        // Create the new tavolo object with the determined name
+        Tavolo newTavolo = new Tavolo(Integer.toString(nextAvailableIndex), true);
+
+        // Add the new tavolo object to the ArrayList
+        tavoli.add(newTavolo);
+
+        // Sort the ArrayList based on the tavolo names
+        Collections.sort(tavoli, new Comparator<Tavolo>() {
+            @Override
+            public int compare(Tavolo tavolo1, Tavolo tavolo2) {
+                int tavolo1Index = 0;
+                int tavolo2Index = 0;
+                try {
+                    tavolo1Index = Integer.parseInt(tavolo1.getNome());
+                    tavolo2Index = Integer.parseInt(tavolo2.getNome());
+                } catch (NumberFormatException e) {
+                    // Ignore tavoli with non-integer names
+                }
+                return tavolo1Index - tavolo2Index;
+            }
+        });
+
+        // aggiorna view
+        modificaTavoliViewModel.aggiornaListaTavoli();
+    }
+
     public void setLoginViewModel(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;
     }
@@ -411,4 +465,10 @@ public class Repository {
     public void setVisualizzaIngredienteViewModel(VisualizzaIngredienteViewModel visualizzaIngredienteViewModel) {
         this.visualizzaIngredienteViewModel = visualizzaIngredienteViewModel;
     }
+
+    public void setModificaTavoliViewModel(ModificaTavoliViewModel modificaTavoliViewModel) {
+        this.modificaTavoliViewModel = modificaTavoliViewModel;
+    }
+
+
 }

@@ -65,7 +65,7 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAllaGestioneTavolo() {
         homeAmministratoreViewModel.vaiAllaGestioneTavolo.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                //TODO: naviga verso gestione tavolo
+                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_modificaTavoliFragment);
             }
         });
     }

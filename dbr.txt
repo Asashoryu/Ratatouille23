@@ -1,0 +1,199 @@
+CREATE TABLE user(
+	username VARCHAR(255) PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL,
+	cognome VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	role VARCHAR(255) NOT NULL,
+	is_reimpostata BOOLEAN NOT NULL
+);
+CREATE TABLE piatto(
+	nome VARCHAR(255) PRIMARY KEY,
+	prezzo REAL NOT NULL,
+	categoria VARCHAR(255) NOT NULL,
+	allergie VARCHAR(300),
+	ordinabile BOOLEAN NOT NULL DEFAULT true,
+	description VARCHAR(300)
+	
+);
+CREATE TABLE ingrediente(
+	nome VARCHAR(255) PRIMARY KEY,
+	costo REAL NOT NULL,
+	quantita REAL NOT NULL,
+	misura VARCHAR(255) NOT NULL,
+	tolleranza REAL NOT NULL,
+	description VARCHAR(300)
+);
+CREATE TABLE tavolo(  
+	id INTEGER PRIMARY KEY,
+	taken BOOLEAN NOT NULL	
+);
+CREATE TABLE conto(
+	id INTEGER PRIMARY KEY,
+	time BIGINT NOT NULL,
+	total REAL NOT NULL,
+	is_chiuso BOOLEAN NOT NULL DEFAULT false,
+	numero_tavolo INT NOT NULL,
+	FOREIGN KEY(numero_tavolo) REFERENCES tavolo(id) on delete cascade 
+	
+);
+CREATE TABLE ordered_dish(
+	corrispondenza SERIAL PRIMARY KEY
+	quantita INTEGER NOT NULL,
+	conto_id INTEGER,
+	nome_piatto VARCHAR(255),
+	FOREIGN KEY(nome_piatto) REFERENCES piatto(name) on delete cascade ,
+	FOREIGN KEY(conto_id) REFERENCES conto(id) on delete cascade 
+	
+);
+CREATE TABLE make_dish(
+	corrispondenza SERIAL PRIMARY KEY,
+	quantity REAL NOT NULL,
+	nome_ingrediente VARCHAR(255),
+	nome_piatto VARCHAR(255),
+	FOREIGN KEY(nome_piatto) REFERENCES piatto(nome) on delete cascade ,
+	FOREIGN KEY(nome_ingrediente) REFERENCES ingrediente(nome)on delete cascade 
+);
+
+
+
+
+DELIMITER //
+CREATE TRIGGER update_ingrediente_quantita_insersci
+AFTER INSERT ON ordered_dish
+FOR EACH ROW
+BEGIN
+    UPDATE ingrediente 
+    SET quantita = quantita - (SELECT make_dish.quantity * NEW.quantita 
+                               FROM make_dish 
+                               WHERE make_dish.nome_piatto = NEW.nome_piatto 
+                                 AND make_dish.nome_ingrediente = ingrediente.nome)
+    WHERE ingrediente.nome IN (SELECT make_dish.nome_ingrediente 
+                               FROM make_dish 
+                               WHERE make_dish.nome_piatto = NEW.nome_piatto);
+END//
+DELIMITER ;
+
+
+DELIMITER //
+CREATE TRIGGER set_quantita_to_zero
+BEFORE UPDATE ON ingrediente
+FOR EACH ROW
+BEGIN
+    IF NEW.quantita < 0 THEN
+        SET NEW.quantita = 0;
+    END IF;
+END$$
+DELIMITER ;
+
+
+DELIMITER //
+CREATE TRIGGER check_ordered_dish_insertion
+BEFORE INSERT ON ordered_dish
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM make_dish m
+        JOIN ingrediente i ON m.nome_ingrediente = i.nome
+        WHERE m.nome_piatto = NEW.nome_piatto AND m.quantity > i.quantita
+    ) THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'Cannot insert into ordered_dish. make_dish.quantity is greater than ingrediente.quantita.';
+    END IF;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER check_tolleranza
+AFTER UPDATE ON ingrediente
+FOR EACH ROW
+BEGIN
+    IF NEW.quantita < NEW.tolleranza THEN
+        INSERT INTO message (text) VALUES ('The quantita value for ingredient ' || NEW.nome || ' has fallen below the tolleranza value.');
+    END IF;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER update_piatto_ordinabile_false
+AFTER INSERT ON make_dish
+FOR EACH ROW
+BEGIN
+    UPDATE piatto
+    SET ordinabile = false
+    WHERE nome IN (
+        SELECT nome_piatto
+        FROM make_dish
+        JOIN ingrediente ON make_dish.nome_ingrediente = ingrediente.nome
+        WHERE ingrediente.quantita < make_dish.quantity
+    );
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER check_table_taken
+BEFORE INSERT ON conto
+FOR EACH ROW
+BEGIN
+    IF (SELECT taken FROM tavolo WHERE id = NEW.numero_tavolo) = true THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot add row to conto: table already taken';
+    END IF;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER update_table_taken
+AFTER INSERT ON conto
+FOR EACH ROW
+BEGIN
+    IF (SELECT is_chiuso FROM conto WHERE numero_tavolo = NEW.numero_tavolo AND is_chiuso = true) THEN
+        UPDATE tavolo SET taken = false WHERE id = NEW.numero_tavolo;
+    END IF;
+END//
+
+CREATE TRIGGER update_table_taken_2
+AFTER UPDATE ON conto
+FOR EACH ROW
+BEGIN
+    IF (SELECT is_chiuso FROM conto WHERE numero_tavolo = NEW.numero_tavolo AND is_chiuso = true) THEN
+        UPDATE tavolo SET taken = false WHERE id = NEW.numero_tavolo;
+    END IF;
+END//
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE TRIGGER update_ingrediente_quantita_cancella
+AFTER DELETE ON ordered_dish
+FOR EACH ROW
+BEGIN
+    UPDATE ingrediente
+    INNER JOIN make_dish
+    ON make_dish.nome_ingrediente = ingrediente.nome
+    AND make_dish.nome_piatto = OLD.nome_piatto
+    SET ingrediente.quantita = ingrediente.quantita + make_dish.quantity;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER update_piatto_ordinabile_true
+AFTER UPDATE ON ingrediente
+FOR EACH ROW
+BEGIN
+    UPDATE piatto
+    SET ordinabile = 1
+    WHERE nome IN (
+        SELECT make_dish.nome_piatto
+        FROM make_dish
+        INNER JOIN ingrediente ON ingrediente.nome = make_dish.nome_ingrediente
+        WHERE ingrediente.quantita > make_dish.quantity
+    );
+END//
+
+DELIMITER ;
+
+
+
+
