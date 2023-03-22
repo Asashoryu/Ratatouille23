@@ -126,7 +126,7 @@
             android:id="@+id/btn_aggiungi"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> aggiungiPortataViewModel.aggiungiPortata(nomeText.getText().toString(), costoText.getText().toString(), categoriaText.getText().toString(), descrizioneText.getText().toString())}"
+            android:onClick="@{() -> aggiungiPortataViewModel.aggiungiPortata(nomeText.getText().toString(), costoText.getText().toString(), descrizioneText.getText().toString(), descrizioneText.getText().toString())}"
             android:text="aggiungi" />
 
         <Button
