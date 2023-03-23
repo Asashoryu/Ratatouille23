@@ -72,7 +72,10 @@ public class OrdinazioneFragment extends Fragment {
     }
 
     public void ImpostaPortateContoItemAdapter() {
-        portateContoItemAdapter = new PortateContoItemAdapter((portata) -> {});
+        portateContoItemAdapter = new PortateContoItemAdapter((portataConto) -> {
+            ordinazioneViewModel.rimuoviPortataDaOrdinazione(portataConto);
+            ordinazioneViewModel.aggiornaListaPortateConto();
+        });
         ordinazioneBinding.listaPortateConto.setAdapter(portateContoItemAdapter);
     }
 

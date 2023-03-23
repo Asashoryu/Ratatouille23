@@ -325,24 +325,24 @@ public class Repository {
         Ordinazione o5 = tavoli.get(1).getOrdinazione();
         Ordinazione o6 = tavoli.get(3).getOrdinazione();
 
-        o1.aggiungiPortata(new Portata("spaghetti", 70f, null, null));
-        o1.aggiungiPortata(new Portata("ciccetti", 6f, null, null));
-        o1.aggiungiPortata(new Portata("crocchette", 54f, null, null));
+        o1.incrementaPortata(new Portata("spaghetti", 70f, null, null));
+        o1.incrementaPortata(new Portata("ciccetti", 6f, null, null));
+        o1.incrementaPortata(new Portata("crocchette", 54f, null, null));
 
-        o2.aggiungiPortata(new Portata("polpette", 62f, null, null));
-        o2.aggiungiPortata(new Portata("arachidi", 35f, null, null));
+        o2.incrementaPortata(new Portata("polpette", 62f, null, null));
+        o2.incrementaPortata(new Portata("arachidi", 35f, null, null));
 
-        o3.aggiungiPortata(new Portata("cicciobombetti", 6f, null, null));
-        o3.aggiungiPortata(new Portata("pere", 70f, null, null));
+        o3.incrementaPortata(new Portata("cicciobombetti", 6f, null, null));
+        o3.incrementaPortata(new Portata("pere", 70f, null, null));
 
-        o4.aggiungiPortata(new Portata("bruciacchietti", 30f, null, null));
+        o4.incrementaPortata(new Portata("bruciacchietti", 30f, null, null));
 
-        o5.aggiungiPortata(new Portata("cotoletta", 45f, null, null));
-        o5.aggiungiPortata(new Portata("patatine", 22f, null, null));
-        o5.aggiungiPortata(new Portata("birra", 5f, null, null));
+        o5.incrementaPortata(new Portata("cotoletta", 45f, null, null));
+        o5.incrementaPortata(new Portata("patatine", 22f, null, null));
+        o5.incrementaPortata(new Portata("birra", 5f, null, null));
 
-        o6.aggiungiPortata(new Portata("insalata", 20f, null, null));
-        o6.aggiungiPortata(new Portata("pane", 2f, null, null));
+        o6.incrementaPortata(new Portata("insalata", 20f, null, null));
+        o6.incrementaPortata(new Portata("pane", 2f, null, null));
 
         storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o1, "1660317380");
         storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o2, "1653162104");

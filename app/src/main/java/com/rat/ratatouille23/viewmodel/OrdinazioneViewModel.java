@@ -7,6 +7,7 @@ import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.PortataOrdine;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.repository.Repository;
 
@@ -26,7 +27,7 @@ public class OrdinazioneViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<Portata>> listaPortate = new MutableLiveData<ArrayList<Portata>>();
 
-    public MutableLiveData<ArrayList<Portata>> listaPortateConto = new MutableLiveData<ArrayList<Portata>>();
+    public MutableLiveData<ArrayList<PortataOrdine>> listaPortateConto = new MutableLiveData<ArrayList<PortataOrdine>>();
 
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
@@ -56,18 +57,23 @@ public class OrdinazioneViewModel extends ViewModel {
     }
 
     public void aggiornaListaPortateConto() {
-        listaPortateConto.setValue(ordinazione.getPortate());
+        listaPortateConto.setValue(ordinazione.getPortateOrdine());
         System.err.println("aggiornamento lista portate conto fatto");
     }
 
     public void aggiungiPortataAllOrdinazione(Portata portata) {
-        ordinazione.aggiungiPortata(portata);
+        ordinazione.incrementaPortata(portata);
         aggiornaCostoTotaleConto();
         System.err.println("aggiornamento portata al conto fatto");
     }
 
+    public void rimuoviPortataDaOrdinazione(PortataOrdine portataConto) {
+        ordinazione.decrementaPortataOrdine(portataConto);
+        aggiornaCostoTotaleConto();
+    }
+
     public void aggiornaCostoTotaleConto() {
-        costoTotaleConto.setValue(ordinazione.getCostoTotalePortate());
+        costoTotaleConto.setValue(ordinazione.getCostoTotalePortateOrdine());
         System.err.println("aggiornamento costo totale conto fatto");
     }
 
@@ -83,4 +89,6 @@ public class OrdinazioneViewModel extends ViewModel {
     public void setFalseTornaIndietro() {
         tornaIndietro.setValue(false);
     }
+
+
 }
