@@ -21,9 +21,9 @@
             android:id="@+id/chart"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/median_value"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toTopOf="@+id/dal_value"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -34,80 +34,76 @@
             android:id="@+id/dal_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
+            android:layout_marginVertical="5dp"
             android:background="@android:color/background_light"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:paddingRight="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/median_value"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/al_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
             android:background="@android:color/background_light"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:paddingRight="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dal_value"
             app:layout_constraintStart_toEndOf="@+id/dal_value" />
 
         <TextView
             android:id="@+id/max_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
             android:background="@android:color/background_light"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:paddingRight="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dal_value"
             app:layout_constraintStart_toEndOf="@+id/al_value" />
 
         <TextView
             android:id="@+id/min_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
             android:background="@android:color/background_light"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:paddingRight="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
-            app:layout_constraintStart_toEndOf="@+id/al_value" />
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dal_value"
+            app:layout_constraintStart_toEndOf="@+id/max_value" />
 
         <TextView
             android:id="@+id/median_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
+            android:layout_marginVertical="5dp"
             android:background="@android:color/background_light"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:paddingRight="10dp"
+            android:textColor="@color/black"
+            android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/textView2"
-            app:layout_constraintStart_toEndOf="@+id/max_value" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/somma_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
             android:background="@android:color/background_light"
-            android:textSize="20dp"
-            android:textColor="@color/black"
             android:paddingRight="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
-            app:layout_constraintStart_toEndOf="@+id/max_value" />
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/median_value"
+            app:layout_constraintStart_toEndOf="@+id/median_value" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp"
             android:text="Select year:"
             android:textColor="@color/white"
             android:textSize="20dp"
@@ -120,7 +116,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:background="@color/grey_light"
-            android:textSize="20dp"
             android:entries="@array/year_array"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintStart_toEndOf="@+id/textView2" />
