@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
+
 public class AggiungiIngredienteViewModel extends ViewModel {
 
     Repository repository;
@@ -26,7 +28,11 @@ public class AggiungiIngredienteViewModel extends ViewModel {
         ingrediente = new Ingrediente(nome, Float.parseFloat(costo), Float.parseFloat(quantita), unitaMisura, descrizione);
         System.err.println(nome + costo + quantita + unitaMisura + descrizione);
 
-        repository.aggiungiIngrediente(ingrediente);
+        try {
+            repository.aggiungiIngrediente(ingrediente);
+        } catch (IOException e) {
+            setMessaggioAggiungiIngrediente(e.getMessage());
+        }
         repository.aggiornaListaIngredienti();
 
         setTornaIndietro();

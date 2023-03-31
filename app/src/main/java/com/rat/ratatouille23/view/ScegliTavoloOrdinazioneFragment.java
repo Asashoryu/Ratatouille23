@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.TavoliItemAdapter;
@@ -64,4 +65,18 @@ public class ScegliTavoloOrdinazioneFragment extends Fragment {
             }
         });
     }
+
+    public void osservaMessaggioErrore() {
+        scegliTavoloOrdinazioneViewModel.messaggioScegliTavoloOrdinazione.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (scegliTavoloOrdinazioneViewModel.isNuovoMessaggioScegliTavoloOrdinazione()) {
+                visualizzaToastConMessaggio(messaggio);
+                scegliTavoloOrdinazioneViewModel.cancellaMessaggioScegliTavoloOrdinazione();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(scegliTavoloOrdinazioneBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
 }

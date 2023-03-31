@@ -1,41 +1,28 @@
 package com.rat.ratatouille23.viewmodel;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
-import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.model.PortataOrdine;
-import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
 public class VisualizzaContoViewModel extends ViewModel {
@@ -61,6 +48,7 @@ public class VisualizzaContoViewModel extends ViewModel {
         repository.setVisualizzaContoViewModel(this);
 
         menu = repository.getMenu();
+
         tavolo = repository.getTavoloSelezionato();
         ordinazione = tavolo.getOrdinazione();
         aggiornaListaPortateConto();
@@ -90,7 +78,7 @@ public class VisualizzaContoViewModel extends ViewModel {
         Document document = new Document();
         try {
             // Set the file path and create the file with a unique name
-            String tableName = ordinazione.getTavolo().getNome();
+            Integer tableName = ordinazione.getTavolo().getId();
             String fileName = "order_" + tableName + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm")) + ".pdf";
             File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             File file = new File(downloadsDir, fileName);
@@ -130,7 +118,11 @@ public class VisualizzaContoViewModel extends ViewModel {
     }
 
     public void chiudiConto() {
-        repository.getStoricoOrdinazioniChiuse().chiudiOrdinazione(ordinazione);
+        try {
+            repository.chiudiConto(ordinazione);
+        } catch (IOException e) {
+            setMessaggioVisualizzaConto(e.getMessage());
+        }
         setTornaIndietro();
     }
 

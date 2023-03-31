@@ -1,12 +1,15 @@
 package com.rat.ratatouille23.viewmodel;
 
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.eccezioni.AggiungiDipendenteException;
+import com.rat.ratatouille23.eccezioni.CreazioneDipendenteException;
 import com.rat.ratatouille23.eccezioni.PersonalizzaMenuException;
 import com.rat.ratatouille23.eccezioni.RuoloNonTrovatoException;
 import com.rat.ratatouille23.model.Allergene;
+import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
 
@@ -17,7 +20,13 @@ public class AggiungiDipendenteViewModel extends ViewModel {
 
     Dipendente dipendente;
 
+    private final String termineSupervisore = "Supervisore";
+    private final String termineAddettoSala = "Addetto sala";
+    private final String termineAddettoCucina = "Addetto cucina";
+
     ArrayList<Allergene> listaAllergeniSelezionati;
+
+    public final ObservableField<String> selectedRuolo = new ObservableField<>("");
 
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
@@ -41,13 +50,13 @@ public class AggiungiDipendenteViewModel extends ViewModel {
     }
 
     public Dipendente.Ruolo validaRuolo(String ruolo) throws RuoloNonTrovatoException {
-        if (ruolo.equals("supervisore")) {
+        if (ruolo.equals(termineSupervisore)) {
             return Dipendente.Ruolo.SUPERVISORE;
         }
-        else if (ruolo.equals("addettosala")) {
+        else if (ruolo.equals(termineAddettoSala)) {
             return Dipendente.Ruolo.ADDETTOSALA;
         }
-        else if (ruolo.equals("addettocucina")) {
+        else if (ruolo.equals(termineAddettoCucina)) {
             return Dipendente.Ruolo.ADDETTOCUCINA;
         }
         else {
@@ -77,5 +86,21 @@ public class AggiungiDipendenteViewModel extends ViewModel {
 
     public void cancellaMessaggioAggiungiDipendente() {
         messaggioAggiungiDipendente.setValue("");
+    }
+
+    public ArrayList<String> getRuoloNames() {
+        ArrayList<String> ruoloNames = new ArrayList<>();
+        ruoloNames.add(termineSupervisore);
+        ruoloNames.add(termineAddettoSala);
+        ruoloNames.add(termineAddettoCucina);
+        return ruoloNames;
+    }
+
+    public ObservableField<String> getSelectedRuolo() {
+        return selectedRuolo;
+    }
+
+    public String getSelectedRuoloName() {
+        return selectedRuolo.get();
     }
 }

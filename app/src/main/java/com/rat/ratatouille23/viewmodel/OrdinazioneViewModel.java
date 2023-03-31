@@ -11,6 +11,7 @@ import com.rat.ratatouille23.model.PortataOrdine;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class OrdinazioneViewModel extends ViewModel {
@@ -33,11 +34,15 @@ public class OrdinazioneViewModel extends ViewModel {
 
     public MutableLiveData<Float> costoTotaleConto = new MutableLiveData<>(0.0f);
 
+    public MutableLiveData<String> messaggioOrdinazione = new MutableLiveData<>("");
+
     public OrdinazioneViewModel() {
         repository = Repository.getInstance();
         repository.setOrdinazioneViewModel(this);
 
+
         menu = repository.getMenu();
+
         tavolo = repository.getTavoloSelezionato();
 
         ordinazione = tavolo.getOrdinazione();
@@ -78,6 +83,12 @@ public class OrdinazioneViewModel extends ViewModel {
     }
 
     public void salvaOrdinazione() {
+
+        try {
+            repository.salvaOrdinazioneTavoloSelezionato();
+        } catch (IOException e) {
+            setMessaggioOrdinazione(e.getMessage());
+        }
         tavolo.occupaTavoloConOrdinazione(ordinazione);
         setTornaIndietro();
     }
@@ -90,5 +101,21 @@ public class OrdinazioneViewModel extends ViewModel {
         tornaIndietro.setValue(false);
     }
 
+    public void setMessaggioOrdinazione(String nuovoMessaggioOrdinazione) {
+        messaggioOrdinazione.setValue(nuovoMessaggioOrdinazione);
+    }
+
+    public String getMessaggioOrdinazione() {
+        return messaggioOrdinazione.getValue();
+    }
+
+
+    public Boolean isNuovoMessaggioOrdinazione() {
+        return getMessaggioOrdinazione() != "";
+    }
+
+    public void cancellaMessaggioOrdinazione() {
+        messaggioOrdinazione.setValue("");
+    }
 
 }

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
+
 public class IndicaQuantitaViewModel extends ViewModel {
 
     Repository repository;
@@ -24,7 +26,11 @@ public class IndicaQuantitaViewModel extends ViewModel {
     }
 
     public void aggiungiIngredienteAlProdotto(String quantita) {
-        repository.aggiungiIngredienteAllaPortataSelezionata(ingrediente, Float.parseFloat(quantita));
+        try {
+            repository.aggiungiIngredienteAllaPortataSelezionata(ingrediente, Float.parseFloat(quantita));
+        } catch (IOException e) {
+            setMessaggioIndicaQuantita(e.getMessage());
+        }
         setTornaIndietro();
     }
 

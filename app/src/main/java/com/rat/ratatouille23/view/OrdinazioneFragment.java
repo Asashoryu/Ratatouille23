@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
@@ -114,5 +115,18 @@ public class OrdinazioneFragment extends Fragment {
                 Navigation.findNavController(fragmentView).popBackStack();
             }
         });
+    }
+
+    public void osservaMessaggioErrore() {
+        ordinazioneViewModel.messaggioOrdinazione.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (ordinazioneViewModel.isNuovoMessaggioOrdinazione()) {
+                visualizzaToastConMessaggio(messaggio);
+                ordinazioneViewModel.cancellaMessaggioOrdinazione();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(ordinazioneBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
 }

@@ -16,6 +16,8 @@ public class DispensaViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> vaiAdAggiungiIngrediente = new MutableLiveData<>(false);
 
+    public MutableLiveData<String> messaggioDispensa = new MutableLiveData<>("");
+
     public DispensaViewModel() {
         repository = Repository.getInstance();
         repository.setDispensaViewModel(this);
@@ -41,5 +43,22 @@ public class DispensaViewModel extends ViewModel {
 
     public void impostaIngredienteSelezionato(Ingrediente ingrediente) {
         repository.setIngredienteSelezionato(ingrediente);
+    }
+
+    public void setMessaggioDispensa(String nuovoMessaggioDispensa) {
+        messaggioDispensa.setValue(nuovoMessaggioDispensa);
+    }
+
+    public String getMessaggioDispensa() {
+        return messaggioDispensa.getValue();
+    }
+
+
+    public Boolean isNuovoMessaggioDispensa() {
+        return getMessaggioDispensa() != "";
+    }
+
+    public void cancellaMessaggioDispensa() {
+        messaggioDispensa.setValue("");
     }
 }

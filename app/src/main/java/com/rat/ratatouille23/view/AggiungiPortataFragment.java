@@ -9,6 +9,9 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
@@ -33,10 +36,31 @@ public class AggiungiPortataFragment extends Fragment {
         aggiungiPortataViewModel = new ViewModelProvider(this).get(AggiungiPortataViewModel.class);
         aggiungiPortataBinding.setAggiungiPortataViewModel(aggiungiPortataViewModel);
 
+        impostaSpinner();
+
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
 
         return fragmentView;
+    }
+
+    public void impostaSpinner() {
+
+        Spinner categorySpinner = aggiungiPortataBinding.categoriaText;
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, aggiungiPortataViewModel.getCategoryNames());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+        aggiungiPortataBinding.categoriaText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                aggiungiPortataViewModel.getSelectedCategory().set((String) parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     public void osservaSeTornareIndietro() {

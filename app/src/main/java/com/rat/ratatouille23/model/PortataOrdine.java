@@ -17,6 +17,13 @@ public class PortataOrdine {
         aggiornaCostoPortataOrdine();
     }
 
+    public PortataOrdine(Ordinazione ordinazione, Portata portata, Integer quantita) {
+        this.ordinazione = ordinazione;
+        this.portata = portata;
+        this.quantita = quantita;
+        aggiornaCostoPortataOrdine();
+    }
+
     public void incrementaQuantita() {
         quantita++;
         aggiornaCostoPortataOrdine();

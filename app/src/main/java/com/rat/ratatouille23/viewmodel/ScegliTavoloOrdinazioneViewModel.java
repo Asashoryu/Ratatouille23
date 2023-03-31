@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
@@ -14,6 +15,8 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Tavolo>> listaTavoli = new MutableLiveData<ArrayList<Tavolo>>();
 
     public MutableLiveData<Boolean> vaiAdAggiungiTavolo = new MutableLiveData<>(false);
+
+    public MutableLiveData<String> messaggioScegliTavoloOrdinazione = new MutableLiveData<>("");
 
     public ScegliTavoloOrdinazioneViewModel() {
         repository = Repository.getInstance();
@@ -24,7 +27,7 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
 
     public void setListaTavoli() {
         aggiornaListaTavoli();
-        repository.getTavoli().forEach(ingrediente -> System.out.println(ingrediente.getNome()));
+        repository.getTavoli().forEach(tavolo -> System.out.println(tavolo.getId()));
     }
 
     public void aggiornaListaTavoli() {
@@ -40,5 +43,22 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
 
     public void impostaTavoloSelezionato(Tavolo tavolo) {
         repository.setTavoloSelezionato(tavolo);
+    }
+
+    public void setMessaggioScegliTavoloOrdinazione(String nuovoMessaggioScegliTavoloOrdinazione) {
+        messaggioScegliTavoloOrdinazione.setValue(nuovoMessaggioScegliTavoloOrdinazione);
+    }
+
+    public String getMessaggioScegliTavoloOrdinazione() {
+        return messaggioScegliTavoloOrdinazione.getValue();
+    }
+
+
+    public Boolean isNuovoMessaggioScegliTavoloOrdinazione() {
+        return getMessaggioScegliTavoloOrdinazione() != "";
+    }
+
+    public void cancellaMessaggioScegliTavoloOrdinazione() {
+        messaggioScegliTavoloOrdinazione.setValue("");
     }
 }

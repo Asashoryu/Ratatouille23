@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeSupervisoreViewBinding;
@@ -41,6 +42,7 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAndareAlMenu() {
         homeSupervisoreViewModel.vaiAlMenu.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeSupervisoreViewModel.loadPerPersonalizzaMenu();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_personalizzaMenuFragment);
             }
         });
@@ -49,6 +51,7 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAndareAllaDispensa() {
         homeSupervisoreViewModel.vaiAllaDispensa.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeSupervisoreViewModel.loadPerGestioneTavolo();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_dispensaView);
             }
         });
@@ -57,6 +60,7 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAlConto() {
         homeSupervisoreViewModel.vaiAlConto.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeSupervisoreViewModel.loadPerVisualizzareConto();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_scegliTavoloVisualizzaContoFragment);
             }
         });
@@ -65,8 +69,22 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAssociareIngredienti() {
         homeSupervisoreViewModel.vaiAdAssociaIngredienti.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeSupervisoreViewModel.loadPerAssociaIngredienti();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_visualizzaMenuFragment3);
             }
         });
+    }
+
+    public void osservaMessaggioErrore() {
+        homeSupervisoreViewModel.messaggioHomeSupervisore.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (homeSupervisoreViewModel.isNuovoMessaggioHomeSupervisore()) {
+                visualizzaToastConMessaggio(messaggio);
+                homeSupervisoreViewModel.cancellaMessaggioHomeSupervisore();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(homeSupervisoreBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
 }

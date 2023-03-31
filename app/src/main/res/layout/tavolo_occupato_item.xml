@@ -27,7 +27,7 @@
                 android:layout_height="200dp"
                 android:background="@drawable/tavolo_occupato"
                 android:padding="8dp"
-                android:text="@{tavolo.nome}"
+                android:text="@{tavolo.getStringId}"
                 android:gravity="center"
                 android:textColor="#3b4540"
                 android:textSize="56sp"

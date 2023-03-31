@@ -8,6 +8,7 @@ import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VisualizzaMenuViewModel extends ViewModel {
@@ -20,6 +21,8 @@ public class VisualizzaMenuViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Portata>> listaPortate = new MutableLiveData<ArrayList<Portata>>();
 
     public MutableLiveData<Boolean> vaiAdAggiungiPortata = new MutableLiveData<>(false);
+
+    public MutableLiveData<String> messaggioVisualizzaMenu = new MutableLiveData<>("");
 
     public VisualizzaMenuViewModel() {
         repository = Repository.getInstance();
@@ -40,5 +43,22 @@ public class VisualizzaMenuViewModel extends ViewModel {
 
     public void impostaPortataSelezionata(Portata portata) {
         repository.setPortataSelezionata(portata);
+    }
+
+    public void setMessaggioVisualizzaMenu(String nuovoMessaggioVisualizzaMenu) {
+        messaggioVisualizzaMenu.setValue(nuovoMessaggioVisualizzaMenu);
+    }
+
+    public String getMessaggioVisualizzaMenu() {
+        return messaggioVisualizzaMenu.getValue();
+    }
+
+
+    public Boolean isNuovoMessaggioVisualizzaMenu() {
+        return getMessaggioVisualizzaMenu() != "";
+    }
+
+    public void cancellaMessaggioVisualizzaMenu() {
+        messaggioVisualizzaMenu.setValue("");
     }
 }

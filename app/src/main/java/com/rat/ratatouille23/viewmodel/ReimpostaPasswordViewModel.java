@@ -39,6 +39,7 @@ public class ReimpostaPasswordViewModel extends ViewModel {
         if (isReimpostaInputValido(vecchiaPassword, nuovaPassword, confermaNuovaPassword))
         try {
             repository.reimpostaPassword(vecchiaPassword, nuovaPassword);
+            repository.setLoginViewModelVaiAvanti();
             setTornaIndietro();
         } catch (ReimpostaPasswordException e) {
             setMessaggioReimpostaPassword(e.getMessage());
@@ -71,10 +72,11 @@ public class ReimpostaPasswordViewModel extends ViewModel {
             return false;
         }
 
-        if (!isStrongPassword(nuovaPassword)) {
-            setMessaggioReimpostaPassword("La nuova password non è abbastanza forte");
-            return false;
-        }
+        // check se abbastanza forte la password
+//        if (!isStrongPassword(nuovaPassword)) {
+//            setMessaggioReimpostaPassword("La nuova password non è abbastanza forte");
+//            return false;
+//        }
 
         return true;
     }
@@ -136,9 +138,6 @@ public class ReimpostaPasswordViewModel extends ViewModel {
 
         return true;
     }
-
-
-
 
     public void setMessaggioReimpostaPassword(String nuovoMessaggioReimpostaPassword) {
         messaggioReimpostaPassword.setValue(nuovoMessaggioReimpostaPassword);

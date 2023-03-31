@@ -1,7 +1,6 @@
 package com.rat.ratatouille23.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Portata {
@@ -10,7 +9,7 @@ public class Portata {
     private String descrizione;
     private ArrayList<Allergene> allergeni;
 
-    private ArrayList<Ingrediente> ingredienti;
+    private ArrayList<IngredientePortata> ingredientiPortata;
 
     public Portata(String nome, Float costo, String descrizione, ArrayList<Allergene> allergeni) {
         setNome(nome);
@@ -18,11 +17,16 @@ public class Portata {
         setDescrizione(descrizione);
         allergeni = new ArrayList<>();
         setAllergeni(allergeni);
-        ingredienti = new ArrayList<Ingrediente>();
+        ingredientiPortata = new ArrayList<IngredientePortata>();
     }
 
-    public void aggiungiIngrediente(Ingrediente ingrediente) {
-        ingredienti.add(ingrediente);
+    public void aggiungiIngredientePortata(IngredientePortata ingredientePortata) {
+        ingredientiPortata.add(ingredientePortata);
+    }
+
+    public void aggiungiIngrediente(Ingrediente ingrediente, Float quantita) {
+        IngredientePortata ingredientePortata = new IngredientePortata( this, ingrediente, quantita);
+        ingredientiPortata.add(ingredientePortata);
     }
 
     public String getNome() {
@@ -57,11 +61,22 @@ public class Portata {
         this.allergeni = allergeni;
     }
 
+    public ArrayList<IngredientePortata> getIngredientiPortata() {
+        return ingredientiPortata;
+    }
+
     public ArrayList<Ingrediente> getIngredienti() {
+        ArrayList<Ingrediente> ingredienti  = new ArrayList<>();
+        for (IngredientePortata ingredientePortata : ingredientiPortata) {
+            ingredienti.add(ingredientePortata.getIngrediente());
+        }
+        System.out.println("Ecco gli ingredienti trovati del piatto " + nome);
+        ingredienti.forEach(ingrediente -> System.out.println(ingrediente.getNome()));
+        System.out.println("Fine ingredienti trovati del piatto " + nome);
         return ingredienti;
     }
 
-    public void setIngredienti(ArrayList<Ingrediente> ingredienti) {
-        this.ingredienti = ingredienti;
+    public void setIngredienti(ArrayList<IngredientePortata> ingredientiPortata) {
+        this.ingredientiPortata = ingredientiPortata;
     }
 }

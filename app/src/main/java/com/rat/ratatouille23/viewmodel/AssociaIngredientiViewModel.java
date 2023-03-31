@@ -57,7 +57,7 @@ public class AssociaIngredientiViewModel extends ViewModel {
     public void aggiungiIngredienteAllaPortata(Ingrediente ingrediente, Float quantita) {
         Ingrediente ingredienteAssociato;
         ingredienteAssociato = new Ingrediente(ingrediente.getNome(), ingrediente.getCosto(), quantita, ingrediente.getUnitaMisura(), ingrediente.getUnitaMisura());
-        portata.aggiungiIngrediente(ingredienteAssociato);
+        portata.aggiungiIngrediente(ingredienteAssociato, quantita);
         aggiornaListaIngredientiPortata();
         aggiornaListaIngredientiNonPortata();
     }

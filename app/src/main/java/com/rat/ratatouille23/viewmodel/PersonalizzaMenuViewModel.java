@@ -9,6 +9,7 @@ import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PersonalizzaMenuViewModel extends ViewModel {
@@ -23,11 +24,14 @@ public class PersonalizzaMenuViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> vaiAdAggiungiPortata = new MutableLiveData<>(false);
 
+    public MutableLiveData<String> messaggioPersonalizzaMenu = new MutableLiveData<>("");
+
     public PersonalizzaMenuViewModel() {
         repository = Repository.getInstance();
         repository.setPersonalizzaMenuViewModel(this);
 
         menu = repository.getMenu();
+
         aggiornaListaCategorie();
     }
 
@@ -45,5 +49,22 @@ public class PersonalizzaMenuViewModel extends ViewModel {
     }
     public void setFalseVaiAdAggiungiPortata() {
         vaiAdAggiungiPortata.setValue(false);
+    }
+
+    public void setMessaggioPersonalizzaMenu(String nuovoMessaggioPersonalizzaMenu) {
+        messaggioPersonalizzaMenu.setValue(nuovoMessaggioPersonalizzaMenu);
+    }
+
+    public String getMessaggioPersonalizzaMenu() {
+        return messaggioPersonalizzaMenu.getValue();
+    }
+
+
+    public Boolean isNuovoMessaggioPersonalizzaMenu() {
+        return getMessaggioPersonalizzaMenu() != "";
+    }
+
+    public void cancellaMessaggioPersonalizzaMenu() {
+        messaggioPersonalizzaMenu.setValue("");
     }
 }

@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
@@ -83,5 +84,18 @@ public class PersonalizzaMenuFragment extends Fragment {
                 Navigation.findNavController(fragmentView).navigate(R.id.action_personalizzaMenuFragment_to_aggiungiPortataFragment);
             }
         });
+    }
+
+    public void osservaMessaggioErrore() {
+        personalizzaMenuViewModel.messaggioPersonalizzaMenu.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (personalizzaMenuViewModel.isNuovoMessaggioPersonalizzaMenu()) {
+                visualizzaToastConMessaggio(messaggio);
+                personalizzaMenuViewModel.cancellaMessaggioPersonalizzaMenu();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(personalizzaMenuBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
 }

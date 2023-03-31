@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.TavoliItemAdapter;
@@ -66,5 +67,18 @@ public class ScegliTavoloVisualizzaContoFragment extends Fragment {
                 Navigation.findNavController(fragmentView).navigate(R.id.action_scegliTavoloVisualizzaContoFragment_to_visualizzaContoFragment);
             }
         });
+    }
+
+    public void osservaMessaggioErrore() {
+        scegliTavoloVisualizzaContoViewModel.messaggioScegliTavoloVisualizzaConto.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (scegliTavoloVisualizzaContoViewModel.isNuovoMessaggioScegliTavoloVisualizzaConto()) {
+                visualizzaToastConMessaggio(messaggio);
+                scegliTavoloVisualizzaContoViewModel.cancellaMessaggioScegliTavoloVisualizzaConto();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(scegliTavoloVisualizzaContoBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
 }

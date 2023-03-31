@@ -27,7 +27,7 @@
                 android:layout_height="200dp"
                 android:background="@drawable/btn_yellow_custom"
                 android:padding="8dp"
-                android:text="@{tavolo.nome}"
+                android:text="@{tavolo.getStringId}"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="56sp"

@@ -1,5 +1,25 @@
 package com.rat.ratatouille23.repository;
 
+import static java.lang.Thread.sleep;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.rat.ratatouille23.DTO.Conto_DTO;
+import com.rat.ratatouille23.DTO.Dish_DTO;
+import com.rat.ratatouille23.DTO.Ingridient_DTO;
+import com.rat.ratatouille23.DTO.Make_Dish_DTO;
+import com.rat.ratatouille23.DTO.Ordered_Dish_DTO;
+import com.rat.ratatouille23.DTO.Tavolo_DTO;
+import com.rat.ratatouille23.DTO.Utente_DTO;
+import com.rat.ratatouille23.backendAPI.ContoService;
+import com.rat.ratatouille23.backendAPI.MakeDishService;
+import com.rat.ratatouille23.backendAPI.UtenteService;
+import com.rat.ratatouille23.backendAPI.DishService;
+import com.rat.ratatouille23.backendAPI.IngridientService;
+import com.rat.ratatouille23.backendAPI.OrderedDishService;
+import com.rat.ratatouille23.backendAPI.TavoloService;
+import com.rat.ratatouille23.eccezioni.AggiungiDipendenteException;
 import com.rat.ratatouille23.eccezioni.CategoriaNonTrovataException;
 import com.rat.ratatouille23.eccezioni.DipendenteNonTrovatoException;
 import com.rat.ratatouille23.eccezioni.ReimpostaPasswordException;
@@ -9,6 +29,7 @@ import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.model.PortataOrdine;
 import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
@@ -16,6 +37,10 @@ import com.rat.ratatouille23.viewmodel.AggiungiIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
 import com.rat.ratatouille23.viewmodel.AssociaIngredientiViewModel;
 import com.rat.ratatouille23.viewmodel.DispensaViewModel;
+import com.rat.ratatouille23.viewmodel.HomeAddettoCucinaViewModel;
+import com.rat.ratatouille23.viewmodel.HomeAddettoSalaViewModel;
+import com.rat.ratatouille23.viewmodel.HomeAmministratoreViewModel;
+import com.rat.ratatouille23.viewmodel.HomeSupervisoreViewModel;
 import com.rat.ratatouille23.viewmodel.IndicaQuantitaViewModel;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
 import com.rat.ratatouille23.viewmodel.ModificaTavoliViewModel;
@@ -29,11 +54,27 @@ import com.rat.ratatouille23.viewmodel.VisualizzaIngredienteViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaMenuViewModel;
 import com.rat.ratatouille23.viewmodel.VisualizzaStatisticheViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Repository {
 
@@ -42,6 +83,8 @@ public class Repository {
     private ArrayList<Ingrediente> dispensa;
 
     private ArrayList<Tavolo> tavoli;
+
+    private ArrayList<Ordinazione> ordinazioni;
 
     private Tavolo tavoloSelezionato;
 
@@ -87,11 +130,20 @@ public class Repository {
 
     private static ModificaTavoliViewModel modificaTavoliViewModel;
 
+    private static HomeAddettoSalaViewModel homeAddettoSalaViewModel;
+
+    private static HomeAddettoCucinaViewModel homeAddettoCucinaViewModel;
+
+    private static HomeAmministratoreViewModel homeAmministratoreViewModel;
+
+    private static HomeSupervisoreViewModel homeSupervisoreViewModel;
+
     private Repository() {
         menu = getMenuTest();
         tavoli = getTavoliTest();
         storicoOrdinazioniChiuse = StoricoOrdinazioniChiuse.getInstance();
-        setStoricoOrdinazioniChiuseTest();
+        dispensa = new ArrayList<>();
+        //setStoricoOrdinazioniChiuseTest();
     }
 
     public static Repository getInstance() {
@@ -110,10 +162,92 @@ public class Repository {
     }
 
     public void login(String username, String password) throws DipendenteNonTrovatoException {
-        // TODO: chiedi al backend i dati
-        // TODO: inizializza tutti i dati presi dal backend nelle classi del model
 
-        dipendente = loginTest(username, password);
+        dipendente = loginRetrofit(username, password);
+    }
+
+    public Dipendente loginRetrofit(String username, String password) throws DipendenteNonTrovatoException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        UtenteService service = retrofit.create(UtenteService.class);
+
+        Call<Utente_DTO> call = service.logIn(username, password);
+
+        try {
+            Utente_DTO dipendente_dto = new AsyncTask<Void, Void, Utente_DTO>() {
+                @Override
+                protected Utente_DTO doInBackground(Void... params) {
+                    try {
+                        Response<Utente_DTO> response = call.execute();
+                        if (response.isSuccessful()) {
+                            return response.body();
+                        } else {
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+
+            if (dipendente_dto == null) {
+                System.out.println("Dip non trovato = null in Retrofit");
+                throw new DipendenteNonTrovatoException();
+            } else {
+                System.out.println("Riuscito e trovato in Retrofit +" + dipendente_dto.getIsReimpostata());
+                Dipendente dip = new Dipendente(dipendente_dto.getNome(), dipendente_dto.getCognome(), dipendente_dto.getUsername(), convertiStringARuolo(dipendente_dto.getRuolo()), dipendente_dto.getPassword(), dipendente_dto.getIsReimpostata());
+                System.out.println(dipendente_dto.getNome() + dipendente_dto.getCognome() + dipendente_dto.getUsername() + convertiStringARuolo(dipendente_dto.getRuolo()) + dipendente_dto.getPassword() + dipendente_dto.getIsReimpostata());
+                return dip;
+            }
+        } catch (TimeoutException e) {
+            throw new DipendenteNonTrovatoException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DipendenteNonTrovatoException(e.getMessage());
+        }
+    }
+
+    public Dipendente.Ruolo convertiStringARuolo (String ruolo){
+        if (ruolo.equals("AMMINISTRATORE")) {
+            return Dipendente.Ruolo.AMMINISTRATORE;
+        }
+        if (ruolo.equals("SUPERVISORE")) {
+            return Dipendente.Ruolo.SUPERVISORE;
+        }
+        if (ruolo.equals("ADDETTOSALA")) {
+            return Dipendente.Ruolo.ADDETTOSALA;
+        }
+        if (ruolo.equals("ADDETTOCUCINA")) {
+            return Dipendente.Ruolo.ADDETTOCUCINA;
+        }
+        if (ruolo.equals("NONIMPOSTATO")) {
+            return Dipendente.Ruolo.NONIMPOSTATO;
+        }
+        return Dipendente.Ruolo.NONIMPOSTATO;
     }
 
     public Dipendente loginTest(String username, String password) throws DipendenteNonTrovatoException {
@@ -140,16 +274,138 @@ public class Repository {
 
     public void reimpostaPassword(String vecchiaPassword, String nuovaPassword) throws ReimpostaPasswordException {
         // TODO: reimposta la password nel backend
+        cambiaPasswordRetrofit(nuovaPassword);
         dipendente.reimpostaPassword(nuovaPassword);
+    }
+
+    public void cambiaPasswordRetrofit(String nuovaPassword) throws ReimpostaPasswordException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        UtenteService service = retrofit.create(UtenteService.class);
+
+        Call<Void> call = service.cambiaPassword(dipendente.getUsername(), nuovaPassword);
+
+        try {
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Password cambiata con successo");
+                    } else {
+                        System.out.println("Errore nel cambio password");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+            // Wait for the response for a maximum of 3 seconds
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void setLoginViewModelVaiAvanti() {
         loginViewModel.setIsVaiAvanti();
     }
 
     public ArrayList<Ingrediente> getIngredienti() {
-        // TODO: recupera gli ingredienti da qualche parte
-        if (dispensa == null) {
-            dispensa = getIngredientiTest();
-        }
         return dispensa;
+    }
+
+    public void loadIngredienti() throws IOException {
+        dispensa = getAllIngridientsRetrofit();
+    }
+
+    public ArrayList<Ingrediente> getAllIngridientsRetrofit() throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        IngridientService service = retrofit.create(IngridientService.class);
+
+        Call<List<Ingridient_DTO>> call = service.getAllIngredients();
+
+        try {
+            List<Ingridient_DTO> ingredienti_dto = new AsyncTask<Void, Void, List<Ingridient_DTO>>() {
+                @Override
+                protected List<Ingridient_DTO> doInBackground(Void... params) {
+                    try {
+                        Response<List<Ingridient_DTO>> response = call.execute();
+                        if (response.isSuccessful()) {
+                            return response.body();
+                        } else {
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+            ArrayList<Ingrediente> ingredienti = new ArrayList<>();
+            for (Ingridient_DTO ingridient_dto : ingredienti_dto) {
+                ingredienti.add(new Ingrediente(ingridient_dto.getName(), ingridient_dto.getPrice(), ingridient_dto.getQuantity(), ingridient_dto.getMisura(), ingridient_dto.getDescription()));
+            }
+
+            return ingredienti;
+
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
     }
 
     public ArrayList<Ingrediente> getIngredientiNonAssociatiAllaPortata(Portata portata) {
@@ -182,33 +438,280 @@ public class Repository {
 
     public ArrayList<Tavolo> getTavoliTest() {
         ArrayList<Tavolo> tavoli = new ArrayList<>();
-        tavoli.add(new Tavolo("1", true));
-        tavoli.add(new Tavolo("2", true));
-        tavoli.add(new Tavolo("3", true));
-        tavoli.add(new Tavolo("4", true));
-        tavoli.add(new Tavolo("5", true));
-        tavoli.add(new Tavolo("6", true));
-        tavoli.add(new Tavolo("7", true));
-        tavoli.add(new Tavolo("8", true));
-        tavoli.add(new Tavolo("9", true));
+        tavoli.add(new Tavolo(1, true));
+        tavoli.add(new Tavolo(2, true));
+        tavoli.add(new Tavolo(3, true));
+        tavoli.add(new Tavolo(4, true));
+        tavoli.add(new Tavolo(5, true));
+        tavoli.add(new Tavolo(6, true));
+        tavoli.add(new Tavolo(7, true));
+        tavoli.add(new Tavolo(8, true));
+        tavoli.add(new Tavolo(9, true));
 
         return tavoli;
     }
 
-    public void aggiungiIngrediente(Ingrediente ingrediente) {
-        //TODO: inserire l'ingrediente nel backend
+    public void aggiungiIngrediente(Ingrediente ingrediente) throws IOException {
+        insertIngredientRetrofit(ingrediente.getNome(), ingrediente.getCosto(), ingrediente.getQuantita(),ingrediente.getUnitaMisura(), 0.0f, ingrediente.getDescrizione());
+
         dispensa.add(ingrediente);
     }
 
-    public void eliminaIngredienteSelezionato() {
+    public void insertIngredientRetrofit(String nome, float prezzo, float quantita, String misura, float tolleranza, String descrizione) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        IngridientService service = retrofit.create(IngridientService.class);
+
+        Call<Void> call = service.insertIngredient(nome, prezzo, quantita, misura, tolleranza, descrizione);
+
+        try {
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Ingrediente inserito con successo");
+                    } else {
+                        System.out.println("Errore nell'inserimento dell'ingrediente");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+            // Wait for the response for a maximum of 3 seconds
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void eliminaIngredienteSelezionato() throws IOException {
         if (ingredienteSelezionato != null) {
+            deleteIngridientRetrofit(ingredienteSelezionato.getNome());
             dispensa.remove(ingredienteSelezionato);
         }
     }
 
-    public void aggiungiIngredienteAllaPortataSelezionata(Ingrediente ingrediente, Float quantita) {
+    public void deleteIngridientRetrofit(String id) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        IngridientService service = retrofit.create(IngridientService.class);
+
+        Call<Void> call = service.deleteIngridient(id);
+
+        try {
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Ingridient deleted successfully");
+                    } else {
+                        System.out.println("Error deleting ingridient");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+            // Wait for the response for a maximum of 3 seconds
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void loadAssociazioniPiattiIngredienti() throws IOException {
+        setAllMakeDishesRetrofit();
+    }
+
+    public void setAllMakeDishesRetrofit() throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        MakeDishService service = retrofit.create(MakeDishService.class);
+
+        AsyncTask<Void, Void, List<Make_Dish_DTO>> task = new AsyncTask<Void, Void, List<Make_Dish_DTO>>() {
+            @Override
+            protected List<Make_Dish_DTO> doInBackground(Void... voids) {
+                Call<List<Make_Dish_DTO>> call = service.getAllMakeDishes();
+                Response<List<Make_Dish_DTO>> response = null;
+                try {
+                    response = call.execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (response.isSuccessful()) {
+                    return response.body();
+                } else {
+                    System.out.println("Errore nel recupero dei piatti");
+                    return null;
+                }
+            }
+        };
+        task.execute();
+
+        try {
+            List<Make_Dish_DTO> makeDishDtos = task.get(3000, TimeUnit.MILLISECONDS);
+            System.out.println("Ecco la lista dei make dish recuperati:");
+            makeDishDtos.forEach(make_dish_dto -> System.out.println(make_dish_dto.getDishName()));
+            System.out.println("Fine lista dei make dish:");
+            convertiEAggiungiDaListMakeDishDTOInListaIngredientePortata(makeDishDtos);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void convertiEAggiungiDaListMakeDishDTOInListaIngredientePortata(List<Make_Dish_DTO> makeDishDtos) {
+        if (makeDishDtos != null) {
+            for (Make_Dish_DTO make_dish_dto : makeDishDtos) {
+                Portata portata = findPortataByNome(make_dish_dto.getDishName(), menu.getPortate());
+                if (portata != null) {
+                    Ingrediente ingrediente = findIngredientByName(make_dish_dto.getIngridientName(), dispensa);
+                    if (ingrediente != null) {
+                        portata.aggiungiIngrediente(ingrediente, make_dish_dto.getQuantity());
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void aggiungiIngredienteAllaPortataSelezionata(Ingrediente ingrediente, Float quantita) throws IOException {
+        associaIngridientToDishRetrofit(quantita, ingrediente.getNome(), portataSelezionata.getNome());
         associaIngredientiViewModel.aggiungiIngredienteAllaPortata(ingrediente, quantita);
     }
+
+    public void associaIngridientToDishRetrofit(float quantity, String ingridientName, String dishName) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                Log.d("Retrofit", "Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        MakeDishService service = retrofit.create(MakeDishService.class);
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Call<Void> call = service.create(quantity, ingridientName, dishName);
+
+                try {
+                    Response<Void> response = call.execute();
+                    if (response.isSuccessful()) {
+                        Log.d("Retrofit", "Ingridient " + ingridientName + " associated with dish " + dishName + " with quantity " + quantity);
+                    } else {
+                        Log.e("Retrofit", "Errore nell'associazione dell'ingrediente " + ingridientName + " al piatto " + dishName);
+                    }
+
+                } catch (IOException e) {
+                    Log.e("Retrofit", "Failed to execute call", e);
+                }
+
+                return null;
+            }
+        };
+
+        task.execute();
+    }
+
+
 
     public void aggiornaListaIngredienti() {
         dispensaViewModel.setListaIngredienti();
@@ -217,6 +720,105 @@ public class Repository {
     public Menu getMenu() {
         return menu;
     }
+
+    public Menu loadAndGetMenu() throws IOException {
+
+        // chimamata al backend per il retrieve
+        loadMenu();
+        return menu;
+    }
+
+    public void loadMenu() throws IOException {
+        menu = getAllDishesRetrofit();
+    }
+
+    public Menu getAllDishesRetrofit() throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        DishService service = retrofit.create(DishService.class);
+
+        Call<List<Dish_DTO>> call = service.getAllDishes();
+
+        try {
+            List<Dish_DTO> dish_dtos = new AsyncTask<Void, Void, List<Dish_DTO>>() {
+                @Override
+                protected List<Dish_DTO> doInBackground(Void... params) {
+                    try {
+                        Response<List<Dish_DTO>> response = call.execute();
+                        if (response.isSuccessful()) {
+                            return response.body();
+                        } else {
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+
+            if (dish_dtos == null) {
+                System.out.println("Dishes not found");
+                return null;
+            } else {
+                menu = new Menu();
+                menu.setCategorie( createCategories(dish_dtos));
+                return menu;
+            }
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public ArrayList<Categoria> createCategories(List<Dish_DTO> dishes) {
+        ArrayList<Categoria> categorie = new ArrayList<>();
+        for (Dish_DTO dish : dishes) {
+            boolean categoriaFound = false;
+            for (Categoria categoria : categorie) {
+                if (categoria.getNome().equals(dish.getCategory())) {
+                    categoria.getPortate().add(new Portata(dish.getName(), dish.getPrice(), dish.getDescription(), null));
+                    categoriaFound = true;
+                    break;
+                }
+            }
+
+            if (!categoriaFound) {
+                ArrayList<Portata> portate = new ArrayList<>();
+                portate.add(new Portata(dish.getName(), dish.getPrice(), dish.getDescription(), null));
+                Categoria categoria = new Categoria(dish.getCategory());
+                categoria.setPortate(portate);
+                categorie.add(categoria);
+            }
+        }
+        return categorie;
+    }
+
 
     public Menu getMenuTest() {
         Menu menu = new Menu();
@@ -257,11 +859,72 @@ public class Repository {
         this.menu = menu;
     }
 
-    public void aggiungiPortataAllaCategoria(Portata portata, String nomeCategoria) throws CategoriaNonTrovataException {
+    public void aggiungiPortataAllaCategoria(Portata portata, String nomeCategoria) throws CategoriaNonTrovataException, IOException {
+
+        insertDishRetrofit(portata.getNome(), nomeCategoria, portata.getCosto(), true, "", portata.getDescrizione());
+
         Categoria categoria = getCategoriaDiNome(nomeCategoria);
         aggiungiPortataAllaCategoria(portata, categoria);
         personalizzaMenuViewModel.aggiornaListaPortate(categoria);
     }
+
+    public void insertDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        DishService service = retrofit.create(DishService.class);
+
+        Call<Void> call = service.insertPiatto(nome, categoria, prezzo, ordinabile, allergie, descrizione);
+
+        try {
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Piatto inserito con successo");
+                    } else {
+                        System.out.println("Errore nell'inserimento del piatto");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+            // Wait for the response for a maximum of 3 seconds
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+
 
     public Categoria getCategoriaDiNome(String nomeCategoria) throws CategoriaNonTrovataException {
         List<Categoria> listaCategorieTrovate;
@@ -274,9 +937,67 @@ public class Repository {
         }
     }
 
-    public void aggiungiDipendente(Dipendente dipendente) {
+    public void aggiungiDipendente(Dipendente dipendente) throws AggiungiDipendenteException {
         //TODO: inserire il dipendente nel backend
+        creaDipendenteRetrofit(dipendente.getUsername(), dipendente.getPassword(), dipendente.getNome(), dipendente.getCognome(), dipendente.getRuolo().toString(), String.valueOf((dipendente.getReimpostata())));
     }
+
+    public void creaDipendenteRetrofit(String username, String password, String nome, String cognome, String ruolo, String isReimpostata) throws AggiungiDipendenteException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        UtenteService service = retrofit.create(UtenteService.class);
+
+        Call<Void> call = service.crea(username, password, nome, cognome, ruolo, isReimpostata);
+
+        try {
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Dipendente creato con successo");
+                    } else {
+                        System.out.println("Errore nella creazione del dipendente");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+            // Wait for the response for a maximum of 3 seconds
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new AggiungiDipendenteException(e.getMessage());
+        }
+    }
+
 
     public void aggiungiPortataAllaCategoria(Portata portata, Categoria Categoria) {
         Categoria.getPortate().add(portata);
@@ -285,6 +1006,536 @@ public class Repository {
     public ArrayList<Tavolo> getTavoli() {
         return tavoli;
     }
+
+    public void loadTavoli() throws IOException {
+        tavoli = getAllTablesRetrofit();
+    }
+
+    public void loadOrdinazioniAndStoricoOrdinazioni() throws IOException {
+        ordinazioni = getAllChecksRetrofit();
+    }
+
+    public void loadPortateOrdine() throws IOException {
+        setAllOrderedDishesRetrofit();
+    }
+
+    public ArrayList<Tavolo> loadAndGetTavoli() throws IOException {
+        loadTavoli();
+        return tavoli;
+    }
+
+    public ArrayList<Tavolo> getAllTablesRetrofit() throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        TavoloService service = retrofit.create(TavoloService.class);
+
+        Call<List<Tavolo_DTO>> call = service.getAllTables();
+
+        try {
+            List<Tavolo_DTO> tavoli_dto = new AsyncTask<Void, Void, List<Tavolo_DTO>>() {
+                @Override
+                protected List<Tavolo_DTO> doInBackground(Void... params) {
+                    try {
+                        Response<List<Tavolo_DTO>> response = call.execute();
+                        if (response.isSuccessful()) {
+                            return response.body();
+                        } else {
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+
+            return convertToTavoloList(tavoli_dto);
+
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public ArrayList<Ordinazione> getAllChecksRetrofit() throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        ContoService service = retrofit.create(ContoService.class);
+
+        Call<List<Conto_DTO>> call = service.getAllChecks();
+
+        try {
+            List<Conto_DTO> conti_dto = new AsyncTask<Void, Void, List<Conto_DTO>>() {
+                @Override
+                protected List<Conto_DTO> doInBackground(Void... params) {
+                    try {
+                        Response<List<Conto_DTO>> response = call.execute();
+                        if (response.isSuccessful()) {
+                            return response.body();
+                        } else {
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+
+            ArrayList<Ordinazione> ordinazioniAperte;
+            ArrayList<Ordinazione> ordinazioniChiuse;
+
+            ordinazioniAperte = convertContoDtoToOrdinazioniAperte(conti_dto);
+            ordinazioniChiuse = convertContoDtoToOrdinazioniChiuse(conti_dto);
+
+            System.err.println("Ordinazioni chiuse");
+            ordinazioniChiuse.forEach(ordinazione -> System.out.print(ordinazione.getId()));
+
+            storicoOrdinazioniChiuse.setOrdinazioni(ordinazioniChiuse);
+
+            ordinazioniAperte.addAll(ordinazioniChiuse);
+
+            return ordinazioniAperte;
+
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void setAllOrderedDishesRetrofit() throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        OrderedDishService service = retrofit.create(OrderedDishService.class);
+
+        Call<List<Ordered_Dish_DTO>> call = service.getAllOrderedDishes();
+
+        try {
+            List<Ordered_Dish_DTO> orderedDishesDto = new AsyncTask<Void, Void, List<Ordered_Dish_DTO>>() {
+                @Override
+                protected List<Ordered_Dish_DTO> doInBackground(Void... params) {
+                    try {
+                        Response<List<Ordered_Dish_DTO>> response = call.execute();
+                        if (response.isSuccessful()) {
+                            return response.body();
+                        } else {
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+
+            addOrderedDishesToOrdinazioni(ordinazioni, orderedDishesDto, menu.getPortate());
+
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void addOrderedDishesToOrdinazioni(ArrayList<Ordinazione> ordinazioni, List<Ordered_Dish_DTO> orderedDishDTOs, ArrayList<Portata> portate) {
+        System.out.println("\nordinazioni");
+        ordinazioni.forEach(ordinazione -> System.out.print(ordinazione.getId() + " "));
+        System.out.println("\nordered dishes dto");
+        orderedDishDTOs.forEach(ordinazione -> System.out.print(ordinazione.getDishName()  + " "));
+        System.out.println("\nportate");
+        portate.forEach(portata -> System.out.print(portata.getNome()  + " "));
+
+
+        for (Ordered_Dish_DTO orderedDishDTO : orderedDishDTOs) {
+            Portata portata = findPortataByNome(orderedDishDTO.getDishName(), portate);
+            if (portata != null) {
+                Ordinazione ordinazione = findOrdinazioneById(orderedDishDTO.getContoId(), ordinazioni);
+
+                if (ordinazione != null) {
+                    PortataOrdine portataOrdine = new PortataOrdine(ordinazione, portata, orderedDishDTO.getQuantity());
+                    ordinazione.aggiungiPortataOrdine(portataOrdine);
+                } else {
+                    System.out.println("Could not find Ordinazione with id " + orderedDishDTO.getContoId());
+                }
+            } else {
+                System.out.println("Could not find Portata with name " + orderedDishDTO.getDishName());
+            }
+        }
+    }
+
+    public Portata findPortataByNome(String nomePortata, ArrayList<Portata> portate) {
+        for (Portata portata : portate) {
+            if (portata.getNome().equals(nomePortata)) {
+                System.out.println("Found Portata with name " + nomePortata);
+                return portata;
+            }
+        }
+        System.out.println("Could not find Portata with name " + nomePortata);
+        return null;
+    }
+
+    public Ingrediente findIngredientByName(String name, List<Ingrediente> ingredienti) {
+        for (Ingrediente ingrediente : ingredienti) {
+            if (ingrediente.getNome().equals(name)) {
+                System.out.println("Found Ingredient with name " + name);
+                return ingrediente;
+            }
+        }
+        System.out.println("Could not find Ingredient with name " + name);
+        return null;
+    }
+
+    public Ordinazione findOrdinazioneById(int idOrdinazione, ArrayList<Ordinazione> ordinazioni) {
+        for (Ordinazione ordinazione : ordinazioni) {
+            if (ordinazione.getId() == idOrdinazione) {
+                System.out.println("Found Ordinazione with id " + idOrdinazione);
+                return ordinazione;
+            }
+        }
+        System.out.println("Could not find Ordinazione with id " + idOrdinazione);
+        return null;
+    }
+
+
+
+    public ArrayList<Tavolo> convertToTavoloList(List<Tavolo_DTO> tavoloDTOList) {
+        ArrayList<Tavolo> tavoloList = new ArrayList<>();
+
+        for (Tavolo_DTO tavoloDTO : tavoloDTOList) {
+            Tavolo tavolo = new Tavolo(tavoloDTO.getId(), !tavoloDTO.isTaken());
+            tavoloList.add(tavolo);
+        }
+
+        return tavoloList;
+    }
+
+    public ArrayList<Ordinazione> convertContoDtoToOrdinazioniAperte(List<Conto_DTO> conti) {
+        ArrayList<Ordinazione> ordinazioniList = new ArrayList<>();
+        for (Conto_DTO conto : conti) {
+            if (!conto.isIs_chiuso()) {
+
+                for (Tavolo tavolo : tavoli) {
+                    if (conto.getTavoloId() == tavolo.getId()) {
+                        Ordinazione ordinazione = new Ordinazione(conto.getId(), conto.getTotal(), conto.isIs_chiuso(), String.valueOf(conto.getTime()), tavolo);
+                        ordinazioniList.add(ordinazione);
+                        break;
+                    }
+                }
+
+            }
+        }
+        return ordinazioniList;
+    }
+
+    public ArrayList<Ordinazione> convertContoDtoToOrdinazioniChiuse(List<Conto_DTO> conti) {
+        ArrayList<Ordinazione> ordinazioniList = new ArrayList<>();
+        for (Conto_DTO conto : conti) {
+            if (conto.isIs_chiuso()) {
+                Ordinazione ordinazione = new Ordinazione(conto.getId(), conto.getTotal(), conto.isIs_chiuso(), String.valueOf(conto.getTime()));
+                ordinazioniList.add(ordinazione);
+            }
+        }
+        return ordinazioniList;
+    }
+
+
+
+    public void salvaOrdinazioneTavoloSelezionato() throws IOException {
+        int nuovoId;
+        if (tavoloSelezionato.getOrdinazione().getId() == -1) {
+            nuovoId = getNewOrdinazioneId();
+        }
+        else {
+            nuovoId = tavoloSelezionato.getOrdinazione().getId();
+            deleteContoRetrofit(nuovoId);
+        }
+        System.out.println("Il nuovo id ottenuto è " + nuovoId);
+        saveContoRetrofit(nuovoId, getMinutaggioAdesso(), tavoloSelezionato.getOrdinazione().getCostoTotalePortateOrdine(), false, tavoloSelezionato.getId(), convertPortataOrdineToOrdered_Dish_DTO(getTavoloSelezionato().getOrdinazione().getPortateOrdine(), nuovoId));
+    }
+
+    public List<Ordered_Dish_DTO> convertPortataOrdineToOrdered_Dish_DTO(ArrayList<PortataOrdine> portataOrdineList, int contoId) {
+        List<Ordered_Dish_DTO> orderedDishDTOList = new ArrayList<>();
+
+        for (PortataOrdine portataOrdine : portataOrdineList) {
+            Ordered_Dish_DTO orderedDishDTO = new Ordered_Dish_DTO(
+                    portataOrdine.getQuantita(),
+                    contoId,
+                    portataOrdine.getPortata().getNome()
+            );
+            orderedDishDTOList.add(orderedDishDTO);
+        }
+
+        return orderedDishDTOList;
+    }
+
+
+    public int getMinutaggioAdesso() {
+        return Integer.parseInt(String.valueOf(Instant.now().getEpochSecond()));
+    }
+
+    public int getNewOrdinazioneId() throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        ContoService service = retrofit.create(ContoService.class);
+
+        Call<Integer> call = service.getNewOrdinazioneId();
+
+        try {
+            return new AsyncTask<Void, Void, Integer>() {
+                @Override
+                protected Integer doInBackground(Void... params) {
+                    try {
+                        Response<Integer> response = call.execute();
+                        if (response.isSuccessful()) {
+                            return response.body();
+                        } else {
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void deleteContoRetrofit(int contoId) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(chain -> {
+            Request request = chain.request();
+            String url = request.url().toString();
+            System.out.println("Request URL: " + url);
+            return chain.proceed(request);
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        ContoService service = retrofit.create(ContoService.class);
+        Call<String> call = service.deleteConto(contoId);
+
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Response<String> response = call.execute();
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code " + response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void saveContoRetrofit(int contoId, int time, float total, boolean isChiuso, int tavoloId, List<Ordered_Dish_DTO> orderedDishes) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(chain -> {
+            Request request = chain.request();
+            String url = request.url().toString();
+            System.out.println("Request URL: " + url);
+            return chain.proceed(request);
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        ContoService service = retrofit.create(ContoService.class);
+
+        Call<String> call = service.saveConto(contoId, time, total, isChiuso, tavoloId, orderedDishes);
+
+        orderedDishes.forEach(ordered_dish_dto -> System.err.println(ordered_dish_dto.getDishName() + " " + ordered_dish_dto.getQuantity()));
+
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Response<String> response = call.execute();
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code " + response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+
+    public void chiudiConto(Ordinazione ordinazione) throws IOException {
+        updateContoIsChiusoRetrofit(ordinazione.getId(), true);
+        storicoOrdinazioniChiuse.chiudiOrdinazione(ordinazione);
+    }
+
+    public void updateContoIsChiusoRetrofit(int contoId, boolean isChiuso) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(chain -> {
+            Request request = chain.request();
+            String url = request.url().toString();
+            System.out.println("Request URL: " + url);
+            return chain.proceed(request);
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        ContoService service = retrofit.create(ContoService.class);
+
+        Call<Void> call = service.updateContoIsChiusoById(contoId, isChiuso);
+
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Response<Void> response = call.execute();
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code " + response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
+
 
     public void setTavoloSelezionato(Tavolo tavolo) {
         this.tavoloSelezionato = tavolo;
@@ -311,9 +1562,6 @@ public class Repository {
     }
 
     public StoricoOrdinazioniChiuse getStoricoOrdinazioniChiuse() {
-        if (storicoOrdinazioniChiuse.getOrdinazioni().isEmpty()) {
-            setStoricoOrdinazioniChiuseTest();
-        }
         return storicoOrdinazioniChiuse;
     }
 
@@ -352,32 +1600,63 @@ public class Repository {
         storicoOrdinazioniChiuse.chiudiOrdinazioneInUTC(o6, "1696638510");
     }
 
-    public void rimuoviTavolo(Tavolo tavolo) {
-        // TODO: rimuovi il tavolo dal backend
+    public void rimuoviTavolo(Tavolo tavolo) throws IOException {
+
+        deleteTableRetrofit(tavolo.getId());
+
         tavoli.remove(tavolo);
         modificaTavoliViewModel.aggiornaListaTavoli();
     }
 
-    public void aggiungiTavoloInOrdine() {
-        // TODO: aggiungi il tavolo al backend
-        // Determine the minimum available index for the new tavolo's name
-        int nextAvailableIndex = 1;
-        for (Tavolo tavolo : tavoli) {
-            int tavoloIndex = 0;
-            try {
-                tavoloIndex = Integer.parseInt(tavolo.getNome());
-            } catch (NumberFormatException e) {
-                // Ignore tavoli with non-integer names
-            }
-            if (tavoloIndex == nextAvailableIndex) {
-                nextAvailableIndex++;
-            } else if (tavoloIndex > nextAvailableIndex) {
-                break;
-            }
+    public void deleteTableRetrofit(int tableId) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(chain -> {
+            Request request = chain.request();
+            String url = request.url().toString();
+            System.out.println("Request URL: " + url);
+            return chain.proceed(request);
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        TavoloService service = retrofit.create(TavoloService.class);
+
+        Call<Void> call = service.deleteTable(tableId);
+
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Response<Void> response = call.execute();
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code " + response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
         }
+    }
+
+    public void aggiungiTavoloInOrdine() throws IOException {
+
+        int nextAvailableIndex = getMinimoIndiceTavolo(tavoli);
+        addTableRetrofit(nextAvailableIndex);
 
         // Create the new tavolo object with the determined name
-        Tavolo newTavolo = new Tavolo(Integer.toString(nextAvailableIndex), true);
+        Tavolo newTavolo = new Tavolo(nextAvailableIndex, true);
 
         // Add the new tavolo object to the ArrayList
         tavoli.add(newTavolo);
@@ -389,8 +1668,8 @@ public class Repository {
                 int tavolo1Index = 0;
                 int tavolo2Index = 0;
                 try {
-                    tavolo1Index = Integer.parseInt(tavolo1.getNome());
-                    tavolo2Index = Integer.parseInt(tavolo2.getNome());
+                    tavolo1Index = tavolo1.getId();
+                    tavolo2Index = tavolo2.getId();
                 } catch (NumberFormatException e) {
                     // Ignore tavoli with non-integer names
                 }
@@ -400,6 +1679,67 @@ public class Repository {
 
         // aggiorna view
         modificaTavoliViewModel.aggiornaListaTavoli();
+    }
+
+    public int getMinimoIndiceTavolo(ArrayList<Tavolo> tavoli) {
+        // Determine the minimum available index for the new tavolo's name
+        int nextAvailableIndex = 1;
+        for (Tavolo tavolo : tavoli) {
+            int tavoloIndex = 0;
+            try {
+                tavoloIndex = tavolo.getId();
+            } catch (NumberFormatException e) {
+                // Ignore tavoli with non-integer names
+            }
+            if (tavoloIndex == nextAvailableIndex) {
+                nextAvailableIndex++;
+            } else if (tavoloIndex > nextAvailableIndex) {
+                break;
+            }
+        }
+        return nextAvailableIndex;
+    }
+
+    public void addTableRetrofit(int id) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(chain -> {
+            Request request = chain.request();
+            String url = request.url().toString();
+            System.out.println("Request URL: " + url);
+            return chain.proceed(request);
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.6:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        TavoloService service = retrofit.create(TavoloService.class);
+
+        Call<Void> call = service.addTable(id);
+
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Response<Void> response = call.execute();
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code " + response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
     }
 
     public void setLoginViewModel(LoginViewModel loginViewModel) {
@@ -470,5 +1810,19 @@ public class Repository {
         this.modificaTavoliViewModel = modificaTavoliViewModel;
     }
 
+    public void setHomeAddettoSalaViewModel(HomeAddettoSalaViewModel homeAddettoSalaViewModel) {
+        this.homeAddettoSalaViewModel = homeAddettoSalaViewModel;
+    }
 
+    public void setHomeAddettoCucinaViewModel(HomeAddettoCucinaViewModel homeAddettoCucinaViewModel) {
+        this.homeAddettoCucinaViewModel = homeAddettoCucinaViewModel;
+    }
+
+    public void setHomeAmministratoreViewModel(HomeAmministratoreViewModel homeAmministratoreViewModel) {
+        this.homeAmministratoreViewModel = homeAmministratoreViewModel;
+    }
+
+    public void setHomeSupervisoreViewModel(HomeSupervisoreViewModel homeSupervisoreViewModel) {
+        this.homeSupervisoreViewModel = homeSupervisoreViewModel;
+    }
 }

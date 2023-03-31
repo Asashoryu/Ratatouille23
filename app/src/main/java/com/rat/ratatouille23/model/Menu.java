@@ -16,6 +16,15 @@ public class Menu {
         return categorie.get(indiceCategoriaSelezionata).getPortate();
     }
 
+    public ArrayList<Portata> getPortate() {
+        ArrayList<Portata> portate = new ArrayList<>();
+        for (Categoria categoria : categorie) {
+            portate.addAll(categoria.getPortate());
+        }
+        return portate;
+    }
+
+
     public ArrayList<Categoria> getCategorie() {
         return categorie;
     }

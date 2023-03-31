@@ -1,13 +1,13 @@
 package com.rat.ratatouille23.model;
 
 public class Tavolo {
-    private String nome;
+    private Integer id;
     private Boolean disponibile;
 
     private Ordinazione ordinazione;
 
-    public Tavolo(String nome, Boolean disponibile) {
-        setNome(nome);
+    public Tavolo(Integer id, Boolean disponibile) {
+        setId(id);
         setDisponibile(disponibile);
         ordinazione = new Ordinazione(this);
     }
@@ -22,12 +22,17 @@ public class Tavolo {
         setDisponibile(true);
     }
 
-    public String getNome() {
-        return nome;
+    public String getStringId() {
+        return id.toString();
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public Integer getId() {
+        return id;
+    }
+
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Boolean getDisponibile() {

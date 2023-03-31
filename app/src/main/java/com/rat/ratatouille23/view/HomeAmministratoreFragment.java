@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeAmministratoreViewBinding;
@@ -41,6 +42,7 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAlMenu() {
         homeAmministratoreViewModel.vaiAlMenu.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeAmministratoreViewModel.loadPerPersonalizzaMenu();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_personalizzaMenuFragment);
             }
         });
@@ -49,6 +51,7 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAlleStatistiche() {
         homeAmministratoreViewModel.vaiAlleStatistiche.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeAmministratoreViewModel.loadPerStatistiche();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_visualizzaStatisticheFragment);
             }
         });
@@ -57,6 +60,7 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAggiungereDipendente() {
         homeAmministratoreViewModel.vaiAdAggiungiDipendente.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeAmministratoreViewModel.loadPerAggiuntadipendente();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_aggiungiDipendenteFragment);
             }
         });
@@ -65,8 +69,22 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAllaGestioneTavolo() {
         homeAmministratoreViewModel.vaiAllaGestioneTavolo.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
+                homeAmministratoreViewModel.loadPerGestioneTavolo();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_modificaTavoliFragment);
             }
         });
+    }
+
+    public void osservaMessaggioErrore() {
+        homeAmministratoreViewModel.messaggioHomeAmministratore.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (homeAmministratoreViewModel.isNuovoMessaggioHomeAmministratore()) {
+                visualizzaToastConMessaggio(messaggio);
+                homeAmministratoreViewModel.cancellaMessaggioHomeAmministratore();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(homeAmministratoreBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
 }

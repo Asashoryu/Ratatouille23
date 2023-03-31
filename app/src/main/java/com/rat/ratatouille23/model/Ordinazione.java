@@ -3,6 +3,8 @@ package com.rat.ratatouille23.model;
 import java.util.ArrayList;
 
 public class Ordinazione {
+
+    private int id = -1;
     Tavolo tavolo;
     ArrayList<PortataOrdine> portateOrdine;
 
@@ -14,6 +16,28 @@ public class Ordinazione {
 
     public Ordinazione(Tavolo tavolo) {
         setTavolo(tavolo);
+        portateOrdine = new ArrayList<>();
+        costoTotalePortateOrdine = 0.0f;
+        isChiusa = false;
+    }
+
+    public Ordinazione(int id, Float costoTotalePortateOrdine, Boolean isChiusa, String minutaggioChiusuraConto, Tavolo tavolo) {
+        this.id = id;
+        this.costoTotalePortateOrdine =costoTotalePortateOrdine;
+        this.isChiusa = isChiusa;
+        this.minutaggioChiusuraConto = minutaggioChiusuraConto;
+        setTavolo(tavolo);
+        portateOrdine = new ArrayList<>();
+        costoTotalePortateOrdine = 0.0f;
+        isChiusa = false;
+        tavolo.occupaTavoloConOrdinazione(this);
+    }
+
+    public Ordinazione(int id, Float costoTotalePortateOrdine, Boolean isChiusa, String minutaggioChiusuraConto) {
+        this.id = id;
+        this.costoTotalePortateOrdine =costoTotalePortateOrdine;
+        this.isChiusa = isChiusa;
+        this.minutaggioChiusuraConto = minutaggioChiusuraConto;
         portateOrdine = new ArrayList<>();
         costoTotalePortateOrdine = 0.0f;
         isChiusa = false;
@@ -99,6 +123,12 @@ public class Ordinazione {
         throw new IllegalArgumentException("Product not found in the order.");
     }
 
+    public void aggiungiPortataOrdine(PortataOrdine portataOrdine) {
+        portateOrdine.add(portataOrdine);
+
+        aggiornaCostoTotalePortateOrdine();
+    }
+
     public void rimuoviPortataOrdine(PortataOrdine portataOrdine) {
         portateOrdine.remove(portataOrdine);
 
@@ -143,5 +173,13 @@ public class Ordinazione {
 
     public void setMinutaggioChiusuraConto(String minutaggioChiusuraConto) {
         this.minutaggioChiusuraConto = minutaggioChiusuraConto;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -9,6 +9,9 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
@@ -32,10 +35,31 @@ public class AggiungiDipendenteFragment extends Fragment {
         aggiungiDipendenteViewModel = new ViewModelProvider(this).get(AggiungiDipendenteViewModel.class);
         aggiungiDipendenteBinding.setAggiungiDipendenteViewModel(aggiungiDipendenteViewModel);
 
+        impostaSpinner();
+
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
 
         return fragmentView;
+    }
+
+    public void impostaSpinner() {
+
+        Spinner categorySpinner = aggiungiDipendenteBinding.ruoloText;
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, aggiungiDipendenteViewModel.getRuoloNames());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+        aggiungiDipendenteBinding.ruoloText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                aggiungiDipendenteViewModel.getSelectedRuolo().set((String) parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     public void osservaSeTornareIndietro() {

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
+
 public class VisualizzaIngredienteViewModel extends ViewModel {
     Repository repository;
 
@@ -23,7 +25,11 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
     }
 
     public void eliminaIngrediente() {
-        repository.eliminaIngredienteSelezionato();
+        try {
+            repository.eliminaIngredienteSelezionato();
+        } catch (IOException e) {
+            setMessaggioVisualizzaIngrediente(e.getMessage());
+        }
         setTornaIndietro();
     }
 

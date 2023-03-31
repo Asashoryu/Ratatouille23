@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.TavoliItemAdapter;
@@ -98,6 +99,19 @@ public class ModificaTavoliFragment extends Fragment {
         {
             tavoliItemAdapter.setData(listaTavoli);
         });
+    }
+
+    public void osservaMessaggioErrore() {
+        modificaTavoliViewModel.messaggioModificaTavoli.observe(getViewLifecycleOwner(), (messaggio) -> {
+            if (modificaTavoliViewModel.isNuovoMessaggioModificaTavoli()) {
+                visualizzaToastConMessaggio(messaggio);
+                modificaTavoliViewModel.cancellaMessaggioModificaTavoli();
+            }
+        });
+    }
+
+    public void visualizzaToastConMessaggio(String messaggio) {
+        Toast.makeText(modificaTavoliBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
 
 }
