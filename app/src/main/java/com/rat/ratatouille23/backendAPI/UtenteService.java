@@ -12,6 +12,9 @@ public interface UtenteService {
     @GET("/Utente/login:{username}:{password}")
     Call<Utente_DTO> logIn(@Path("username") String username, @Path("password") String password);
 
+    @PUT("/Utente/setToken/{username}/{token}")
+    Call<Void> setToken(@Path("username") String username, @Path("token") String token);
+
     @PUT("/Utente/cambiaPassword:{username}:{vecchia_password}")
     Call<Void> cambiaPassword(@Path("username") String username, @Path("vecchia_password") String vecchia_password);
 

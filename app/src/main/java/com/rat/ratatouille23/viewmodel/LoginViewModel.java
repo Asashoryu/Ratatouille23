@@ -34,7 +34,7 @@ public class LoginViewModel extends ViewModel {
                 else {
                     setIsVaiAReimpostaPassword();
                 }
-            } catch (DipendenteNonTrovatoException dnte) {
+            } catch (Exception dnte) {
                 dnte.printStackTrace();
                 setMessaggioLogin(dnte.getMessage());
             }

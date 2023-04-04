@@ -5,6 +5,8 @@ import static java.lang.Thread.sleep;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.rat.ratatouille23.DTO.Conto_DTO;
 import com.rat.ratatouille23.DTO.Dish_DTO;
 import com.rat.ratatouille23.DTO.Ingridient_DTO;
@@ -62,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -163,9 +166,89 @@ public class Repository {
         this.dipendente = dipendente;
     }
 
-    public void login(String username, String password) throws DipendenteNonTrovatoException {
+    public void login(String username, String password) throws Exception {
 
         dipendente = loginRetrofit(username, password);
+
+        if (dipendente.getToken() == null) {
+            String token = generaFCMToken();
+            setTokenRetrofit(dipendente.getUsername(), token);
+        }
+    }
+
+    public void setTokenRetrofit(String username, String token) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        UtenteService service = retrofit.create(UtenteService.class);
+
+        AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                try {
+                    Call<Void> call = service.setToken(username, token);
+                    Response<Void> response = call.execute();
+                    if (response.isSuccessful()) {
+                        System.out.println("Token set successfully");
+                        return true;
+                    } else {
+                        System.out.println("Error setting token");
+                        return false;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (!success) {
+                    // Handle error
+                }
+            }
+        };
+
+        task.execute();
+    }
+
+
+
+
+    public String generaFCMToken() {
+        Task<String> task = FirebaseMessaging.getInstance().getToken();
+        while (!task.isComplete()) {
+            // Wait for the task to complete
+        }
+        if (task.isSuccessful()) {
+            String token = task.getResult();
+            return token;
+        } else {
+            // Handle error
+            return null;
+        }
     }
 
     public Dipendente loginRetrofit(String username, String password) throws DipendenteNonTrovatoException {
@@ -221,7 +304,7 @@ public class Repository {
                 throw new DipendenteNonTrovatoException();
             } else {
                 System.out.println("Riuscito e trovato in Retrofit +" + dipendente_dto.getIsReimpostata());
-                Dipendente dip = new Dipendente(dipendente_dto.getNome(), dipendente_dto.getCognome(), dipendente_dto.getUsername(), convertiStringARuolo(dipendente_dto.getRuolo()), dipendente_dto.getPassword(), dipendente_dto.getIsReimpostata());
+                Dipendente dip = new Dipendente(dipendente_dto.getNome(), dipendente_dto.getCognome(), dipendente_dto.getUsername(), convertiStringARuolo(dipendente_dto.getRuolo()), dipendente_dto.getPassword(), dipendente_dto.getIsReimpostata(), dipendente_dto.getToken());
                 System.out.println(dipendente_dto.getNome() + dipendente_dto.getCognome() + dipendente_dto.getUsername() + convertiStringARuolo(dipendente_dto.getRuolo()) + dipendente_dto.getPassword() + dipendente_dto.getIsReimpostata());
                 return dip;
             }
@@ -254,21 +337,21 @@ public class Repository {
 
     public Dipendente loginTest(String username, String password) throws DipendenteNonTrovatoException {
         if (username.equals("a") && password.equals("a")) {
-            return new Dipendente("Joe", "Amministratore", username, Dipendente.Ruolo.AMMINISTRATORE, password, true);
+            return new Dipendente("Joe", "Amministratore", username, Dipendente.Ruolo.AMMINISTRATORE, password, true, null);
         }
         else if (username.equals("s" )&& password.equals("s")) {
-            return new Dipendente("Joe", "Supervisore", username, Dipendente.Ruolo.SUPERVISORE, password, true);
+            return new Dipendente("Joe", "Supervisore", username, Dipendente.Ruolo.SUPERVISORE, password, true, null);
         }
         else if (username.equals("as") && password.equals("as")) {
-            return new Dipendente("Joe", "AddettoSala", username, Dipendente.Ruolo.ADDETTOSALA, password, true);
+            return new Dipendente("Joe", "AddettoSala", username, Dipendente.Ruolo.ADDETTOSALA, password, true, null);
         }
         else if (username.equals("ac") && password.equals("ac")) {
-            return new Dipendente("Joe", "AddettoCucina", username, Dipendente.Ruolo.ADDETTOCUCINA, password, true);
+            return new Dipendente("Joe", "AddettoCucina", username, Dipendente.Ruolo.ADDETTOCUCINA, password, true, null);
         }
         else if (username.equals("re") && password.equals("re")) {
-            return new Dipendente("Joe", "AddettoCucinaNonImpostato", username, Dipendente.Ruolo.ADDETTOCUCINA, password, false);
+            return new Dipendente("Joe", "AddettoCucinaNonImpostato", username, Dipendente.Ruolo.ADDETTOCUCINA, password, false, null);
         } else if (username.equals("rp") && password.equals("rp")) {
-            return new Dipendente("Joe", "Reimposta", username,Dipendente.Ruolo.NONIMPOSTATO, password, false);
+            return new Dipendente("Joe", "Reimposta", username,Dipendente.Ruolo.NONIMPOSTATO, password, false, null);
         } else {
             throw new DipendenteNonTrovatoException();
         }
@@ -334,7 +417,6 @@ public class Repository {
             e.printStackTrace();
         }
     }
-
 
 
     public void setLoginViewModelVaiAvanti() {

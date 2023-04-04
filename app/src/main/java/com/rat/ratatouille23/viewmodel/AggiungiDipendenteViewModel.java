@@ -40,7 +40,7 @@ public class AggiungiDipendenteViewModel extends ViewModel {
     public void aggiungiDipendente(String nome, String cognome, String username, String ruolo, String password) {
         try {
             dipendente = null;
-            dipendente = new Dipendente(nome, cognome, username, validaRuolo(ruolo), password, false);
+            dipendente = new Dipendente(nome, cognome, username, validaRuolo(ruolo), password, false, null);
             repository.aggiungiDipendente(dipendente);
             System.err.println(nome + cognome + username + ruolo + password);
             setTornaIndietro();

@@ -12,6 +12,8 @@ public class Utente_DTO {
     @SerializedName("isReimpostata")
     private Boolean IsReimpostata;
 
+    private String token;
+
     public Utente_DTO() {
     }
 
@@ -64,13 +66,20 @@ public class Utente_DTO {
         this.ruolo = ruolo;
     }
 
-
     public Boolean getIsReimpostata() {
         return IsReimpostata;
     }
 
     public void setIsReimpostata(Boolean IsReimpostata) {
         this.IsReimpostata = IsReimpostata;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
 

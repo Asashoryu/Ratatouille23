@@ -20,13 +20,16 @@ public class Dipendente {
     private String password;
     private Boolean isReimpostata;
 
-    public Dipendente(String nome, String cognome, String username, Ruolo ruolo, String password, Boolean isReimpostata) {
+    private String token;
+
+    public Dipendente(String nome, String cognome, String username, Ruolo ruolo, String password, Boolean isReimpostata, String token) {
         setNome(nome);
         setCognome(cognome);
         setUsername(username);
         setRuolo(ruolo);
         setPassword(password);
         setReimpostata(isReimpostata);
+        setToken(token);
     }
 
     public void reimpostaPassword(String nuovaPassword) throws ReimpostaPasswordException {
@@ -84,5 +87,13 @@ public class Dipendente {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
