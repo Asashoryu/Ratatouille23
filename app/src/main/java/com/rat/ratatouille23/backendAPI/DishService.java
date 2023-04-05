@@ -13,7 +13,7 @@ public interface DishService {
     @GET("/Dish/getdishes")
     Call<List<Dish_DTO>> getAllDishes();
 
-    @POST("/Dish/insert_piatto:{nome}:{categoria}:{prezzo}:{ordinabile}:{allergie}:{descrizione}")
+    @POST("/Dish/insert_piatto/{nome}/{categoria}/{prezzo}/{ordinabile}/{allergie}/{descrizione}")
     Call<Void> insertPiatto(@Path("nome") String nome,
                             @Path("categoria") String categoria,
                             @Path("prezzo") float prezzo,

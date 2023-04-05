@@ -1,4 +1,6 @@
-package com.rat.ratatouille23.eccezioni;
+package com.rat.ratatouille23.eccezioni.rat.ordinazione;
+
+import com.rat.ratatouille23.eccezioni.rat.ordinazione.OrdinazioneException;
 
 public class DecrementoQuantitaProdottoEccezione extends OrdinazioneException {
 

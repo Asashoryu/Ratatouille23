@@ -3,7 +3,6 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.eccezioni.DipendenteNonTrovatoException;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
 

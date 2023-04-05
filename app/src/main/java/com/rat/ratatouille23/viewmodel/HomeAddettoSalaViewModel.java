@@ -26,6 +26,8 @@ public class HomeAddettoSalaViewModel extends ViewModel {
             repository.loadTavoli();
             repository.loadOrdinazioniAndStoricoOrdinazioni();
             repository.loadPortateOrdine();
+            repository.loadIngredienti();
+            repository.loadAssociazioniPiattiIngredienti();
         } catch (IOException e) {
             setMessaggioHomeAddettoSala(e.getMessage());
         }

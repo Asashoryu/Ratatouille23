@@ -135,6 +135,16 @@ public class Ordinazione {
         aggiornaCostoTotalePortateOrdine();
     }
 
+    public PortataOrdine getPortataOrdineCorrispondenteAPortata(Portata portata) {
+        for (PortataOrdine portataOrdine: portateOrdine) {
+            System.out.println("Portata ordine : " + portataOrdine.getPortata().getNome() + " e portata :" + portata.getNome());
+            if (portataOrdine.getPortata().getNome().equals(portata.getNome())) {
+                return portataOrdine;
+            }
+        }
+        return null;
+    }
+
     public Tavolo getTavolo() {
         return tavolo;
     }
@@ -182,4 +192,6 @@ public class Ordinazione {
     public void setId(int id) {
         this.id = id;
     }
+
+
 }

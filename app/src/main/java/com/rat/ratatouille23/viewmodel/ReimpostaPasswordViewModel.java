@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.eccezioni.ReimpostaPasswordException;
+import com.rat.ratatouille23.eccezioni.rat.login.ReimpostaPasswordException;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
 

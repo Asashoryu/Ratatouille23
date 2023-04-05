@@ -1,4 +1,6 @@
-package com.rat.ratatouille23.eccezioni;
+package com.rat.ratatouille23.eccezioni.rat.login;
+
+import com.rat.ratatouille23.eccezioni.rat.Ratatouille23Exception;
 
 public class LoginException extends Ratatouille23Exception {
 

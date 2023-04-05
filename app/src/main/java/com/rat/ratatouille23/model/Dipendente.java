@@ -1,6 +1,6 @@
 package com.rat.ratatouille23.model;
 
-import com.rat.ratatouille23.eccezioni.ReimpostaPasswordException;
+import com.rat.ratatouille23.eccezioni.rat.login.ReimpostaPasswordException;
 
 public class Dipendente {
     public enum Ruolo{
@@ -33,7 +33,6 @@ public class Dipendente {
     }
 
     public void reimpostaPassword(String nuovaPassword) throws ReimpostaPasswordException {
-        // TODO: validare la nuova password rispetto alla vecchia e nel caso di errore lanciare un eccezione
         setPassword(nuovaPassword);
         Boolean erroreValidazione = false;
         if (erroreValidazione) {

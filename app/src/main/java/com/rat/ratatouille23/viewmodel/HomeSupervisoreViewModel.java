@@ -63,6 +63,8 @@ public class HomeSupervisoreViewModel extends ViewModel {
 
         try {
             repository.loadMenu();
+            repository.loadIngredienti();
+            repository.loadAssociazioniPiattiIngredienti();
         } catch (IOException e) {
             setMessaggioHomeSupervisore(e.getMessage());
         }

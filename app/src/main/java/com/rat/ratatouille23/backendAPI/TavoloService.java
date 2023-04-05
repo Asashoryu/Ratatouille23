@@ -14,9 +14,9 @@ public interface TavoloService {
     @GET("/Tavolo/get_all_tables")
     Call<List<Tavolo_DTO>> getAllTables();
 
-    @POST("/Tavolo/add_table:{id}")
+    @POST("/Tavolo/add_table/{id}")
     Call<Void> addTable(@Path("id") int id);
 
-    @DELETE("/Tavolo/delete_table:{id}")
+    @DELETE("/Tavolo/delete_table/{id}")
     Call<Void> deleteTable(@Path("id") int id);
 }

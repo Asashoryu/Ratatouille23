@@ -4,12 +4,9 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.eccezioni.AggiungiDipendenteException;
-import com.rat.ratatouille23.eccezioni.CreazioneDipendenteException;
-import com.rat.ratatouille23.eccezioni.PersonalizzaMenuException;
-import com.rat.ratatouille23.eccezioni.RuoloNonTrovatoException;
+import com.rat.ratatouille23.eccezioni.rat.creadipendente.AggiungiDipendenteException;
+import com.rat.ratatouille23.eccezioni.rat.creadipendente.RuoloNonTrovatoException;
 import com.rat.ratatouille23.model.Allergene;
-import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
 

@@ -1,6 +1,8 @@
-package com.rat.ratatouille23.eccezioni;
+package com.rat.ratatouille23.eccezioni.rat.login;
 
-public class DipendenteNonTrovatoException extends LoginException{
+import com.rat.ratatouille23.eccezioni.rat.login.LoginException;
+
+public class DipendenteNonTrovatoException extends LoginException {
 
     private static String messaggioDefault = "Non esiste un dipendente con le credenziali indicate";
 

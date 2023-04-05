@@ -1,4 +1,6 @@
-package com.rat.ratatouille23.eccezioni;
+package com.rat.ratatouille23.eccezioni.rat.creadipendente;
+
+import com.rat.ratatouille23.eccezioni.rat.creadipendente.AggiungiDipendenteException;
 
 public class RuoloNonTrovatoException extends AggiungiDipendenteException {
 

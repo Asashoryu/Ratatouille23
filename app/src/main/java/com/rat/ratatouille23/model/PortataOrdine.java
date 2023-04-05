@@ -43,6 +43,17 @@ public class PortataOrdine {
         costoTotalePortataOrdine = portata.getCosto() * quantita;
     }
 
+    public Float getQuantitaIngredienteUsata(Ingrediente ingrediente) {
+        Float quantitaUsata = 0.0f;
+        for (IngredientePortata ingredientePortata : portata.getIngredientiPortata()) {
+            if (ingredientePortata.getIngrediente().equals(ingrediente)) {
+                quantitaUsata += ingredientePortata.getQuantita() * quantita;
+            }
+        }
+        return quantitaUsata;
+    }
+
+
     public Portata getPortata() {
         return portata;
     }

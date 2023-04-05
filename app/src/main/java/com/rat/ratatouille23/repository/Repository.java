@@ -21,13 +21,14 @@ import com.rat.ratatouille23.backendAPI.DishService;
 import com.rat.ratatouille23.backendAPI.IngridientService;
 import com.rat.ratatouille23.backendAPI.OrderedDishService;
 import com.rat.ratatouille23.backendAPI.TavoloService;
-import com.rat.ratatouille23.eccezioni.AggiungiDipendenteException;
-import com.rat.ratatouille23.eccezioni.CategoriaNonTrovataException;
-import com.rat.ratatouille23.eccezioni.DipendenteNonTrovatoException;
-import com.rat.ratatouille23.eccezioni.ReimpostaPasswordException;
+import com.rat.ratatouille23.eccezioni.rat.creadipendente.AggiungiDipendenteException;
+import com.rat.ratatouille23.eccezioni.rat.menu.CategoriaNonTrovataException;
+import com.rat.ratatouille23.eccezioni.rat.login.DipendenteNonTrovatoException;
+import com.rat.ratatouille23.eccezioni.rat.login.ReimpostaPasswordException;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.model.IngredientePortata;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
@@ -64,7 +65,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -714,7 +714,9 @@ public class Repository {
         try {
             List<Make_Dish_DTO> makeDishDtos = task.get(3000, TimeUnit.MILLISECONDS);
             System.out.println("Ecco la lista dei make dish recuperati:");
-            makeDishDtos.forEach(make_dish_dto -> System.out.println(make_dish_dto.getDishName()));
+            if (makeDishDtos != null) {
+                makeDishDtos.forEach(make_dish_dto -> System.out.println(make_dish_dto.getDishName()));
+            }
             System.out.println("Fine lista dei make dish:");
             convertiEAggiungiDaListMakeDishDTOInListaIngredientePortata(makeDishDtos);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -1401,7 +1403,7 @@ public class Repository {
     public void salvaOrdinazioneTavoloSelezionato() throws IOException {
         int nuovoId;
         if (tavoloSelezionato.getOrdinazione().getId() == -1) {
-            nuovoId = getNewOrdinazioneId();
+            nuovoId = getNewOrdinazioneIdRetrofit();
         }
         else {
             nuovoId = tavoloSelezionato.getOrdinazione().getId();
@@ -1431,7 +1433,7 @@ public class Repository {
         return Integer.parseInt(String.valueOf(Instant.now().getEpochSecond()));
     }
 
-    public int getNewOrdinazioneId() throws IOException {
+    public int getNewOrdinazioneIdRetrofit() throws IOException {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         // Add an interceptor to the OkHttp client
@@ -1575,7 +1577,68 @@ public class Repository {
     public void chiudiConto(Ordinazione ordinazione) throws IOException {
         updateContoIsChiusoRetrofit(ordinazione.getId(), true);
         storicoOrdinazioniChiuse.chiudiOrdinazione(ordinazione);
+
+        riduciQuantitaIngredientiOrdinazione(ordinazione);
     }
+
+    public void riduciQuantitaIngredientiOrdinazione(Ordinazione ordinazione) throws IOException {
+        for (PortataOrdine portataOrdine : ordinazione.getPortateOrdine()) {
+            Portata portata = portataOrdine.getPortata();
+            for (IngredientePortata ingredientePortata : portata.getIngredientiPortata()) {
+                Ingrediente ingrediente = ingredientePortata.getIngrediente();
+                float quantitaIngrediente = ingrediente.getQuantita();
+                quantitaIngrediente = quantitaIngrediente - (portataOrdine.getQuantita() * ingredientePortata.getQuantita());
+                // riduci in backend
+                updateIngredientQuantityRetrofit(ingrediente.getNome(), quantitaIngrediente);
+                ingrediente.setQuantita(quantitaIngrediente);
+
+
+            }
+        }
+    }
+
+    public void updateIngredientQuantityRetrofit(String ingredientName, float quantity) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(chain -> {
+            Request request = chain.request();
+            String url = request.url().toString();
+            System.out.println("Request URL: " + url);
+            return chain.proceed(request);
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        IngridientService service = retrofit.create(IngridientService.class);
+
+        Call<Void> call = service.updateIngridientQuantityById(ingredientName, quantity);
+
+        try {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Response<Void> response = call.execute();
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code " + response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute().get(3, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            throw new IOException("Request timed out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
 
     public void updateContoIsChiusoRetrofit(int contoId, boolean isChiuso) throws IOException {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -1619,7 +1682,13 @@ public class Repository {
         }
     }
 
+    public ArrayList<Ordinazione> getOrdinazioni() {
+        return ordinazioni;
+    }
 
+    public void setOrdinazioni(ArrayList<Ordinazione> ordinazioni) {
+        this.ordinazioni = ordinazioni;
+    }
 
     public void setTavoloSelezionato(Tavolo tavolo) {
         this.tavoloSelezionato = tavolo;
