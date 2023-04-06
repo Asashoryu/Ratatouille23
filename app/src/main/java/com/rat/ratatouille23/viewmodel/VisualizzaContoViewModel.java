@@ -120,10 +120,10 @@ public class VisualizzaContoViewModel extends ViewModel {
     public void chiudiConto() {
         try {
             repository.chiudiConto(ordinazione);
+            setTornaIndietro();
         } catch (IOException e) {
             setMessaggioVisualizzaConto(e.getMessage());
         }
-        setTornaIndietro();
     }
 
     public void setTornaIndietro() {

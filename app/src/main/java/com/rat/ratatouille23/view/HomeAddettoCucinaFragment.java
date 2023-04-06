@@ -15,6 +15,8 @@ import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeAddettoCucinaViewBinding;
 import com.rat.ratatouille23.viewmodel.HomeAddettoCucinaViewModel;
 
+import java.io.IOException;
+
 public class HomeAddettoCucinaFragment extends Fragment {
 
     HomeAddettoCucinaViewModel homeAddettoCucinaViewModel;
@@ -35,15 +37,20 @@ public class HomeAddettoCucinaFragment extends Fragment {
         osservaSeAssociareIngredienti();
         osservaSeEffettuareLogOut();
 
+        osservaMessaggioErrore();
+
         return fragmentView;
     }
 
     public void osservaSeAndareAllaDispensa() {
         homeAddettoCucinaViewModel.vaiAllaDispensa.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti.equals(true)) {
-                homeAddettoCucinaViewModel.loadPerDispensa();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoCucinaView_to_dispensaView);
-
+                try {
+                    homeAddettoCucinaViewModel.loadPerDispensa();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoCucinaView_to_dispensaView);
+                } catch (IOException e) {
+                    homeAddettoCucinaViewModel.setMessaggioHomeAddettoCucina(e.getMessage());
+                }
             }
         });
     }
@@ -51,8 +58,12 @@ public class HomeAddettoCucinaFragment extends Fragment {
     public void osservaSeAssociareIngredienti() {
         homeAddettoCucinaViewModel.vaiAdAssociaIngredienti.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti.equals(true)) {
-                homeAddettoCucinaViewModel.loadPerAssociaIngredienti();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoCucinaView_to_visualizzaMenuFragment);
+                try {
+                    homeAddettoCucinaViewModel.loadPerAssociaIngredienti();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoCucinaView_to_visualizzaMenuFragment);
+                } catch (IOException e) {
+                    homeAddettoCucinaViewModel.setMessaggioHomeAddettoCucina(e.getMessage());
+                }
             }
         });
     }

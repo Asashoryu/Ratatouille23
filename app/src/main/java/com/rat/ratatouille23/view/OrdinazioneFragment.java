@@ -48,6 +48,8 @@ public class OrdinazioneFragment extends Fragment {
         osservaCambientoPortate();
         osservaCambientoPortateConto();
 
+        osservaMessaggioErrore();
+
         osservaCambiamentoCostoTotaleConto();
 
         osservaSeTornareIndietro();

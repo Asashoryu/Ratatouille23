@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment {
         loginViewModel.messaggioLogin.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (loginViewModel.isNuovoMessaggioLogin()) {
                 loginBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
-                loginBinding.errorMessage.setText(loginViewModel.getMessaggioLogin());
+                loginBinding.errorMessage.setText(messaggio);
                 loginBinding.errorSign.setVisibility(View.VISIBLE);
                 //visualizzaToastConMessaggio(loginViewModel.getMessaggioLogin());
                 loginViewModel.cancellaMessaggioLogin();

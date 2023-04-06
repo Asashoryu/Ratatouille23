@@ -24,15 +24,6 @@ public class ScegliTavoloVisualizzaContoViewModel extends ViewModel {
         repository = Repository.getInstance();
         repository.setScegliTavoloVisualizzaContoViewModel(this);
 
-        try {
-            repository.loadMenu();
-            repository.loadTavoli();
-            repository.loadOrdinazioniAndStoricoOrdinazioni();
-            repository.loadPortateOrdine();
-        } catch (IOException e) {
-            setMessaggioScegliTavoloVisualizzaConto(e.getMessage());
-        }
-
         setListaTavoli();
     }
 

@@ -66,41 +66,26 @@ public class HomeSupervisoreViewModel extends ViewModel {
         messaggioHomeSupervisore.setValue("");
     }
 
-    public void loadPerVisualizzareConto() {
-
-        try {
-            repository.loadMenu();
-            repository.loadIngredienti();
-            repository.loadAssociazioniPiattiIngredienti();
-        } catch (IOException e) {
-            setMessaggioHomeSupervisore(e.getMessage());
-        }
-
+    public void loadPerVisualizzareConto() throws IOException {
+        repository.loadTavoli();
+        repository.loadMenu();
+        repository.loadIngredienti();
+        repository.loadOrdinazioniAndStoricoOrdinazioni();
+        repository.loadPortateOrdine();
+        repository.loadAssociazioniPiattiIngredienti();
     }
 
-    public void loadPerAssociaIngredienti() {
-        try {
-            repository.loadMenu();
-            repository.loadIngredienti();
-            repository.loadAssociazioniPiattiIngredienti();
-        } catch (IOException e) {
-            setMessaggioHomeSupervisore(e.getMessage());
-        }
+    public void loadPerAssociaIngredienti() throws IOException {
+        repository.loadMenu();
+        repository.loadIngredienti();
+        repository.loadAssociazioniPiattiIngredienti();
     }
 
-    public void loadPerPersonalizzaMenu() {
-        try {
-            repository.loadMenu();
-        } catch (IOException e) {
-            setMessaggioHomeSupervisore(e.getMessage());
-        }
+    public void loadPerPersonalizzaMenu() throws IOException {
+        repository.loadMenu();
     }
 
-    public void loadPerGestioneTavolo() {
-        try {
-            repository.loadTavoli();
-        } catch (IOException e) {
-            setMessaggioHomeSupervisore(e.getMessage());
-        }
+    public void loadPerDispensa() throws IOException {
+        repository.loadIngredienti();
     }
 }

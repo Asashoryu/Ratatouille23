@@ -15,6 +15,8 @@ import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeAddettoSalaViewBinding;
 import com.rat.ratatouille23.viewmodel.HomeAddettoSalaViewModel;
 
+import java.io.IOException;
+
 public class HomeAddettoSalaFragment extends Fragment {
 
     HomeAddettoSalaViewModel homeAddettoSalaViewModel;
@@ -34,14 +36,20 @@ public class HomeAddettoSalaFragment extends Fragment {
         osservaSeRegistrareOrdinazione();
         osservaSeEffettuareLogOut();
 
+        osservaMessaggioErrore();
+
         return fragmentView;
     }
 
     public void osservaSeRegistrareOrdinazione() {
         homeAddettoSalaViewModel.vaiARegistraOrdinazione.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti.equals(true)) {
-                homeAddettoSalaViewModel.loadPerRegistrareOrdinazione();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoSalaView_to_scegliTavoloOrdinazioneFragment);
+                try {
+                    homeAddettoSalaViewModel.loadPerRegistrareOrdinazione();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeAddettoSalaView_to_scegliTavoloOrdinazioneFragment);
+                } catch (IOException e) {
+                    homeAddettoSalaViewModel.setMessaggioHomeAddettoSala(e.getMessage());
+                }
             }
         });
     }
