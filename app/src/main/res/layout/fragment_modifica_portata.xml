@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.ModificaPortataFragment">
+
+    <data>
+        <variable
+            name="modificaPortataViewModel"
+            type="com.rat.ratatouille23.viewmodel.ModificaPortataViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue_dark" >
+
+        <TextView
+            android:id="@+id/txt_nome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="nome *"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/nome_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/et_custom"
+            android:text="@{modificaPortataViewModel.getPortata().nome.toString}"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:maxLength="20"
+            android:paddingHorizontal="5dp"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/txt_costo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="costo *"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <FrameLayout
+            android:id="@+id/costo_frame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/costo_text"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
+                android:text="@{modificaPortataViewModel.getPortata().costo.toString}"
+                android:layout_weight="1"
+                android:textSize="25dp"
+                android:background="@drawable/et_custom"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/txt_categoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="categoria *"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <FrameLayout
+            android:id="@+id/categoria_frame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
+
+            <Spinner
+                android:id="@+id/categoria_spinner"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:paddingHorizontal="5dp"
+                android:maxLength="100"
+                android:textSize="25dp"
+                android:textColor="@color/black"
+                android:background="@drawable/et_custom"
+                android:ems="10" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/txt_lista_allergeni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="lista allergeni"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/lista_allergeni_text"
+            android:layout_width="wrap_content"
+            android:layout_height= "wrap_content"
+            android:layout_weight="1"
+            android:paddingHorizontal="5dp"
+            android:maxLength="20"
+            android:textSize="25dp"
+            android:background="@drawable/et_custom"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/txt_descrizione"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="descrizione"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/descrizione_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingHorizontal="5dp"
+            android:maxLength="20"
+            android:text="@{modificaPortataViewModel.getPortata().descrizione.toString}"
+            android:textSize="25dp"
+            android:background="@drawable/et_custom"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/btn_aggiungi"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> modificaPortataViewModel.modificaPortata(nomeText.getText().toString(),costoText.getText().toString(),modificaPortataViewModel.getCategoriaSelezionata().toString(),descrizioneText.toString())}"
+            android:text="aggiungi" />
+
+        <Button
+            android:id="@+id/btn_annulla"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> modificaPortataViewModel.setTornaIndietro()}"
+            android:text="annulla" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="btn_aggiungi,btn_annulla"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="50dp"/>
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="txt_nome,txt_costo,txt_categoria,txt_lista_allergeni,txt_descrizione"
+            app:layout_constraintBottom_toTopOf="@+id/flow_button"
+            app:layout_constraintEnd_toStartOf="@id/flow_et"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_et"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="nome_text,costo_frame,categoria_frame,lista_allergeni_text,descrizione_text"
+            app:layout_constraintBottom_toTopOf="@+id/flow_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/flow_txt"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/error_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="700dp"
+            android:layout_margin="50dp"
+            android:padding="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/nome_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="500dp"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/error_sign"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="10dp"
+                android:visibility="invisible"
+                android:src="@drawable/warning_sign"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/error_message"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
