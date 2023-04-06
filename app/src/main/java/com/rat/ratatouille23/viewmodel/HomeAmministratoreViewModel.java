@@ -59,33 +59,24 @@ public class HomeAmministratoreViewModel extends ViewModel {
         messaggioHomeAmministratore.setValue("");
     }
 
-    public void loadPerStatistiche() {
-        try {
-            repository.loadMenu();
-            repository.loadTavoli();
-            repository.loadOrdinazioniAndStoricoOrdinazioni();
-            repository.loadPortateOrdine();
-        } catch (IOException e) {
-            setMessaggioHomeAmministratore(e.getMessage());
-        }
+    public void loadPerStatistiche() throws IOException {
+        repository.loadMenu();
+        repository.loadTavoli();
+        repository.loadOrdinazioniAndStoricoOrdinazioni();
+        repository.loadPortateOrdine();
+
     }
 
-    public void loadPerAggiuntadipendente() {
+    public void loadPerAggiuntadipendente() throws IOException {
     }
 
-    public void loadPerGestioneTavolo() {
-        try {
-            repository.loadTavoli();
-        } catch (IOException e) {
-            setMessaggioHomeAmministratore(e.getMessage());
-        }
+    public void loadPerGestioneTavolo() throws IOException {
+        repository.loadTavoli();
+
     }
 
-    public void loadPerPersonalizzaMenu() {
-        try {
-            repository.loadMenu();
-        } catch (IOException e) {
-            setMessaggioHomeAmministratore(e.getMessage());
-        }
+    public void loadPerPersonalizzaMenu() throws IOException {
+        repository.loadMenu();
+
     }
 }

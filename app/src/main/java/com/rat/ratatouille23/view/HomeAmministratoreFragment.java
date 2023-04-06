@@ -15,6 +15,8 @@ import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeAmministratoreViewBinding;
 import com.rat.ratatouille23.viewmodel.HomeAmministratoreViewModel;
 
+import java.io.IOException;
+
 public class HomeAmministratoreFragment extends Fragment {
 
     HomeAmministratoreViewModel homeAmministratoreViewModel;
@@ -36,14 +38,20 @@ public class HomeAmministratoreFragment extends Fragment {
         osservaSeAggiungereDipendente();
         osservaSeAndareAllaGestioneTavolo();
 
+        osservaMessaggioErrore();
+
         return fragmentView;
     }
 
     public void osservaSeAndareAlMenu() {
         homeAmministratoreViewModel.vaiAlMenu.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeAmministratoreViewModel.loadPerPersonalizzaMenu();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_personalizzaMenuFragment);
+                try {
+                    homeAmministratoreViewModel.loadPerPersonalizzaMenu();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_personalizzaMenuFragment);
+                } catch (IOException e) {
+                    homeAmministratoreViewModel.setMessaggioHomeAmministratore(e.getMessage());
+                }
             }
         });
     }
@@ -51,8 +59,12 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAlleStatistiche() {
         homeAmministratoreViewModel.vaiAlleStatistiche.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeAmministratoreViewModel.loadPerStatistiche();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_visualizzaStatisticheFragment);
+                try {
+                    homeAmministratoreViewModel.loadPerStatistiche();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_visualizzaStatisticheFragment);
+                } catch (IOException e) {
+                    homeAmministratoreViewModel.setMessaggioHomeAmministratore(e.getMessage());
+                }
             }
         });
     }
@@ -60,8 +72,12 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAggiungereDipendente() {
         homeAmministratoreViewModel.vaiAdAggiungiDipendente.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeAmministratoreViewModel.loadPerAggiuntadipendente();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_aggiungiDipendenteFragment);
+                try {
+                    homeAmministratoreViewModel.loadPerAggiuntadipendente();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_aggiungiDipendenteFragment);
+                } catch (IOException e) {
+                    homeAmministratoreViewModel.setMessaggioHomeAmministratore(e.getMessage());
+                }
             }
         });
     }
@@ -69,8 +85,12 @@ public class HomeAmministratoreFragment extends Fragment {
     public void osservaSeAndareAllaGestioneTavolo() {
         homeAmministratoreViewModel.vaiAllaGestioneTavolo.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeAmministratoreViewModel.loadPerGestioneTavolo();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_modificaTavoliFragment);
+                try {
+                    homeAmministratoreViewModel.loadPerGestioneTavolo();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeAmministratoreView_to_modificaTavoliFragment);
+                } catch (IOException e) {
+                    homeAmministratoreViewModel.setMessaggioHomeAmministratore(e.getMessage());
+                }
             }
         });
     }

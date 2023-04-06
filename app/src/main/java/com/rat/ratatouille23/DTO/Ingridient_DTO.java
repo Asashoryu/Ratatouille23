@@ -5,17 +5,20 @@ public class Ingridient_DTO {
     private float price;
     private float quantity;
     private String misura;
+
+    private float soglia;
     private float tolleranza;
     private String description;
 
     public Ingridient_DTO() {
     }
 
-    public Ingridient_DTO(String name, float price, float quantity, String misura, float tolleranza, String description) {
+    public Ingridient_DTO(String name, float price, float quantity, String misura, float soglia, float tolleranza, String description) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.misura = misura;
+        this.soglia = soglia;
         this.tolleranza = tolleranza;
         this.description = description;
     }
@@ -50,6 +53,14 @@ public class Ingridient_DTO {
 
     public void setMisura(String misura) {
         this.misura = misura;
+    }
+
+    public float getSoglia() {
+        return soglia;
+    }
+
+    public void setSoglia(float soglia) {
+        this.soglia = soglia;
     }
 
     public float getTolleranza() {

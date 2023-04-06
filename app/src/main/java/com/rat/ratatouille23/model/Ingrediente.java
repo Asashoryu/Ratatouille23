@@ -9,14 +9,17 @@ public class Ingrediente {
 
     private Float costo;
 
+    private Float soglia;
+
     private String descrizione;
 
 
-    public Ingrediente(String nome, Float costo, Float quantita, String unitaMisura, String descrizione) {
+    public Ingrediente(String nome, Float costo, Float quantita, String unitaMisura, Float soglia, String descrizione) {
         setNome(nome);
         setCosto(costo);
         setQuantita(quantita);
         setUnitaMisura(unitaMisura);
+        setSoglia(soglia);
         setDescrizione(descrizione);
     }
 
@@ -50,6 +53,14 @@ public class Ingrediente {
 
     public void setCosto(Float costo) {
         this.costo = costo;
+    }
+
+    public Float getSoglia() {
+        return soglia;
+    }
+
+    public void setSoglia(Float soglia) {
+        this.soglia = soglia;
     }
 
     public String getDescrizione() {

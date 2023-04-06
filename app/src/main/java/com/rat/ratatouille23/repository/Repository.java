@@ -479,7 +479,7 @@ public class Repository {
             }.execute().get(3, TimeUnit.SECONDS);
             ArrayList<Ingrediente> ingredienti = new ArrayList<>();
             for (Ingridient_DTO ingridient_dto : ingredienti_dto) {
-                ingredienti.add(new Ingrediente(ingridient_dto.getName(), ingridient_dto.getPrice(), ingridient_dto.getQuantity(), ingridient_dto.getMisura(), ingridient_dto.getDescription()));
+                ingredienti.add(new Ingrediente(ingridient_dto.getName(), ingridient_dto.getPrice(), ingridient_dto.getQuantity(), ingridient_dto.getMisura(), ingridient_dto.getSoglia(), ingridient_dto.getDescription()));
             }
 
             return ingredienti;
@@ -510,12 +510,12 @@ public class Repository {
 
     public ArrayList<Ingrediente> getIngredientiTest() {
         ArrayList<Ingrediente> ingredienti = new ArrayList<>();
-        ingredienti.add(new Ingrediente("Farina", 100f, 4.5f, "kg", "nessuna"));
-        ingredienti.add(new Ingrediente("Cocco", 100f, 530f, "kg", "descrizione farlocca"));
-        ingredienti.add(new Ingrediente("Latte", 100f, 12f, "L", "descrizione barocca"));
-        ingredienti.add(new Ingrediente("Pasta", 100f, 15f, "kg", "descrizione testa di cocca"));
-        ingredienti.add(new Ingrediente("Riso", 100f, 10f, "kg", "descrizione albicocca"));
-        ingredienti.add(new Ingrediente("Burro", 100f, 1f, "kg", "descrizione sei una oca"));
+        ingredienti.add(new Ingrediente("Farina", 100f, 4.5f, "kg", 0.0f, "nessuna"));
+        ingredienti.add(new Ingrediente("Cocco", 100f, 530f, "kg", 0.0f, "descrizione farlocca"));
+        ingredienti.add(new Ingrediente("Latte", 100f, 12f, "L", 0.0f, "descrizione barocca"));
+        ingredienti.add(new Ingrediente("Pasta", 100f, 15f, "kg", 0.0f, "descrizione testa di cocca"));
+        ingredienti.add(new Ingrediente("Riso", 100f, 10f, "kg", 0.0f, "descrizione albicocca"));
+        ingredienti.add(new Ingrediente("Burro", 100f, 1f, "kg", 0.0f, "descrizione sei una oca"));
 
         return ingredienti;
     }
@@ -536,12 +536,12 @@ public class Repository {
     }
 
     public void aggiungiIngrediente(Ingrediente ingrediente) throws IOException {
-        insertIngredientRetrofit(ingrediente.getNome(), ingrediente.getCosto(), ingrediente.getQuantita(),ingrediente.getUnitaMisura(), 0.0f, ingrediente.getDescrizione());
+        insertIngredientRetrofit(ingrediente.getNome(), ingrediente.getCosto(), ingrediente.getQuantita(),ingrediente.getUnitaMisura(), ingrediente.getSoglia(), 0.0f, ingrediente.getDescrizione());
 
         dispensa.add(ingrediente);
     }
 
-    public void insertIngredientRetrofit(String nome, float prezzo, float quantita, String misura, float tolleranza, String descrizione) throws IOException {
+    public void insertIngredientRetrofit(String nome, float prezzo, float quantita, String misura, float soglia, float tolleranza, String descrizione) throws IOException {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         // Add an interceptor to the OkHttp client
         httpClient.addInterceptor(new Interceptor() {
@@ -568,7 +568,7 @@ public class Repository {
 
         IngridientService service = retrofit.create(IngridientService.class);
 
-        Call<Void> call = service.insertIngredient(nome, prezzo, quantita, misura, tolleranza, descrizione);
+        Call<Void> call = service.insertIngredient(nome, prezzo, quantita, misura, soglia, tolleranza, descrizione);
 
         try {
             call.enqueue(new Callback<Void>() {
@@ -740,6 +740,7 @@ public class Repository {
     }
 
 
+
     public void aggiungiIngredienteAllaPortataSelezionata(Ingrediente ingrediente, Float quantita) throws IOException {
         associaIngridientToDishRetrofit(quantita, ingrediente.getNome(), portataSelezionata.getNome());
         associaIngredientiViewModel.aggiungiIngredienteAllaPortata(ingrediente, quantita);
@@ -797,8 +798,6 @@ public class Repository {
         task.execute();
     }
 
-
-
     public void aggiornaListaIngredienti() {
         dispensaViewModel.setListaIngredienti();
     }
@@ -807,18 +806,12 @@ public class Repository {
         return menu;
     }
 
-    public Menu loadAndGetMenu() throws IOException {
-
-        // chimamata al backend per il retrieve
-        loadMenu();
-        return menu;
-    }
-
     public void loadMenu() throws IOException {
         menu = getAllDishesRetrofit();
     }
 
-    public Menu getAllDishesRetrofit() throws IOException {
+    public Menu
+    getAllDishesRetrofit() throws IOException {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         // Add an interceptor to the OkHttp client
@@ -1223,7 +1216,7 @@ public class Repository {
             ordinazioniChiuse = convertContoDtoToOrdinazioniChiuse(conti_dto);
 
             System.err.println("Ordinazioni chiuse");
-            ordinazioniChiuse.forEach(ordinazione -> System.out.print(ordinazione.getId()));
+            ordinazioniChiuse.forEach(ordinazione -> System.out.println(ordinazione.getId()));
 
             storicoOrdinazioniChiuse.setOrdinazioni(ordinazioniChiuse);
 
@@ -1310,7 +1303,6 @@ public class Repository {
             Portata portata = findPortataByNome(orderedDishDTO.getDishName(), portate);
             if (portata != null) {
                 Ordinazione ordinazione = findOrdinazioneById(orderedDishDTO.getContoId(), ordinazioni);
-
                 if (ordinazione != null) {
                     PortataOrdine portataOrdine = new PortataOrdine(ordinazione, portata, orderedDishDTO.getQuantity());
                     ordinazione.aggiungiPortataOrdine(portataOrdine);
@@ -1373,7 +1365,6 @@ public class Repository {
         ArrayList<Ordinazione> ordinazioniList = new ArrayList<>();
         for (Conto_DTO conto : conti) {
             if (!conto.isIs_chiuso()) {
-
                 for (Tavolo tavolo : tavoli) {
                     if (conto.getTavoloId() == tavolo.getId()) {
                         Ordinazione ordinazione = new Ordinazione(conto.getId(), conto.getTotal(), conto.isIs_chiuso(), String.valueOf(conto.getTime()), tavolo);
@@ -1404,6 +1395,7 @@ public class Repository {
         int nuovoId;
         if (tavoloSelezionato.getOrdinazione().getId() == -1) {
             nuovoId = getNewOrdinazioneIdRetrofit();
+            tavoloSelezionato.getOrdinazione().setId(nuovoId);
         }
         else {
             nuovoId = tavoloSelezionato.getOrdinazione().getId();
@@ -1584,15 +1576,18 @@ public class Repository {
     public void riduciQuantitaIngredientiOrdinazione(Ordinazione ordinazione) throws IOException {
         for (PortataOrdine portataOrdine : ordinazione.getPortateOrdine()) {
             Portata portata = portataOrdine.getPortata();
+            System.err.println("Nome portata: " + portata.getNome());
+            System.out.println("ecco i suoi ingredienti");
+            portata.getIngredientiPortata().forEach(ingredientePortata -> System.out.println(ingredientePortata.getIngrediente().getNome()));
+            System.out.println("fine ingredienti");
             for (IngredientePortata ingredientePortata : portata.getIngredientiPortata()) {
+                System.err.println("Nome ingrediente: " + ingredientePortata.getIngrediente().getNome());
                 Ingrediente ingrediente = ingredientePortata.getIngrediente();
                 float quantitaIngrediente = ingrediente.getQuantita();
                 quantitaIngrediente = quantitaIngrediente - (portataOrdine.getQuantita() * ingredientePortata.getQuantita());
                 // riduci in backend
                 updateIngredientQuantityRetrofit(ingrediente.getNome(), quantitaIngrediente);
                 ingrediente.setQuantita(quantitaIngrediente);
-
-
             }
         }
     }

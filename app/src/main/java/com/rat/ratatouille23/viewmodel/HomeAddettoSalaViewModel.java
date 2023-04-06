@@ -20,17 +20,13 @@ public class HomeAddettoSalaViewModel extends ViewModel {
         repository.setHomeAddettoSalaViewModel(this);
     }
 
-    public void loadPerRegistrareOrdinazione() {
-        try {
-            repository.loadMenu();
-            repository.loadTavoli();
-            repository.loadOrdinazioniAndStoricoOrdinazioni();
-            repository.loadPortateOrdine();
-            repository.loadIngredienti();
-            repository.loadAssociazioniPiattiIngredienti();
-        } catch (IOException e) {
-            setMessaggioHomeAddettoSala(e.getMessage());
-        }
+    public void loadPerRegistrareOrdinazione() throws IOException{
+        repository.loadTavoli();
+        repository.loadMenu();
+        repository.loadOrdinazioniAndStoricoOrdinazioni();
+        repository.loadPortateOrdine();
+        repository.loadIngredienti();
+        repository.loadAssociazioniPiattiIngredienti();
     }
 
     public void setVaiARegistraOrdinazione() {

@@ -30,22 +30,15 @@ public class HomeAddettoCucinaViewModel extends ViewModel {
         vaiAdAssociaIngredienti.setValue(false);
     }
 
-    public void loadPerDispensa() {
-        try {
-            repository.loadIngredienti();
-        } catch (IOException e) {
-            setMessaggioHomeAddettoCucina(e.getMessage());
-        }
+    public void loadPerDispensa() throws IOException {
+        repository.loadIngredienti();
+
     }
 
-    public void loadPerAssociaIngredienti() {
-        try {
-            repository.loadMenu();
-            repository.loadIngredienti();
-            repository.loadAssociazioniPiattiIngredienti();
-        } catch (IOException e) {
-            setMessaggioHomeAddettoCucina(e.getMessage());
-        }
+    public void loadPerAssociaIngredienti() throws IOException {
+        repository.loadMenu();
+        repository.loadIngredienti();
+        repository.loadAssociazioniPiattiIngredienti();
     }
 
     public void setMessaggioHomeAddettoCucina(String nuovoMessaggioHomeAddettoCucina) {

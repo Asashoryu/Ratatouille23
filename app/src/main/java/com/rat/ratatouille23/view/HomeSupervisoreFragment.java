@@ -15,6 +15,8 @@ import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeSupervisoreViewBinding;
 import com.rat.ratatouille23.viewmodel.HomeSupervisoreViewModel;
 
+import java.io.IOException;
+
 public class HomeSupervisoreFragment extends Fragment {
 
     HomeSupervisoreViewModel homeSupervisoreViewModel;
@@ -36,14 +38,20 @@ public class HomeSupervisoreFragment extends Fragment {
         osservaSeAlConto();
         osservaSeAssociareIngredienti();
 
+        osservaMessaggioErrore();
+
         return fragmentView;
     }
 
     public void osservaSeAndareAlMenu() {
         homeSupervisoreViewModel.vaiAlMenu.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeSupervisoreViewModel.loadPerPersonalizzaMenu();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_personalizzaMenuFragment);
+                try {
+                    homeSupervisoreViewModel.loadPerPersonalizzaMenu();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_personalizzaMenuFragment);
+                } catch (IOException e) {
+                    homeSupervisoreViewModel.setMessaggioHomeSupervisore(e.getMessage());
+                }
             }
         });
     }
@@ -51,8 +59,12 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAndareAllaDispensa() {
         homeSupervisoreViewModel.vaiAllaDispensa.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeSupervisoreViewModel.loadPerGestioneTavolo();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_dispensaView);
+                try {
+                    homeSupervisoreViewModel.loadPerDispensa();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_dispensaView);
+                } catch (IOException e) {
+                    homeSupervisoreViewModel.setMessaggioHomeSupervisore(e.getMessage());
+                }
             }
         });
     }
@@ -60,8 +72,12 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAlConto() {
         homeSupervisoreViewModel.vaiAlConto.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeSupervisoreViewModel.loadPerVisualizzareConto();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_scegliTavoloVisualizzaContoFragment);
+                try {
+                    homeSupervisoreViewModel.loadPerVisualizzareConto();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_scegliTavoloVisualizzaContoFragment);
+                } catch (IOException e) {
+                    homeSupervisoreViewModel.setMessaggioHomeSupervisore(e.getMessage());
+                }
             }
         });
     }
@@ -69,8 +85,12 @@ public class HomeSupervisoreFragment extends Fragment {
     public void osservaSeAssociareIngredienti() {
         homeSupervisoreViewModel.vaiAdAssociaIngredienti.observe(getViewLifecycleOwner(), (vaiAvanti) -> {
             if (vaiAvanti) {
-                homeSupervisoreViewModel.loadPerAssociaIngredienti();
-                Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_visualizzaMenuFragment3);
+                try {
+                    homeSupervisoreViewModel.loadPerAssociaIngredienti();
+                    Navigation.findNavController(fragmentView).navigate(R.id.action_homeSupervisoreView_to_visualizzaMenuFragment3);
+                } catch (IOException e) {
+                    homeSupervisoreViewModel.setMessaggioHomeSupervisore(e.getMessage());
+                }
             }
         });
     }

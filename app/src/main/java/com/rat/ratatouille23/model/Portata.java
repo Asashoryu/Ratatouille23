@@ -27,6 +27,7 @@ public class Portata {
     public void aggiungiIngrediente(Ingrediente ingrediente, Float quantita) {
         IngredientePortata ingredientePortata = new IngredientePortata( this, ingrediente, quantita);
         ingredientiPortata.add(ingredientePortata);
+        System.err.println("Aggiunto ingrediente " + ingrediente.getNome() + " alla portata " + nome);
     }
 
     public String getNome() {

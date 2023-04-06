@@ -23,20 +23,67 @@ public class AggiungiIngredienteViewModel extends ViewModel {
         repository.setAggiungiIngredienteViewModel(this);
     }
 
-    public void aggiungiIngrediente(String nome, String costo, String quantita, String unitaMisura, String descrizione) {
+    public void aggiungiIngrediente(String nome, String costo, String quantita, String unitaMisura, String soglia, String descrizione) {
         ingrediente = null;
-        ingrediente = new Ingrediente(nome, Float.parseFloat(costo), Float.parseFloat(quantita), unitaMisura, descrizione);
-        System.err.println(nome + costo + quantita + unitaMisura + descrizione);
 
-        try {
-            repository.aggiungiIngrediente(ingrediente);
-        } catch (IOException e) {
-            setMessaggioAggiungiIngrediente(e.getMessage());
+        if (isInputAggiungiIngredienteValido(nome, costo, quantita, unitaMisura, soglia, descrizione)) {
+            Float valoreCosto = Float.parseFloat(costo);
+            Float valoreQuantita = Float.parseFloat(quantita);
+            Float valoreSoglia = Float.parseFloat(soglia);
+            ingrediente = new Ingrediente(nome, valoreCosto, valoreQuantita, unitaMisura, valoreSoglia, descrizione);
+            System.err.println(nome + costo + quantita + unitaMisura + descrizione);
+
+            try {
+                repository.aggiungiIngrediente(ingrediente);
+                repository.aggiornaListaIngredienti();
+                setTornaIndietro();
+            } catch (IOException e) {
+                setMessaggioAggiungiIngrediente(e.getMessage());
+            }
         }
-        repository.aggiornaListaIngredienti();
-
-        setTornaIndietro();
     }
+
+    public Boolean isInputAggiungiIngredienteValido(String nome, String costo, String quantita, String unitaMisura, String soglia, String descrizione) {
+        if (nome == null || nome.isEmpty()) {
+            // Handle the case where the 'nome' input is null or empty
+            setMessaggioAggiungiIngrediente("Il nome non può essere vuoto");
+            return false;
+        }
+        if (costo == null || Float.parseFloat(costo) < 0) {
+            // Handle the case where the 'costo' input is null or negative
+            setMessaggioAggiungiIngrediente("Il costo deve essere maggiore o uguale a zero");
+            return false;
+        }
+        if (quantita == null || Float.parseFloat(quantita) < 0) {
+            // Handle the case where the 'quantita' input is null or negative
+            setMessaggioAggiungiIngrediente("La quantità deve essere maggiore o uguale a zero");
+            return false;
+        }
+        if (unitaMisura == null || unitaMisura.isEmpty()) {
+            // Handle the case where the 'unitaMisura' input is null or empty
+            setMessaggioAggiungiIngrediente("L'unità di misura non può essere vuota");
+            return false;
+        }
+        if (soglia == null || Float.parseFloat(soglia) < 0) {
+            // Handle the case where the 'soglia' input is null or negative
+            setMessaggioAggiungiIngrediente("La soglia deve essere maggiore o uguale a zero");
+            return false;
+        }
+
+        if (Float.parseFloat(soglia) > Float.parseFloat(quantita)) {
+            // Handle the case where the 'soglia' input is null or negative
+            setMessaggioAggiungiIngrediente("La soglia non può essere più grande della quantità inserita");
+            return false;
+        }
+
+        if (descrizione == null || descrizione.isEmpty()) {
+            // Handle the case where the 'descrizione' input is null or empty
+            setMessaggioAggiungiIngrediente("La descrizione non può essere vuota");
+            return false;
+        }
+        return true;
+    }
+
 
     public void setTornaIndietro() {
         tornaIndietro.setValue(true);

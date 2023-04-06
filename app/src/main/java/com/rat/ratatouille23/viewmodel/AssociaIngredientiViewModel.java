@@ -30,13 +30,13 @@ public class AssociaIngredientiViewModel extends ViewModel {
     }
 
     public void setListaIngredientiPortata() {
+        System.out.println("Ingredienti in portata");
         aggiornaListaIngredientiPortata();
-        repository.getIngredienti().forEach(ingrediente -> System.out.println(ingrediente.getNome()));
     }
 
     public void setListaIngredientiNonPortata() {
+        System.out.println("Ingredienti non in portata");
         aggiornaListaIngredientiNonPortata();
-        repository.getIngredienti().forEach(ingrediente -> System.out.println(ingrediente.getNome()));
     }
 
     public void aggiornaListaIngredientiPortata() {
@@ -56,7 +56,7 @@ public class AssociaIngredientiViewModel extends ViewModel {
 
     public void aggiungiIngredienteAllaPortata(Ingrediente ingrediente, Float quantita) {
         Ingrediente ingredienteAssociato;
-        ingredienteAssociato = new Ingrediente(ingrediente.getNome(), ingrediente.getCosto(), quantita, ingrediente.getUnitaMisura(), ingrediente.getUnitaMisura());
+        ingredienteAssociato = new Ingrediente(ingrediente.getNome(), ingrediente.getCosto(), quantita, ingrediente.getUnitaMisura(), ingrediente.getSoglia(), ingrediente.getDescrizione());
         portata.aggiungiIngrediente(ingredienteAssociato, quantita);
         aggiornaListaIngredientiPortata();
         aggiornaListaIngredientiNonPortata();

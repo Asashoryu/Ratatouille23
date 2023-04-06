@@ -75,7 +75,7 @@
 
             <EditText
                 android:id="@+id/quantita_text"
-                android:layout_width="50dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="25dp"
@@ -89,7 +89,7 @@
 
             <EditText
                 android:id="@+id/unitaMisura_text"
-                android:layout_width="50dp"
+                android:layout_width="75dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="25dp"
@@ -105,29 +105,80 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/txt_soglia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="soglia"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_descrizione"
+            app:layout_constraintEnd_toStartOf="@+id/soglia_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_quantita" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/soglia_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/flow_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/soglia_text"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/et_custom"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:paddingHorizontal="5dp"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/soglia_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
             android:id="@+id/txt_descrizione"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="descrizione"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="544dp" />
 
         <EditText
             android:id="@+id/descrizione_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/et_custom"
             android:layout_weight="1"
-            android:textSize="25dp"
-            android:paddingHorizontal="5dp"
+            android:background="@drawable/et_custom"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:paddingHorizontal="5dp"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="@+id/flow_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_descrizione"
+            app:layout_constraintTop_toBottomOf="@+id/soglia_layout" />
 
         <Button
             android:id="@+id/btn_aggiungi"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> aggiungiIngredienteViewModel.aggiungiIngrediente(nomeText.getText().toString(), costoText.getText().toString(), quantitaText.getText().toString(), unitaMisuraText.getText().toString(), descrizioneText.getText().toString())}"
+            android:onClick="@{() -> aggiungiIngredienteViewModel.aggiungiIngrediente(nomeText.getText().toString(), costoText.getText().toString(), quantitaText.getText().toString(), unitaMisuraText.getText().toString(), sogliaText.getText().toString(), descrizioneText.getText().toString())}"
             android:text="aggiungi" />
 
         <Button
@@ -152,7 +203,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:constraint_referenced_ids="txt_nome,txt_costo,txt_quantita,txt_descrizione"
+            app:constraint_referenced_ids="txt_nome,txt_costo,txt_quantita,txt_soglia, txt_descrizione"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toStartOf="@id/flow_et"
             app:layout_constraintStart_toStartOf="parent"
@@ -163,49 +214,11 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:constraint_referenced_ids="nome_text,costo_frame,quantita_layout,descrizione_text"
+            app:constraint_referenced_ids="nome_text,costo_frame,quantita_layout, soglia_layout, descrizione_text"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/flow_txt"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/error_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="700dp"
-            android:layout_margin="50dp"
-            android:padding="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/nome_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/error_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="500dp"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/error_sign"
-                android:layout_width="30dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="10dp"
-                android:visibility="invisible"
-                android:src="@drawable/warning_sign"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/error_message"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

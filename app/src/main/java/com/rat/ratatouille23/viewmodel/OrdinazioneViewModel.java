@@ -26,7 +26,7 @@ public class OrdinazioneViewModel extends ViewModel {
 
     private Menu menu;
 
-    private ArrayList<Ordinazione> ordinazioniAperte;
+    private ArrayList<Ordinazione> ordinazioniTutte;
 
     private Ordinazione ordinazione;
 
@@ -51,7 +51,7 @@ public class OrdinazioneViewModel extends ViewModel {
 
         tavolo = repository.getTavoloSelezionato();
 
-        ordinazioniAperte = repository.getOrdinazioni();
+        ordinazioniTutte = repository.getOrdinazioni();
 
         ordinazione = tavolo.getOrdinazione();
 
@@ -81,23 +81,26 @@ public class OrdinazioneViewModel extends ViewModel {
             System.err.println("aggiornamento portata al conto fatto");
         }
         else {
+            System.err.println("Tento di stampare che non ci sono gli ingredienti per la portata");
             setMessaggioOrdinazione("Ingredienti insufficienti per questa portata");
         }
     }
 
     public boolean isIngredientiDisponibiliPerPortata(Portata portata) {
-        Set<Ordinazione> allOrdinazioni = new HashSet<>(ordinazioniAperte);
+        Set<Ordinazione> allOrdinazioni = new HashSet<>(ordinazioniTutte);
         allOrdinazioni.add(ordinazione);
         for (IngredientePortata ingredientePortata : portata.getIngredientiPortata()) {
             Ingrediente ingrediente = ingredientePortata.getIngrediente();
             float quantitaIngredienteDisponibile = ingrediente.getQuantita();
-            for (Ordinazione ordinazioneAperta : allOrdinazioni) {
-                for (PortataOrdine portataOrdine : ordinazioneAperta.getPortateOrdine()) {
-                    if (portataOrdine.getPortata().equals(portata)) {
-                        float quantitaUsata = portataOrdine.getQuantitaIngredienteUsata(ingrediente);
-                        quantitaIngredienteDisponibile -= quantitaUsata;
-                        if (quantitaIngredienteDisponibile < 0) {
-                            return false;
+            for (Ordinazione unaOrdinazione : allOrdinazioni) {
+                if (!unaOrdinazione.getChiusa()) {
+                    for (PortataOrdine portataOrdine : unaOrdinazione.getPortateOrdine()) {
+                        if (portataOrdine.getPortata().equals(portata)) {
+                            float quantitaUsata = portataOrdine.getQuantitaIngredienteUsata(ingrediente);
+                            quantitaIngredienteDisponibile -= quantitaUsata;
+                            if (quantitaIngredienteDisponibile < ingredientePortata.getQuantita()) {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -119,11 +122,13 @@ public class OrdinazioneViewModel extends ViewModel {
     public void salvaOrdinazione() {
         try {
             repository.salvaOrdinazioneTavoloSelezionato();
+            tavolo.occupaTavoloConOrdinazione(ordinazione);
+            ordinazioniTutte.add(ordinazione);
+            setTornaIndietro();
         } catch (IOException e) {
+            System.err.println("ordinazione messaggio: "+ e.getMessage());
             setMessaggioOrdinazione(e.getMessage());
         }
-        tavolo.occupaTavoloConOrdinazione(ordinazione);
-        setTornaIndietro();
     }
 
     public void setTornaIndietro() {
@@ -144,7 +149,7 @@ public class OrdinazioneViewModel extends ViewModel {
 
 
     public Boolean isNuovoMessaggioOrdinazione() {
-        return getMessaggioOrdinazione() != "";
+        return !getMessaggioOrdinazione().equals("");
     }
 
     public void cancellaMessaggioOrdinazione() {
