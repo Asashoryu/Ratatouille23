@@ -75,9 +75,9 @@ public class AggiungiPortataFragment extends Fragment {
     public void osservaMessaggioErrore() {
         aggiungiPortataViewModel.messaggioAggiungiPortata.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (aggiungiPortataViewModel.isNuovoMessaggioAggiungiPortata()) {
-//                aggiungiPortataBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
-//                aggiungiPortataBinding.errorMessage.setText(messaggio);
-//                aggiungiPortataBinding.errorSign.setVisibility(View.VISIBLE);
+                aggiungiPortataBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
+                aggiungiPortataBinding.errorMessage.setText(messaggio);
+                aggiungiPortataBinding.errorSign.setVisibility(View.VISIBLE);
                 //visualizzaToastConMessaggio(messaggio);
                 aggiungiPortataViewModel.cancellaMessaggioAggiungiPortata();
             }

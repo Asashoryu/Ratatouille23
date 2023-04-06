@@ -3,6 +3,9 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantiaIngredienteException;
+import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantitaIngredienteNegativaException;
+import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantitaIngredienteNullException;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
@@ -27,11 +30,26 @@ public class IndicaQuantitaViewModel extends ViewModel {
 
     public void aggiungiIngredienteAlProdotto(String quantita) {
         try {
+            checkQuantitaNull(quantita);
+            checkQuantitaNegativa(Float.parseFloat(quantita));
             repository.aggiungiIngredienteAllaPortataSelezionata(ingrediente, Float.parseFloat(quantita));
-        } catch (IOException e) {
+            setTornaIndietro();
+        } catch (IOException | QuantiaIngredienteException e) {
             setMessaggioIndicaQuantita(e.getMessage());
         }
-        setTornaIndietro();
+    }
+
+    public void checkQuantitaNull (String quantita) throws QuantitaIngredienteNullException {
+        if (quantita.isEmpty()) {
+            throw new QuantitaIngredienteNullException();
+        }
+    }
+
+    public void checkQuantitaNegativa (float quantita) throws QuantitaIngredienteNegativaException {
+        if (quantita <= 0)
+        {
+            throw new QuantitaIngredienteNegativaException();
+        }
     }
 
     public String getUnitaMisuraIngrediente() {

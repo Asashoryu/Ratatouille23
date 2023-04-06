@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.eccezioni.rat.Ratatouille23Exception;
+import com.rat.ratatouille23.eccezioni.rat.menu.CampiPortataVuotiException;
 import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Portata;
@@ -12,6 +13,8 @@ import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AggiungiPortataViewModel extends ViewModel {
     Repository repository;
@@ -36,12 +39,32 @@ public class AggiungiPortataViewModel extends ViewModel {
     public void aggiungiPortata(String nome, String costo, String categoria, String descrizione) {
         try {
             portata = null;
+            checkPortata(nome,costo,categoria);
             repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, listaAllergeniSelezionati), categoria);
             System.err.println(nome + costo + categoria + descrizione);
             setTornaIndietro();
 
         } catch (Ratatouille23Exception | IOException e) {
             setMessaggioAggiungiPortata(e.getMessage());
+        }
+    }
+
+    public void checkPortata(String nome, String costo, String categoria) throws CampiPortataVuotiException {
+        boolean controlloStringhe = true;
+        Set<String> stringSet = new HashSet<>();
+        stringSet.add(nome);
+        stringSet.add(costo);
+        stringSet.add(categoria);
+
+        for (String string: stringSet) {
+            if (string == null || string.trim().isEmpty()) {
+                controlloStringhe = false;
+                break;
+            }
+        }
+
+        if (!controlloStringhe) {
+            throw new CampiPortataVuotiException();
         }
     }
 
