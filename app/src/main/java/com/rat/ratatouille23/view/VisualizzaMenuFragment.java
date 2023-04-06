@@ -41,6 +41,7 @@ public class VisualizzaMenuFragment extends Fragment {
 
         osservaCambientoCategorie();
         osservaCambientoPortate();
+        osservaSeTornareIndietro();
 
         return fragmentView;
     }
@@ -71,6 +72,14 @@ public class VisualizzaMenuFragment extends Fragment {
         visualizzaMenuViewModel.listaPortate.observe(getViewLifecycleOwner(), listaPortate ->
         {
             portateItemAdapter.setData(listaPortate);
+        });
+    }
+
+    public void osservaSeTornareIndietro() {
+        visualizzaMenuViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
         });
     }
 }

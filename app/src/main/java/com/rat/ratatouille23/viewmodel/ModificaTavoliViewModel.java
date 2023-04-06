@@ -18,6 +18,8 @@ public class ModificaTavoliViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioModificaTavoli = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
+
     public ModificaTavoliViewModel() {
         repository = Repository.getInstance();
         repository.setModificaTavoliViewModel(this);
@@ -69,6 +71,11 @@ public class ModificaTavoliViewModel extends ViewModel {
 
     public void cancellaMessaggioModificaTavoli() {
         messaggioModificaTavoli.setValue("");
+    }
+
+    public void setTornaIndietro() {
+        tornaIndietro.setValue(true);
+        tornaIndietro.setValue(false);
     }
 
 }

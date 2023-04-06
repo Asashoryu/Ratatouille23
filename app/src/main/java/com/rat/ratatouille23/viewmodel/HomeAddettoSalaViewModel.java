@@ -15,6 +15,8 @@ public class HomeAddettoSalaViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioHomeAddettoSala = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> logOut = new MutableLiveData<>(false);
+
     public HomeAddettoSalaViewModel() {
         repository = Repository.getInstance();
         repository.setHomeAddettoSalaViewModel(this);
@@ -53,6 +55,11 @@ public class HomeAddettoSalaViewModel extends ViewModel {
 
     public void cancellaMessaggioHomeAddettoSala() {
         messaggioHomeAddettoSala.setValue("");
+    }
+
+    public void setLogOut() {
+        logOut.setValue(true);
+        logOut.setValue(false);
     }
 
 }

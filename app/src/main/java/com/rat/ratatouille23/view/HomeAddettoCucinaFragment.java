@@ -33,6 +33,7 @@ public class HomeAddettoCucinaFragment extends Fragment {
 
         osservaSeAndareAllaDispensa();
         osservaSeAssociareIngredienti();
+        osservaSeEffettuareLogOut();
 
         return fragmentView;
     }
@@ -67,5 +68,13 @@ public class HomeAddettoCucinaFragment extends Fragment {
 
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(homeAddettoCucinaBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
+    public void osservaSeEffettuareLogOut() {
+        homeAddettoCucinaViewModel.logOut.observe(getViewLifecycleOwner(), (logOut) -> {
+            if (logOut) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
     }
 }

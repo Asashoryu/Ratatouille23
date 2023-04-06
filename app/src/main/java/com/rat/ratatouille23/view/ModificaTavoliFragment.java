@@ -42,6 +42,8 @@ public class ModificaTavoliFragment extends Fragment {
 
         osservaCambientoTavoli();
 
+        osservaSeTornareIndietro();
+
         return fragmentView;
     }
 
@@ -112,6 +114,14 @@ public class ModificaTavoliFragment extends Fragment {
 
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(modificaTavoliBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
+    public void osservaSeTornareIndietro() {
+        modificaTavoliViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
     }
 
 }

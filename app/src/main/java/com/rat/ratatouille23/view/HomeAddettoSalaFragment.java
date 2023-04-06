@@ -32,6 +32,7 @@ public class HomeAddettoSalaFragment extends Fragment {
         homeAddettoSalaBinding.setHomeAddettoSalaViewModel(homeAddettoSalaViewModel);
 
         osservaSeRegistrareOrdinazione();
+        osservaSeEffettuareLogOut();
 
         return fragmentView;
     }
@@ -56,5 +57,13 @@ public class HomeAddettoSalaFragment extends Fragment {
 
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(homeAddettoSalaBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
+    public void osservaSeEffettuareLogOut() {
+        homeAddettoSalaViewModel.logOut.observe(getViewLifecycleOwner(), (logOut) -> {
+            if (logOut) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
     }
 }

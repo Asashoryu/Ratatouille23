@@ -38,6 +38,14 @@ public class LoginFragment extends Fragment {
         return fragmentView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        loginBinding.nomeText.setText("");
+        loginBinding.passwordText.setText("");
+    }
+
     public void osservaSeReimpostarePassword() {
         loginViewModel.isVaiAReimpostaPassword.observe(getViewLifecycleOwner(), (isVaiAReimpostaPassword) -> {
             if (isVaiAReimpostaPassword == true) {

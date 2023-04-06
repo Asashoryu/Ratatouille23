@@ -17,6 +17,8 @@ public class HomeAmministratoreViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioHomeAmministratore = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> logOut = new MutableLiveData<>(false);
+
     public HomeAmministratoreViewModel() {
         repository = Repository.getInstance();
         repository.setHomeAmministratoreViewModel(this);
@@ -87,5 +89,10 @@ public class HomeAmministratoreViewModel extends ViewModel {
         } catch (IOException e) {
             setMessaggioHomeAmministratore(e.getMessage());
         }
+    }
+
+    public void setLogOut() {
+        logOut.setValue(true);
+        logOut.setValue(false);
     }
 }

@@ -42,6 +42,7 @@ public class AssociaIngredientiFragment extends Fragment {
 
         osservaCambientoIngredientiPortata();
         osservaCambientoIngredientiNonPortata();
+        osservaSeTornareIndietro();
 
         return fragmentView;
     }
@@ -72,4 +73,13 @@ public class AssociaIngredientiFragment extends Fragment {
             ingredientiNonPortataItemAdapter.setData(listaIngredientiNonPortata);
         });
     }
+
+    public void osservaSeTornareIndietro() {
+        associaIngredientiViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
+    }
+
 }

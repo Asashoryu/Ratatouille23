@@ -18,6 +18,8 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioScegliTavoloOrdinazione = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
+
     public ScegliTavoloOrdinazioneViewModel() {
         repository = Repository.getInstance();
         repository.setScegliTavoloOrdinazioneViewModel(this);
@@ -60,5 +62,10 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
 
     public void cancellaMessaggioScegliTavoloOrdinazione() {
         messaggioScegliTavoloOrdinazione.setValue("");
+    }
+
+    public void setTornaIndietro() {
+        tornaIndietro.setValue(true);
+        tornaIndietro.setValue(true);
     }
 }

@@ -12,8 +12,8 @@ public class HomeAddettoCucinaViewModel extends ViewModel {
     Repository repository;
     public MutableLiveData<Boolean> vaiAllaDispensa = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> vaiAdAssociaIngredienti = new MutableLiveData<>(false);
-
     public MutableLiveData<String> messaggioHomeAddettoCucina = new MutableLiveData<>("");
+    public MutableLiveData<Boolean> logOut = new MutableLiveData<>(false);
 
     public HomeAddettoCucinaViewModel() {
         repository = Repository.getInstance();
@@ -63,5 +63,10 @@ public class HomeAddettoCucinaViewModel extends ViewModel {
 
     public void cancellaMessaggioHomeAddettoCucina() {
         messaggioHomeAddettoCucina.setValue("");
+    }
+
+    public void setLogOut() {
+        logOut.setValue(true);
+        logOut.setValue(false);
     }
 }
