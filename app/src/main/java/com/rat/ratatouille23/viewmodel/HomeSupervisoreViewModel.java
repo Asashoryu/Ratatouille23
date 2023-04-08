@@ -17,6 +17,8 @@ public class HomeSupervisoreViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioHomeSupervisore = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> logOut = new MutableLiveData<>(false);
+
     public HomeSupervisoreViewModel() {
         repository = Repository.getInstance();
         repository.setHomeSupervisoreViewModel(this);
@@ -40,6 +42,11 @@ public class HomeSupervisoreViewModel extends ViewModel {
     public void setVaiAdAssociaIngredienti() {
         vaiAdAssociaIngredienti.setValue(true);
         vaiAdAssociaIngredienti.setValue(false);
+    }
+
+    public void setLogOut() {
+        logOut.setValue(true);
+        logOut.setValue(false);
     }
 
     public void setMessaggioHomeSupervisore(String nuovoMessaggioHomeSupervisore) {

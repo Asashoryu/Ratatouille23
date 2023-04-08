@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.eccezioni.rat.creadipendente.AggiungiDipendenteException;
+import com.rat.ratatouille23.eccezioni.rat.creadipendente.CammpiDipendenteVuotiException;
 import com.rat.ratatouille23.eccezioni.rat.creadipendente.RuoloNonTrovatoException;
 import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AggiungiDipendenteViewModel extends ViewModel {
     Repository repository;
@@ -37,6 +40,7 @@ public class AggiungiDipendenteViewModel extends ViewModel {
     public void aggiungiDipendente(String nome, String cognome, String username, String ruolo, String password) {
         try {
             dipendente = null;
+            checkCampi(nome,cognome,username,password);
             dipendente = new Dipendente(nome, cognome, username, validaRuolo(ruolo), password, false, null);
             repository.aggiungiDipendente(dipendente);
             System.err.println(nome + cognome + username + ruolo + password);
@@ -47,17 +51,34 @@ public class AggiungiDipendenteViewModel extends ViewModel {
     }
 
     public Dipendente.Ruolo validaRuolo(String ruolo) throws RuoloNonTrovatoException {
-        if (ruolo.equals(termineSupervisore)) {
-            return Dipendente.Ruolo.SUPERVISORE;
+        switch (ruolo) {
+            case termineSupervisore:
+                return Dipendente.Ruolo.SUPERVISORE;
+            case termineAddettoSala:
+                return Dipendente.Ruolo.ADDETTOSALA;
+            case termineAddettoCucina:
+                return Dipendente.Ruolo.ADDETTOCUCINA;
+            default:
+                throw new RuoloNonTrovatoException();
         }
-        else if (ruolo.equals(termineAddettoSala)) {
-            return Dipendente.Ruolo.ADDETTOSALA;
+    }
+
+    public void checkCampi(String nome, String cognome, String username, String password) throws CammpiDipendenteVuotiException {
+        boolean controlloStringhe = true;
+        Set<String> stringSet = new HashSet<>();
+        stringSet.add(nome);
+        stringSet.add(cognome);
+        stringSet.add(username);
+        stringSet.add(password);
+
+        for (String string: stringSet) {
+            if (string == null || string.trim().isEmpty()) {
+                controlloStringhe = false;
+                break;
+            }
         }
-        else if (ruolo.equals(termineAddettoCucina)) {
-            return Dipendente.Ruolo.ADDETTOCUCINA;
-        }
-        else {
-            throw new RuoloNonTrovatoException();
+        if (!controlloStringhe) {
+            throw new CammpiDipendenteVuotiException();
         }
     }
 

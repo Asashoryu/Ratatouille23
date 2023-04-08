@@ -3,10 +3,13 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.rat.ratatouille23.eccezioni.rat.dispensa.PersonalizzaDispensaException;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AggiungiIngredienteViewModel extends ViewModel {
 
@@ -34,12 +37,33 @@ public class AggiungiIngredienteViewModel extends ViewModel {
             System.err.println(nome + costo + quantita + unitaMisura + descrizione);
 
             try {
+                checkIngrediente(nome,costo,quantita,unitaMisura);
                 repository.aggiungiIngrediente(ingrediente);
                 repository.aggiornaListaIngredienti();
                 setTornaIndietro();
-            } catch (IOException e) {
+            } catch (IOException | PersonalizzaDispensaException e) {
                 setMessaggioAggiungiIngrediente(e.getMessage());
             }
+        }
+    }
+
+    public void checkIngrediente (String nome, String costo, String quantita, String unitaMisura) throws PersonalizzaDispensaException {
+        boolean controlloStringhe = true;
+        Set<String> stringSet = new HashSet<>();
+        stringSet.add(nome);
+        stringSet.add(costo);
+        stringSet.add(quantita);
+        stringSet.add(unitaMisura);
+
+        for (String string: stringSet) {
+            if (string == null || string.trim().isEmpty()) {
+                controlloStringhe = false;
+                break;
+            }
+        }
+
+        if (!controlloStringhe) {
+            throw new PersonalizzaDispensaException();
         }
     }
 

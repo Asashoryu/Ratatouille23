@@ -38,6 +38,7 @@ public class DispensaFragment extends Fragment {
 
         osservaCambientoIngredienti();
         osservaSeAggiungereIngrediente();
+        osservaSeTornareIndietro();
 
         return fragmentView;
     }
@@ -62,6 +63,14 @@ public class DispensaFragment extends Fragment {
             if (isVaiAvanti == true) {
                 dispensaViewModel.setFalseVaiAdAggiungiIngrediente();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_dispensaView_to_aggiungiIngredienteFragment);
+            }
+        });
+    }
+
+    public void osservaSeTornareIndietro() {
+        dispensaViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                Navigation.findNavController(fragmentView).popBackStack();
             }
         });
     }

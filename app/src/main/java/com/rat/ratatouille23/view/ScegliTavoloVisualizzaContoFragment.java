@@ -39,6 +39,7 @@ public class ScegliTavoloVisualizzaContoFragment extends Fragment {
 
         osservaCambientoTavoli();
         osservaSeAndareAVisualizzaConto();
+        osservaSeTornareIndietro();
 
         return fragmentView;
     }
@@ -80,5 +81,13 @@ public class ScegliTavoloVisualizzaContoFragment extends Fragment {
 
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(scegliTavoloVisualizzaContoBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
+    public void osservaSeTornareIndietro() {
+        scegliTavoloVisualizzaContoViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
     }
 }

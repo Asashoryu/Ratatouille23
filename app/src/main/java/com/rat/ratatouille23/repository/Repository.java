@@ -46,6 +46,7 @@ import com.rat.ratatouille23.viewmodel.HomeAmministratoreViewModel;
 import com.rat.ratatouille23.viewmodel.HomeSupervisoreViewModel;
 import com.rat.ratatouille23.viewmodel.IndicaQuantitaViewModel;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
+import com.rat.ratatouille23.viewmodel.ModificaPortataViewModel;
 import com.rat.ratatouille23.viewmodel.ModificaTavoliViewModel;
 import com.rat.ratatouille23.viewmodel.OrdinazioneViewModel;
 import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
@@ -96,7 +97,7 @@ public class Repository {
     private Ingrediente ingredienteSelezionato;
     private Menu menu;
 
-    private final String baseUrl = "http://192.168.1.6:8080/";
+    private final String baseUrl = "http://192.168.1.3:8080/";
 
     private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
     private static Repository questaRepository = null;
@@ -112,6 +113,8 @@ public class Repository {
     private static PersonalizzaMenuViewModel personalizzaMenuViewModel;
 
     private static AggiungiPortataViewModel aggiungiPortataViewModel;
+
+    private static ModificaPortataViewModel modificaPortataViewModel;
 
     private static AggiungiDipendenteViewModel aggiungiDipendenteViewModel;
 
@@ -1912,6 +1915,10 @@ public class Repository {
 
     public void setAggiungiPortataViewModel(AggiungiPortataViewModel aggiungiPortataViewModel) {
         this.aggiungiPortataViewModel = aggiungiPortataViewModel;
+    }
+
+    public void setModificaPortataViewModel(ModificaPortataViewModel modificaPortataViewModel) {
+        this.modificaPortataViewModel = modificaPortataViewModel;
     }
 
     public void setAggiungiDipendenteViewModel(AggiungiDipendenteViewModel aggiungiDipendenteViewModel) {

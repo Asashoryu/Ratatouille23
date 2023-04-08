@@ -38,6 +38,7 @@ public class ScegliTavoloOrdinazioneFragment extends Fragment {
 
         osservaCambientoTavoli();
         osservaSeAndareAOrdinazione();
+        osservaSeTornareIndietro();
 
         return fragmentView;
     }
@@ -77,6 +78,14 @@ public class ScegliTavoloOrdinazioneFragment extends Fragment {
 
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(scegliTavoloOrdinazioneBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
+    public void osservaSeTornareIndietro() {
+        scegliTavoloOrdinazioneViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
+            if (tornaIndietro) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
     }
 
 }

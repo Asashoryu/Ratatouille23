@@ -18,6 +18,8 @@ public class ScegliTavoloVisualizzaContoViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioScegliTavoloVisualizzaConto = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
+
     public ScegliTavoloVisualizzaContoViewModel() {
         repository = Repository.getInstance();
         repository.setScegliTavoloVisualizzaContoViewModel(this);
@@ -60,5 +62,10 @@ public class ScegliTavoloVisualizzaContoViewModel extends ViewModel {
 
     public void cancellaMessaggioScegliTavoloVisualizzaConto() {
         messaggioScegliTavoloVisualizzaConto.setValue("");
+    }
+
+    public void setTornaIndietro() {
+        tornaIndietro.setValue(true);
+        tornaIndietro.setValue(false);
     }
 }

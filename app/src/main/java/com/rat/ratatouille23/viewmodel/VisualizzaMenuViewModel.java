@@ -24,6 +24,8 @@ public class VisualizzaMenuViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioVisualizzaMenu = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
+
     public VisualizzaMenuViewModel() {
         repository = Repository.getInstance();
         repository.setVisualizzaMenuViewModel(this);
@@ -60,5 +62,10 @@ public class VisualizzaMenuViewModel extends ViewModel {
 
     public void cancellaMessaggioVisualizzaMenu() {
         messaggioVisualizzaMenu.setValue("");
+    }
+
+    public void setTornaIndietro() {
+        tornaIndietro.setValue(true);
+        tornaIndietro.setValue(false);
     }
 }

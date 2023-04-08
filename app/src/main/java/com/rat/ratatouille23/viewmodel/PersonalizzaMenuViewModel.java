@@ -44,6 +44,10 @@ public class PersonalizzaMenuViewModel extends ViewModel {
         listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
     }
 
+    public void impostaPortataSelezionata(Portata portata) {
+        repository.setPortataSelezionata(portata);
+    }
+
     public void setVaiAdAggiungiPortata() {
         vaiAdAggiungiPortata.setValue(true);
     }

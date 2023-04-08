@@ -89,6 +89,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/conto_fragment"
                 tools:ignore="HardcodedText" />
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:onClick="@{() -> ordinazioneViewModel.setTornaIndietro()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout

@@ -53,13 +53,16 @@ public class IndicaQuantitaIngredienteFragment extends Fragment {
     public void osservaMessaggioErrore() {
         indicaQuantitaViewModel.messaggioIndicaQuantita.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (indicaQuantitaViewModel.isNuovoMessaggioIndicaQuantita()) {
-                visualizzaToastConMessaggio(messaggio);
+                indicaQuantitaBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
+                indicaQuantitaBinding.errorMessage.setText(messaggio);
+                indicaQuantitaBinding.errorSign.setVisibility(View.VISIBLE);
+                //visualizzaToastConMessaggio(messaggio);
                 indicaQuantitaViewModel.cancellaMessaggioIndicaQuantita();
             }
         });
     }
 
-    public void visualizzaToastConMessaggio(String messaggio) {
+    /*public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(indicaQuantitaBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
-    }
+    }*/
 }

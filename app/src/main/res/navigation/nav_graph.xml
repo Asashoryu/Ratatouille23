@@ -111,6 +111,9 @@
         <action
             android:id="@+id/action_personalizzaMenuFragment_to_aggiungiPortataFragment"
             app:destination="@id/aggiungiPortataFragment" />
+        <action
+            android:id="@+id/action_personalizzaMenuFragment_to_modificaPortataFragment"
+            app:destination="@id/modificaPortataFragment" />
     </fragment>
     <fragment
         android:id="@+id/aggiungiPortataFragment"
@@ -187,4 +190,9 @@
         android:name="com.rat.ratatouille23.view.ModificaTavoliFragment"
         android:label="fragment_modifica_tavoli"
         tools:layout="@layout/fragment_modifica_tavoli" />
+    <fragment
+        android:id="@+id/modificaPortataFragment"
+        android:name="com.rat.ratatouille23.view.ModificaPortataFragment"
+        android:label="fragment_modifica_portata"
+        tools:layout="@layout/fragment_modifica_portata" />
 </navigation>

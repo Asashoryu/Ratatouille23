@@ -19,6 +19,8 @@ public class AssociaIngredientiViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> vaiAdAggiungiIngrediente = new MutableLiveData<>(false);
 
+    public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
+
     public AssociaIngredientiViewModel() {
         repository = Repository.getInstance();
         repository.setAssociaIngredientiViewModel(this);
@@ -64,5 +66,10 @@ public class AssociaIngredientiViewModel extends ViewModel {
 
     public void impostaIngredienteSelezionato(Ingrediente ingrediente) {
         repository.setIngredienteSelezionato(ingrediente);
+    }
+
+    public void setTornaIndietro() {
+        tornaIndietro.setValue(true);
+        tornaIndietro.setValue(false);
     }
 }

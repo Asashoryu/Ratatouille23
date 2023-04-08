@@ -125,8 +125,10 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
+            android:background="@drawable/btn_custom"
             android:onClick="@{() -> visualizzaStatisticheViewModel.setTornaIndietro()}"
-            android:text="annulla"
+            android:text="Torna indietro"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

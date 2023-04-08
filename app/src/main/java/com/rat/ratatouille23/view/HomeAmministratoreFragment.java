@@ -37,6 +37,7 @@ public class HomeAmministratoreFragment extends Fragment {
         osservaSeAndareAlleStatistiche();
         osservaSeAggiungereDipendente();
         osservaSeAndareAllaGestioneTavolo();
+        osservaSeEffettuareLogOut();
 
         osservaMessaggioErrore();
 
@@ -107,4 +108,13 @@ public class HomeAmministratoreFragment extends Fragment {
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(homeAmministratoreBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
     }
+
+    public void osservaSeEffettuareLogOut() {
+        homeAmministratoreViewModel.logOut.observe(getViewLifecycleOwner(), (logOut) -> {
+            if (logOut) {
+                Navigation.findNavController(fragmentView).popBackStack();
+            }
+        });
+    }
+
 }

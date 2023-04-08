@@ -18,6 +18,8 @@ public class DispensaViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioDispensa = new MutableLiveData<>("");
 
+    public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
+
     public DispensaViewModel() {
         repository = Repository.getInstance();
         repository.setDispensaViewModel(this);
@@ -60,5 +62,10 @@ public class DispensaViewModel extends ViewModel {
 
     public void cancellaMessaggioDispensa() {
         messaggioDispensa.setValue("");
+    }
+
+    public void setTornaIndietro() {
+        tornaIndietro.setValue(true);
+        tornaIndietro.setValue(false);
     }
 }
