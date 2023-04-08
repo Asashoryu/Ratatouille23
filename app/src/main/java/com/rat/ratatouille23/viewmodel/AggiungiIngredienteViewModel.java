@@ -102,7 +102,7 @@ public class AggiungiIngredienteViewModel extends ViewModel {
     }
 
     public Boolean isNuovoMessaggioAggiungiIngrediente() {
-        return getMessaggioAggiungiIngrediente() != "";
+        return !getMessaggioAggiungiIngrediente().equals("");
     }
 
     public void cancellaMessaggioAggiungiIngrediente() {
