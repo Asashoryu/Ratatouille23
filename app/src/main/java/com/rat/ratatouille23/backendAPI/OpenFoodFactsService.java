@@ -19,8 +19,7 @@ public interface OpenFoodFactsService {
     Call<Portata> getProduct(@Path("barcode") String barcode);
 
     @GET("/cgi/search.pl")
-    Call<JsonObject> getFoodInfo(@Query("search_terms") String foodName, @Query("page_size") int pageSize, @Query("json") int json, @Query("lc") String langCode, @Query("search_simple") int searchSimple);
-
+    Call<JsonObject> getFoodInfo(@Query("search_terms") String foodName, @Query("page_size") int pageSize, @Query("json") int json, @Query("lc") String langCode, @Query("search_simple") int searchSimple, @Query("fields") String field);
 
 }
 

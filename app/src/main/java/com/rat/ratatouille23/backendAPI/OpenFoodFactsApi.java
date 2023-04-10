@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OpenFoodFactsApi {
 
-    private static final String BASE_URL = "https://world.openfoodfacts.org";
+    private static final String BASE_URL = "https://it.openfoodfacts.org";
 
     private static OpenFoodFactsApi instance;
 

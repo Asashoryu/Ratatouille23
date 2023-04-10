@@ -16,6 +16,7 @@
         android:layout_height="match_parent"
         android:background="@color/blue_dark" >
 
+
         <TextView
             android:id="@+id/txt_nome"
             android:layout_width="wrap_content"
@@ -24,7 +25,7 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/nome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +35,8 @@
             android:inputType="textPersonName"
             android:maxLength="20"
             android:paddingHorizontal="5dp"
-            android:textSize="25dp" />
+            android:textSize="25dp"
+            android:hint="nome della portata (autocompletamento)"/>
 
         <TextView
             android:id="@+id/txt_costo"
@@ -126,7 +128,7 @@
             android:id="@+id/btn_aggiungi"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> aggiungiPortataViewModel.aggiungiPortata(nomeText.getText().toString(), costoText.getText().toString() , aggiungiPortataViewModel.getSelectedCategoryName(), descrizioneText.getText().toString())}"
+            android:onClick="@{() -> aggiungiPortataViewModel.aggiungiPortata(nomeText.getText().toString(), costoText.getText().toString() , aggiungiPortataViewModel.getSelectedCategoryName(), listaAllergeniText.getText().toString(), descrizioneText.getText().toString())}"
             android:text="aggiungi" />
 
         <Button
