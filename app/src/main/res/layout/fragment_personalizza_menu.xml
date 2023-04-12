@@ -47,7 +47,7 @@
             android:background="@drawable/btn_yellow_custom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_aggiungi_portate"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sortButton"
             app:layout_constraintTop_toBottomOf="@+id/frame_portate" >
 
             <androidx.recyclerview.widget.RecyclerView
@@ -59,6 +59,18 @@
                 android:orientation="horizontal" />
 
         </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/sortButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="25dp"
+            android:src="@drawable/baseline_compare_arrows_24"
+            android:onClick="@{() -> personalizzaMenuViewModel.setIsCliccato()}"
+            android:background="@drawable/btn_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frame_portate" />
 
         <Button
             android:id="@+id/btn_aggiungi_portate"

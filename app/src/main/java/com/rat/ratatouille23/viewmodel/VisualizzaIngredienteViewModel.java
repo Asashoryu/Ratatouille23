@@ -1,5 +1,7 @@
 package com.rat.ratatouille23.viewmodel;
 
+import android.widget.EditText;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -31,6 +33,10 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
             setMessaggioVisualizzaIngrediente(e.getMessage());
         }
         setTornaIndietro();
+    }
+
+    public void setNomeEditable (EditText nome) {
+        nome.setEnabled(!nome.isEnabled());
     }
 
     public Ingrediente getIngrediente() {

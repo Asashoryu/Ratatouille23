@@ -19,56 +19,90 @@
             android:id="@+id/txt_nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="nome"
+            android:text="nome *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/nome_frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" >
+
         <EditText
-            android:focusable="false"
             android:id="@+id/nome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/et_custom"
             android:layout_weight="1"
-            android:textSize="25dp"
-            android:text="@{visualizzaIngredienteViewModel.getIngrediente().nome.toString()}"
-            android:paddingHorizontal="5dp"
+            android:background="@drawable/et_custom"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:editable="false"
+            android:inputType="textPersonName"
+            android:paddingHorizontal="5dp"
+            android:text="@{visualizzaIngredienteViewModel.getIngrediente().nome.toString()}"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/edit_nome"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@color/grey_light"
+            android:src="@drawable/baseline_edit_24"
+            android:onClick="@{() -> visualizzaIngredienteViewModel.setNomeEditable(nomeText)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/txt_costo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="costo"
+            android:text="costo *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/costo_frame"
             android:layout_width="0dp"
             android:layout_height="wrap_content" >
 
+            <ImageButton
+                android:id="@+id/edit_costo"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@color/grey_light"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/costo_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <EditText
-                android:focusable="false"
                 android:id="@+id/costo_text"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/et_custom"
                 android:layout_weight="1"
-                android:textSize="25dp"
+                android:background="@drawable/et_custom"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="numberDecimal"
                 android:paddingHorizontal="5dp"
                 android:text="@{visualizzaIngredienteViewModel.getIngrediente().costo.toString()}"
-                android:ems="10"
-                android:inputType="numberDecimal" />
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/txt_quantita"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="quantita"
+            android:text="quantita *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
@@ -100,10 +134,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="25dp"
+                android:background="@color/blue_dark"
                 android:text="@{visualizzaIngredienteViewModel.getIngrediente().unitaMisura.toString()}"
                 android:paddingHorizontal="5dp"
                 android:layout_marginHorizontal="20dp"
-                android:background="@drawable/et_custom"
+                android:textColor="@color/white"
                 android:ems="10"
                 android:inputType="number"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -120,18 +155,39 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/descrizione_frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" >
+
         <EditText
-            android:focusable="false"
             android:id="@+id/descrizione_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/et_custom"
             android:layout_weight="1"
-            android:textSize="25dp"
-            android:text="@{visualizzaIngredienteViewModel.getIngrediente().descrizione.toString()}"
-            android:paddingHorizontal="5dp"
+            android:background="@drawable/et_custom"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:focusable="false"
+            android:inputType="textPersonName"
+            android:paddingHorizontal="5dp"
+            android:text="@{visualizzaIngredienteViewModel.getIngrediente().descrizione.toString()}"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/edit_descrizione"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@color/grey_light"
+            android:src="@drawable/baseline_edit_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btn_elimina"
@@ -152,9 +208,10 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_txt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:layout_marginHorizontal="50dp"
             app:constraint_referenced_ids="txt_nome,txt_costo,txt_quantita,txt_descrizione"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toStartOf="@id/flow_et"
@@ -163,10 +220,11 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_et"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:constraint_referenced_ids="nome_text,costo_frame,quantita_layout,descrizione_text"
+            android:layout_marginHorizontal="50dp"
+            app:constraint_referenced_ids="nome_frame,costo_frame,quantita_layout,descrizione_frame"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/flow_txt"

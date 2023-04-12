@@ -19,7 +19,7 @@
             android:id="@+id/txt_nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="nome"
+            android:text="nome *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
@@ -38,7 +38,7 @@
             android:id="@+id/txt_costo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="costo"
+            android:text="costo *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
@@ -64,7 +64,7 @@
             android:id="@+id/txt_quantita"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="quantita"
+            android:text="quantita *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
@@ -87,9 +87,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/unitaMisura_text"
-                android:layout_width="75dp"
+            <Spinner
+                android:id="@+id/unitaMisura_spinner"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_weight="1"
@@ -172,7 +172,7 @@
             android:id="@+id/btn_aggiungi"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> aggiungiIngredienteViewModel.aggiungiIngrediente(nomeText.getText().toString(), costoText.getText().toString(), quantitaText.getText().toString(), unitaMisuraText.getText().toString(), sogliaText.getText().toString(), descrizioneText.getText().toString())}"
+            android:onClick="@{() -> aggiungiIngredienteViewModel.aggiungiIngrediente(nomeText.getText().toString(), costoText.getText().toString(), quantitaText.getText().toString(), aggiungiIngredienteViewModel.unitaMisuraSelezionata.toString(), sogliaText.getText().toString(), descrizioneText.getText().toString())}"
             android:text="aggiungi" />
 
         <Button
