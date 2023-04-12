@@ -8,15 +8,14 @@ public class Portata {
     private String nome;
     private Float costo;
     private String descrizione;
-    private ArrayList<Allergene> allergeni;
 
+    private String allergeni;
     private ArrayList<IngredientePortata> ingredientiPortata;
 
-    public Portata(String nome, Float costo, String descrizione, ArrayList<Allergene> allergeni) {
+    public Portata(String nome, Float costo, String descrizione, String allergeni) {
         setNome(nome);
         setCosto(costo);
         setDescrizione(descrizione);
-        allergeni = new ArrayList<>();
         setAllergeni(allergeni);
         ingredientiPortata = new ArrayList<IngredientePortata>();
     }
@@ -55,11 +54,11 @@ public class Portata {
         this.descrizione = descrizione;
     }
 
-    public List<Allergene> getAllergeni() {
+    public String getAllergeni() {
         return allergeni;
     }
 
-    public void setAllergeni(ArrayList<Allergene> allergeni) {
+    public void setAllergeni(String allergeni) {
         this.allergeni = allergeni;
     }
 

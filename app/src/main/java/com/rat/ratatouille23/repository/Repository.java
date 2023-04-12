@@ -97,7 +97,7 @@ public class Repository {
     private Ingrediente ingredienteSelezionato;
     private Menu menu;
 
-    private final String baseUrl = "http://100.102.26.208:8080/";
+    private final String baseUrl = "http://192.168.1.8:8080/";
 
     private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
     private static Repository questaRepository = null;
@@ -599,6 +599,62 @@ public class Repository {
         }
     }
 
+    public void updateIngredientRetrofit(String name, float price, float quantity, String measure,
+                                         float threshold, float tolerance, String description) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        IngridientService service = retrofit.create(IngridientService.class);
+
+        Call<Void> call = service.updateIngredient(name, price, quantity, measure, threshold, tolerance, description);
+
+        try {
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Ingredient updated successfully");
+                    } else {
+                        System.out.println("Error updating the ingredient");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+            // Wait for the response for a maximum of 3 seconds
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
     public void eliminaIngredienteSelezionato() throws IOException {
         if (ingredienteSelezionato != null) {
             deleteIngridientRetrofit(ingredienteSelezionato.getNome());
@@ -1006,7 +1062,61 @@ public class Repository {
         }
     }
 
+    public void updateDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        DishService service = retrofit.create(DishService.class);
+
+        Call<Void> call = service.updatePiatto(nome, categoria, prezzo, ordinabile, allergie, descrizione);
+
+        try {
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Piatto aggiornato con successo");
+                    } else {
+                        System.out.println("Errore nell'aggiornamento del piatto");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+            // Wait for the response for a maximum of 3 seconds
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
 
     public Categoria getCategoriaDiNome(String nomeCategoria) throws CategoriaNonTrovataException {
         List<Categoria> listaCategorieTrovate;

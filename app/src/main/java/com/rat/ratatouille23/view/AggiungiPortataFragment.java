@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ public class AggiungiPortataFragment extends Fragment {
         aggiungiPortataBinding.setAggiungiPortataViewModel(aggiungiPortataViewModel);
 
         impostaSpinner();
+        impostaAutocompletamentoListener();
 
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
@@ -62,6 +66,25 @@ public class AggiungiPortataFragment extends Fragment {
             }
         });
     }
+
+    public void impostaAutocompletamentoListener() {
+        AutoCompleteTextView autoCompleteTextView = aggiungiPortataBinding.nomeText;
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().isEmpty()) {
+                    aggiungiPortataViewModel.searchFoodInfo(s.toString(), autoCompleteTextView);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
 
     public void osservaSeTornareIndietro() {
         aggiungiPortataViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
