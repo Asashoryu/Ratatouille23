@@ -105,11 +105,6 @@ public class AggiungiIngredienteFragment extends Fragment {
         seekBar.setProgressDrawable(layerDrawable);
     }
 
-
-
-
-
-
     public void osservaSeTornareIndietro() {
         aggiungiIngredienteViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
             if (tornaIndietro) {

@@ -1,5 +1,7 @@
 package com.rat.ratatouille23.backendAPI;
 
+import androidx.annotation.Nullable;
+
 import com.rat.ratatouille23.DTO.Dish_DTO;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public interface DishService {
                             @Path("categoria") String categoria,
                             @Path("prezzo") float prezzo,
                             @Path("ordinabile") Boolean ordinabile,
-                            @Path("allergie") String allergie,
-                            @Path("descrizione") String descrizione);
+                            @Nullable @Path("allergie") String allergie,
+                            @Nullable @Path("descrizione") String descrizione);
 
     @PUT("/Dish/update_piatto/{nome}/{categoria}/{prezzo}/{ordinabile}/{allergie}/{descrizione}")
     Call<Void> updatePiatto(@Path("nome") String nome,

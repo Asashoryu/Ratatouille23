@@ -100,11 +100,6 @@ public class AggiungiIngredienteViewModel extends ViewModel {
             return false;
         }
 
-        if (descrizione == null || descrizione.isEmpty()) {
-            // Handle the case where the 'descrizione' input is null or empty
-            setMessaggioAggiungiIngrediente("La descrizione non può essere vuota");
-            return false;
-        }
         return true;
     }
 

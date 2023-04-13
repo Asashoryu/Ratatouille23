@@ -1,5 +1,6 @@
 package com.rat.ratatouille23.repository;
 
+import static android.content.ContentValues.TAG;
 import static java.lang.Thread.sleep;
 
 import android.os.AsyncTask;
@@ -69,6 +70,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import okhttp3.Interceptor;
@@ -544,23 +546,22 @@ public class Repository {
         dispensa.add(ingrediente);
     }
 
-    public void insertIngredientRetrofit(String nome, float prezzo, float quantita, String misura, float soglia, float tolleranza, String descrizione) throws IOException {
+    public void insertIngredientRetrofit(String nome, float prezzo, float quantita, String misura, float soglia, float tolleranza, String descrizione) {
+        if (descrizione == null || descrizione.isEmpty()) {
+            descrizione = "-";
+        }
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         // Add an interceptor to the OkHttp client
-        httpClient.addInterceptor(new Interceptor() {
-            @NotNull
-            @Override
-            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
-                // Get the request
-                Request request = chain.request();
+        httpClient.addInterceptor(chain -> {
+            // Get the request
+            Request request = chain.request();
+            // Get the URL as a string and print it
+            String url = request.url().toString();
+            Logger.getLogger(getClass().getName()).info("Request URL: " + url);
 
-                // Get the URL as a string and print it
-                String url = request.url().toString();
-                System.out.println("Request URL: " + url);
-
-                // Proceed with the request
-                return chain.proceed(request);
-            }
+            // Proceed with the request
+            return chain.proceed(request);
         });
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -573,31 +574,28 @@ public class Repository {
 
         Call<Void> call = service.insertIngredient(nome, prezzo, quantita, misura, soglia, tolleranza, descrizione);
 
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Logger.getLogger(getClass().getName()).info(response.isSuccessful() ? "Ingrediente inserito con successo" : "Errore nell'inserimento dell'ingrediente");
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Logger.getLogger(getClass().getName()).severe("Failed to insert ingrediente");
+                t.printStackTrace();
+            }
+        });
+
         try {
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        System.out.println("Ingrediente inserito con successo");
-                    } else {
-                        System.out.println("Errore nell'inserimento dell'ingrediente");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-
             // Wait for the response for a maximum of 3 seconds
             Thread.sleep(3000);
-
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new IOException(e.getMessage());
+            Logger.getLogger(getClass().getName()).severe("Thread interrupted while waiting for response");
+            Thread.currentThread().interrupt();
         }
     }
+
 
     public void updateIngredientRetrofit(String name, float price, float quantity, String measure,
                                          float threshold, float tolerance, String description) throws IOException {
@@ -997,7 +995,7 @@ public class Repository {
         this.menu = menu;
     }
 
-    public void aggiungiPortataAllaCategoria(Portata portata, String nomeCategoria) throws CategoriaNonTrovataException, IOException {
+    public void aggiungiPortataAllaCategoria(Portata portata, String nomeCategoria) throws IOException, CategoriaNonTrovataException, ExecutionException, InterruptedException {
 
         insertDishRetrofit(portata.getNome(), nomeCategoria, portata.getCosto(), true, "", portata.getDescrizione());
 
@@ -1006,7 +1004,15 @@ public class Repository {
         personalizzaMenuViewModel.aggiornaListaPortate(categoria);
     }
 
-    public void insertDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException {
+    public boolean insertDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException, ExecutionException, InterruptedException {
+
+        if (allergie == null || allergie.isEmpty()) {
+            allergie = "-";
+        }
+        if (descrizione == null || descrizione.isEmpty()) {
+            descrizione = "-";
+        }
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         // Add an interceptor to the OkHttp client
@@ -1036,33 +1042,58 @@ public class Repository {
 
         Call<Void> call = service.insertPiatto(nome, categoria, prezzo, ordinabile, allergie, descrizione);
 
+        AsyncTask<Void, Void, Response<Void>> task = new AsyncTask<Void, Void, Response<Void>>() {
+            @Override
+            protected Response<Void> doInBackground(Void... voids) {
+                try {
+                    Response<Void> response = call.execute();
+                    return response;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Response<Void> response) {
+                if (response != null && response.isSuccessful()) {
+                    System.out.println("Piatto inserito con successo");
+                } else {
+                    int statusCode = response != null ? response.code() : -1;
+                    String message = "Errore nell'inserimento del piatto. Status code: " + statusCode;
+                    System.out.println(message);
+                }
+            }
+        };
+        task.execute();
+
+        // Wait for the response for a maximum of 3 seconds
         try {
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        System.out.println("Piatto inserito con successo");
-                    } else {
-                        System.out.println("Errore nell'inserimento del piatto");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-
-            // Wait for the response for a maximum of 3 seconds
-            Thread.sleep(3000);
-
-        } catch (InterruptedException e) {
+            task.get(3, TimeUnit.SECONDS);
+            if (task.get() != null && task.get().isSuccessful()) {
+                return true;
+            } else {
+                throw new IOException("Errore nell'inserimento del piatto");
+            }
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            throw new IOException("Timeout nell'inserimento del piatto");
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             throw new IOException(e.getMessage());
         }
+
     }
 
-    public void updateDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException {
+    public boolean updateDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException, InterruptedException {
+
+        if (allergie == null || allergie.isEmpty()) {
+            allergie = "-";
+        }
+        if (descrizione == null || descrizione.isEmpty()) {
+            descrizione = "-";
+        }
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         // Add an interceptor to the OkHttp client
@@ -1092,31 +1123,48 @@ public class Repository {
 
         Call<Void> call = service.updatePiatto(nome, categoria, prezzo, ordinabile, allergie, descrizione);
 
+        AsyncTask<Void, Void, Response<Void>> task = new AsyncTask<Void, Void, Response<Void>>() {
+            @Override
+            protected Response<Void> doInBackground(Void... voids) {
+                try {
+                    Response<Void> response = call.execute();
+                    return response;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Response<Void> response) {
+                if (response != null && response.isSuccessful()) {
+                    System.out.println("Piatto aggiornato con successo");
+                } else {
+                    int statusCode = response != null ? response.code() : -1;
+                    String message = "Errore nell'aggiornamento del piatto. Status code: " + statusCode;
+                    System.out.println(message);
+                }
+            }
+        };
+        task.execute();
+
+        // Wait for the response for a maximum of 3 seconds
         try {
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        System.out.println("Piatto aggiornato con successo");
-                    } else {
-                        System.out.println("Errore nell'aggiornamento del piatto");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-
-            // Wait for the response for a maximum of 3 seconds
-            Thread.sleep(3000);
-
-        } catch (InterruptedException e) {
+            task.get(3, TimeUnit.SECONDS);
+            if (task.get() != null && task.get().isSuccessful()) {
+                return true;
+            } else {
+                throw new IOException("Errore nell'aggiornamento del piatto");
+            }
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            throw new IOException("Timeout nell'aggiornamento del piatto");
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             throw new IOException(e.getMessage());
         }
     }
+
 
     public Categoria getCategoriaDiNome(String nomeCategoria) throws CategoriaNonTrovataException {
         List<Categoria> listaCategorieTrovate;

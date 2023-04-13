@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,8 +61,7 @@ public class AggiungiPortataViewModel extends ViewModel {
             repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), categoria);
             System.err.println(nome + costo + categoria + descrizione);
             setTornaIndietro();
-
-        } catch (Ratatouille23Exception | IOException e) {
+        } catch (Ratatouille23Exception | IOException | InterruptedException | ExecutionException e) {
             setMessaggioAggiungiPortata(e.getMessage());
         }
     }
