@@ -6,11 +6,10 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.model.Menu;
-import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PersonalizzaMenuViewModel extends ViewModel {
 
@@ -20,13 +19,15 @@ public class PersonalizzaMenuViewModel extends ViewModel {
 
     Categoria tutti;
 
-    ArrayList categorie;
+    ArrayList<Categoria> categorie;
+
+    String nomeTutti = "Tutti";
 
     public MutableLiveData<ArrayList<Categoria>> listaCategorie = new MutableLiveData<ArrayList<Categoria>>();
 
     public MutableLiveData<ArrayList<Portata>> listaPortate = new MutableLiveData<ArrayList<Portata>>();
 
-    public MutableLiveData<Boolean> isCliccato = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isCliccatoOrdina = new MutableLiveData<>(false);
 
     public MutableLiveData<Boolean> vaiAdAggiungiPortata = new MutableLiveData<>(false);
 
@@ -37,9 +38,17 @@ public class PersonalizzaMenuViewModel extends ViewModel {
         repository.setPersonalizzaMenuViewModel(this);
 
         menu = repository.getMenu();
-        tutti = new Categoria("Tutti");
-        categorie = new ArrayList<Categoria>(menu.getCategorie());
+
+        categorie = menu.getCategorie();
+
+
+        tutti = new Categoria(nomeTutti);
+
         categorie.add(0,tutti);
+
+        tutti.getPortate().forEach(portata -> {System.err.println(portata.getNome());});
+
+        Collections.shuffle(tutti.getPortate());
 
         aggiornaListaCategorie();
         aggiornaListaPortate(tutti);
@@ -52,29 +61,44 @@ public class PersonalizzaMenuViewModel extends ViewModel {
     }
 
     public void aggiornaListaPortate(Categoria categoriaSelezionata) {
-        if (categoriaSelezionata.equals(tutti)) {
-            listaPortate.setValue(menu.getPortate());   //getAll
+        if (categoriaSelezionata == tutti) {
+            tutti.setPortate(menu.getTuttePortate());
+            listaPortate.setValue(menu.getPortateDellaCategoria(tutti));
         }
         else {
             listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
         }
     }
 
-    public void ordinaTutto() {
-        for (Categoria categoria : menu.getCategorie()) {
-                listaPortate.setValue(menu.getPortateOrdinateDellaCategoria(categoria));
-        }
-        listaPortate.setValue(menu.ordinaPortate());
-
+    public void ordinaEaggiornaCategoriaTutti() {
+        selectionSortPortate(tutti.getPortate());
+        listaPortate.setValue(tutti.getPortate());
     }
+
+    public static void selectionSortPortate(ArrayList<Portata> portate) {
+        for (int i = 0; i < portate.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < portate.size(); j++) {
+                if (portate.get(j).getNome().compareTo(portate.get(minIndex).getNome()) < 0) {
+                    minIndex = j;
+                }
+            }
+            if (minIndex != i) {
+                Portata temp = portate.get(i);
+                portate.set(i, portate.get(minIndex));
+                portate.set(minIndex, temp);
+            }
+        }
+    }
+
 
     public void impostaPortataSelezionata(Portata portata) {
         repository.setPortataSelezionata(portata);
     }
 
-    public void setIsCliccato() {
-        isCliccato.setValue(true);
-        isCliccato.setValue(false);
+    public void setIsCliccatoOrdina() {
+        isCliccatoOrdina.setValue(true);
+        isCliccatoOrdina.setValue(false);
     }
 
     public void setVaiAdAggiungiPortata() {
@@ -91,7 +115,6 @@ public class PersonalizzaMenuViewModel extends ViewModel {
     public String getMessaggioPersonalizzaMenu() {
         return messaggioPersonalizzaMenu.getValue();
     }
-
 
     public Boolean isNuovoMessaggioPersonalizzaMenu() {
         return getMessaggioPersonalizzaMenu() != "";

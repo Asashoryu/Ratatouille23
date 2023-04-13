@@ -1,8 +1,6 @@
 package com.rat.ratatouille23.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Menu {
     ArrayList<Categoria> categorie;
@@ -16,13 +14,8 @@ public class Menu {
         return categorie.get(indiceCategoriaSelezionata).getPortate();
     }
 
-    public ArrayList<Portata> getPortateOrdinateDellaCategoria(Categoria categoria) {
-        ArrayList<Portata> portateOrdinate = getPortateDellaCategoria(categoria);
-        Collections.sort(portateOrdinate,new Portata.NomeComparator());
-        return portateOrdinate;
-    }
 
-    public ArrayList<Portata> getPortate() {
+    public ArrayList<Portata> getTuttePortate() {
         ArrayList<Portata> portate = new ArrayList<>();
         for (Categoria categoria : categorie) {
             portate.addAll(categoria.getPortate());
@@ -30,10 +23,17 @@ public class Menu {
         return portate;
     }
 
+    public ArrayList<Portata> getPortateOrdinateDellaCategoria(Categoria categoria) {
+        ArrayList<Portata> portateOrdinate = getPortateDellaCategoria(categoria);
+//        Collections.sort(portateOrdinate,new Portata.NomeComparator());
+        portateOrdinate = selectionSortPortate(portateOrdinate);
+        return portateOrdinate;
+    }
+
     public ArrayList<Portata> ordinaPortate() {
-        ArrayList<Portata> portateOrdinate = getPortate();
-        Collections.sort(portateOrdinate,new Portata.NomeComparator());
-        //portateOrdinate = insertionPortate(portateOrdinate);
+        ArrayList<Portata> portateOrdinate = getTuttePortate();
+//        Collections.sort(portateOrdinate,new Portata.NomeComparator());
+        portateOrdinate = selectionSortPortate(portateOrdinate);
         return portateOrdinate;
     }
 
@@ -46,24 +46,22 @@ public class Menu {
         this.categorie = categorie;
     }
 
-    public ArrayList<Portata> insertionPortate (ArrayList<Portata> portate) {
-        int i,j = 0;
-        int n = portate.size();
-        Portata portata;
-        ArrayList<Portata> portateOrdinate = new ArrayList<>();
-        ArrayList<Portata> portateClone = new ArrayList<>(portate);
-        while (j < n) {
-            portata = portateClone.get(0);
-            for (i = 0; i < portateClone.size(); i++) {
-                //ciao Moggy
-                if (portata.getNome().compareTo(portateClone.get(i).getNome()) > 0) {
-                    portata = portateClone.get(i);
+    public static ArrayList<Portata> selectionSortPortate(ArrayList<Portata> portate) {
+        ArrayList<Portata> sortedPortate = new ArrayList<>();
+        while (portate.size() > 0) {
+            Portata smallestPortata = portate.get(0);
+            int smallestIndex = 0;
+            for (int i = 1; i < portate.size(); i++) {
+                Portata currentPortata = portate.get(i);
+                if (currentPortata.getNome().compareTo(smallestPortata.getNome()) < 0) {
+                    smallestPortata = currentPortata;
+                    smallestIndex = i;
                 }
             }
-            portateClone.remove(portata);
-            portateOrdinate.add(j,portata);
-            j++;
+            sortedPortate.add(smallestPortata);
+            portate.remove(smallestIndex);
         }
-        return portateOrdinate;
+        return sortedPortate;
     }
+
 }

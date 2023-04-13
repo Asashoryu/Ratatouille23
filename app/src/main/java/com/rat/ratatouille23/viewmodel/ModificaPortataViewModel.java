@@ -26,6 +26,8 @@ public class ModificaPortataViewModel extends ViewModel {
 
     public int indiceCategoria = 0;
 
+    String nomeTutti = "Tutti";
+
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
     public MutableLiveData<String> messaggioModificaPortata = new MutableLiveData<>("");
@@ -66,7 +68,9 @@ public class ModificaPortataViewModel extends ViewModel {
     public ArrayList<String> getCategoryNames() {
         ArrayList<String> categoryNames = new ArrayList<>();
         for (Categoria categoria : repository.getMenu().getCategorie()) {
-            categoryNames.add(categoria.getNome());
+            if (!categoria.getNome().equals(nomeTutti)) {
+                categoryNames.add(categoria.getNome());
+            }
         }
         return categoryNames;
     }

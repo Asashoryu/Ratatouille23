@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
-import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.adapter.PortateItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentPersonalizzaMenuBinding;
 import com.rat.ratatouille23.viewmodel.PersonalizzaMenuViewModel;
@@ -46,7 +45,6 @@ public class PersonalizzaMenuFragment extends Fragment {
         osservaCambientoPortate();
 
         osservaSeCliccato();
-        osservaSeCliccato1();
 
         osservaSeAggiungerePortata();
 
@@ -83,20 +81,19 @@ public class PersonalizzaMenuFragment extends Fragment {
     }
 
     public void osservaSeCliccato() {
-        personalizzaMenuViewModel.isCliccato.observe(getViewLifecycleOwner(), (isCliccato) -> {
-            personalizzaMenuBinding.sortButton.setBackgroundResource(R.drawable.btn_round_yellow);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    personalizzaMenuBinding.sortButton.setBackgroundResource(R.drawable.btn_round);
-                }
-            }, 100);
-        });
-    }
+        personalizzaMenuViewModel.isCliccatoOrdina.observe(getViewLifecycleOwner(), (isCliccato) -> {
+            if (isCliccato) {
+                System.err.println("qui il click");
+                personalizzaMenuViewModel.ordinaEaggiornaCategoriaTutti();
 
-    public void osservaSeCliccato1() {
-        personalizzaMenuViewModel.isCliccato.observe(getViewLifecycleOwner(), (isCliccato) -> {
-            personalizzaMenuViewModel.ordinaTutto();
+                personalizzaMenuBinding.sortButton.setBackgroundResource(R.drawable.btn_round_yellow);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        personalizzaMenuBinding.sortButton.setBackgroundResource(R.drawable.btn_round);
+                    }
+                }, 100);
+            }
         });
     }
 

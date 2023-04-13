@@ -37,9 +37,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AggiungiPortataViewModel extends ViewModel {
     Repository repository;
 
-    Portata portata;
+    String nomeTutti = "Tutti";
 
-    public MutableLiveData<ArrayList<Categoria>> listaCategorie = new MutableLiveData<ArrayList<Categoria>>();
+    Portata portata;
 
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
@@ -92,7 +92,7 @@ public class AggiungiPortataViewModel extends ViewModel {
     public void searchFoodInfo(String foodName, AutoCompleteTextView autoCompleteTextView) {
         if (foodName.length() > 0) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://world.openfoodfacts.org")
+                    .baseUrl("https://it.openfoodfacts.org")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             OpenFoodFactsService service = retrofit.create(OpenFoodFactsService.class);
@@ -192,7 +192,9 @@ public class AggiungiPortataViewModel extends ViewModel {
     public ArrayList<String> getCategoryNames() {
         ArrayList<String> categoryNames = new ArrayList<>();
         for (Categoria categoria : repository.getMenu().getCategorie()) {
-            categoryNames.add(categoria.getNome());
+            if (!categoria.getNome().equals(nomeTutti)) {
+                categoryNames.add(categoria.getNome());
+            }
         }
         return categoryNames;
     }

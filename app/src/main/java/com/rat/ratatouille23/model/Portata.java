@@ -81,9 +81,9 @@ public class Portata {
         this.ingredientiPortata = ingredientiPortata;
     }
 
-    static class NomeComparator implements Comparator<Portata> {
-        public int compare(Portata p1, Portata p2) {
-            return p1.getNome().compareTo(p2.getNome());
-        }
-    }
+//    static class NomeComparator implements Comparator<Portata> {
+//        public int compare(Portata p1, Portata p2) {
+//            return p1.getNome().compareTo(p2.getNome());
+//        }
+//    }
 }

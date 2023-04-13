@@ -1,6 +1,5 @@
 package com.rat.ratatouille23.repository;
 
-import static android.content.ContentValues.TAG;
 import static java.lang.Thread.sleep;
 
 import android.os.AsyncTask;
@@ -785,7 +784,7 @@ public class Repository {
     public void convertiEAggiungiDaListMakeDishDTOInListaIngredientePortata(List<Make_Dish_DTO> makeDishDtos) {
         if (makeDishDtos != null) {
             for (Make_Dish_DTO make_dish_dto : makeDishDtos) {
-                Portata portata = findPortataByNome(make_dish_dto.getDishName(), menu.getPortate());
+                Portata portata = findPortataByNome(make_dish_dto.getDishName(), menu.getTuttePortate());
                 if (portata != null) {
                     Ingrediente ingrediente = findIngredientByName(make_dish_dto.getIngridientName(), dispensa);
                     if (ingrediente != null) {
@@ -1441,7 +1440,7 @@ public class Repository {
                 }
             }.execute().get(3, TimeUnit.SECONDS);
 
-            addOrderedDishesToOrdinazioni(ordinazioni, orderedDishesDto, menu.getPortate());
+            addOrderedDishesToOrdinazioni(ordinazioni, orderedDishesDto, menu.getTuttePortate());
 
         } catch (TimeoutException e) {
             throw new IOException("Request timed out");
