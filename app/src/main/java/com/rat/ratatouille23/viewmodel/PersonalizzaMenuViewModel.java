@@ -18,9 +18,15 @@ public class PersonalizzaMenuViewModel extends ViewModel {
 
     Menu menu;
 
+    Categoria tutti;
+
+    ArrayList categorie;
+
     public MutableLiveData<ArrayList<Categoria>> listaCategorie = new MutableLiveData<ArrayList<Categoria>>();
 
     public MutableLiveData<ArrayList<Portata>> listaPortate = new MutableLiveData<ArrayList<Portata>>();
+
+    public MutableLiveData<Boolean> isCliccato = new MutableLiveData<>(false);
 
     public MutableLiveData<Boolean> vaiAdAggiungiPortata = new MutableLiveData<>(false);
 
@@ -31,21 +37,44 @@ public class PersonalizzaMenuViewModel extends ViewModel {
         repository.setPersonalizzaMenuViewModel(this);
 
         menu = repository.getMenu();
+        tutti = new Categoria("Tutti");
+        categorie = new ArrayList<Categoria>(menu.getCategorie());
+        categorie.add(0,tutti);
 
         aggiornaListaCategorie();
+        aggiornaListaPortate(tutti);
     }
 
     public void aggiornaListaCategorie() {
-        listaCategorie.setValue(menu.getCategorie());
+        listaCategorie.setValue(categorie);
         menu.getCategorie().forEach(categoria -> {System.out.println(categoria.getNome());});
 
     }
+
     public void aggiornaListaPortate(Categoria categoriaSelezionata) {
-        listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
+        if (categoriaSelezionata.equals(tutti)) {
+            listaPortate.setValue(menu.getPortate());   //getAll
+        }
+        else {
+            listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
+        }
+    }
+
+    public void ordinaTutto() {
+        for (Categoria categoria : menu.getCategorie()) {
+                listaPortate.setValue(menu.getPortateOrdinateDellaCategoria(categoria));
+        }
+        listaPortate.setValue(menu.ordinaPortate());
+
     }
 
     public void impostaPortataSelezionata(Portata portata) {
         repository.setPortataSelezionata(portata);
+    }
+
+    public void setIsCliccato() {
+        isCliccato.setValue(true);
+        isCliccato.setValue(false);
     }
 
     public void setVaiAdAggiungiPortata() {

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,9 @@ public class PersonalizzaMenuFragment extends Fragment {
         osservaCambientoCategorie();
         osservaCambientoPortate();
 
+        osservaSeCliccato();
+        osservaSeCliccato1();
+
         osservaSeAggiungerePortata();
 
         return fragmentView;
@@ -75,6 +79,24 @@ public class PersonalizzaMenuFragment extends Fragment {
         personalizzaMenuViewModel.listaPortate.observe(getViewLifecycleOwner(), listaPortate ->
         {
             portateItemAdapter.setData(listaPortate);
+        });
+    }
+
+    public void osservaSeCliccato() {
+        personalizzaMenuViewModel.isCliccato.observe(getViewLifecycleOwner(), (isCliccato) -> {
+            personalizzaMenuBinding.sortButton.setBackgroundResource(R.drawable.btn_round_yellow);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    personalizzaMenuBinding.sortButton.setBackgroundResource(R.drawable.btn_round);
+                }
+            }, 100);
+        });
+    }
+
+    public void osservaSeCliccato1() {
+        personalizzaMenuViewModel.isCliccato.observe(getViewLifecycleOwner(), (isCliccato) -> {
+            personalizzaMenuViewModel.ordinaTutto();
         });
     }
 

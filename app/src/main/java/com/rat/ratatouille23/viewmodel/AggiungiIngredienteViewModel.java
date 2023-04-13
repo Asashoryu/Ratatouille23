@@ -8,6 +8,7 @@ import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +18,10 @@ public class AggiungiIngredienteViewModel extends ViewModel {
 
     Ingrediente ingrediente;
 
+    String unitaMisuraSelezionata;
+
+    public ArrayList<String> unitaDiMisura = new ArrayList<>();
+
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
     public MutableLiveData<String> messaggioAggiungiIngrediente = new MutableLiveData<>("");
@@ -24,6 +29,7 @@ public class AggiungiIngredienteViewModel extends ViewModel {
     public AggiungiIngredienteViewModel() {
         repository = Repository.getInstance();
         repository.setAggiungiIngredienteViewModel(this);
+        generaUnitaDiMisura();
     }
 
     public void aggiungiIngrediente(String nome, String costo, String quantita, String unitaMisura, String soglia, String descrizione) {
@@ -67,6 +73,11 @@ public class AggiungiIngredienteViewModel extends ViewModel {
         }
     }
 
+    public void generaUnitaDiMisura() {
+        unitaDiMisura.add("kg");
+        unitaDiMisura.add("L");
+    }
+
     public Boolean isInputAggiungiIngredienteValido(String nome, String costo, String quantita, String unitaMisura, String soglia, String descrizione) {
         if (nome == null || nome.isEmpty()) {
             // Handle the case where the 'nome' input is null or empty
@@ -103,6 +114,13 @@ public class AggiungiIngredienteViewModel extends ViewModel {
         return true;
     }
 
+    public String getUnitaMisuraSelezionata() {
+        return unitaMisuraSelezionata;
+    }
+
+    public void setUnitaMisuraSelezionata(String unitaMisuraSelezionata) {
+        this.unitaMisuraSelezionata = unitaMisuraSelezionata;
+    }
 
     public void setTornaIndietro() {
         tornaIndietro.setValue(true);

@@ -21,7 +21,7 @@
             android:id="@+id/txt_nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="nome"
+            android:text="nome *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
@@ -42,7 +42,7 @@
             android:id="@+id/txt_costo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="costo"
+            android:text="costo *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
@@ -68,7 +68,7 @@
             android:id="@+id/txt_categoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="categoria"
+            android:text="categoria *"
             android:textColor="@color/white"
             android:textSize="20dp" />
 

@@ -13,8 +13,11 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +45,35 @@ public class AggiungiIngredienteFragment extends Fragment {
         aggiungiIngredienteViewModel = new ViewModelProvider(this).get(AggiungiIngredienteViewModel.class);
         aggiungiIngredienteBinding.setAggiungiIngredienteViewModel(aggiungiIngredienteViewModel);
 
+        impostaSpinnerUnitaDiMisura();
         impostaSeekBar();
 
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
 
         return fragmentView;
+    }
+
+    public void impostaSpinnerUnitaDiMisura() {
+
+        Spinner unitaMisuraSpinner = aggiungiIngredienteBinding.unitaMisuraSpinner;
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, aggiungiIngredienteViewModel.unitaDiMisura);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitaMisuraSpinner.setAdapter(adapter);
+
+        unitaMisuraSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String unitaSelezionata = unitaMisuraSpinner.getSelectedItem().toString();
+                aggiungiIngredienteViewModel.setUnitaMisuraSelezionata(unitaSelezionata);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //do nothing
+            }
+        });
     }
 
     public void impostaSeekBar() {

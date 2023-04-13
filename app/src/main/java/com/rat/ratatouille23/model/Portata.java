@@ -1,6 +1,7 @@
 package com.rat.ratatouille23.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Portata {
@@ -78,5 +79,11 @@ public class Portata {
 
     public void setIngredienti(ArrayList<IngredientePortata> ingredientiPortata) {
         this.ingredientiPortata = ingredientiPortata;
+    }
+
+    static class NomeComparator implements Comparator<Portata> {
+        public int compare(Portata p1, Portata p2) {
+            return p1.getNome().compareTo(p2.getNome());
+        }
     }
 }
