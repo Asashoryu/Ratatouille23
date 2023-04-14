@@ -23,18 +23,38 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <EditText
-            android:id="@+id/nome_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/et_custom"
-            android:text="@{modificaPortataViewModel.getPortata().nome.toString}"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:maxLength="20"
-            android:paddingHorizontal="5dp"
-            android:textSize="25dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/nome_frame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/nome_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/et_custom"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="20"
+                android:paddingHorizontal="5dp"
+                android:text="@{modificaPortataViewModel.getPortata().nome.toString}"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/edit_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="@color/grey_light"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/txt_costo"
@@ -44,24 +64,37 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/costo_frame"
             android:layout_width="0dp"
             android:layout_height="wrap_content" >
 
             <EditText
                 android:id="@+id/costo_text"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:text="@{modificaPortataViewModel.getPortata().costo.toString}"
                 android:layout_weight="1"
-                android:textSize="25dp"
                 android:background="@drawable/et_custom"
                 android:ems="10"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:paddingHorizontal="5dp"
+                android:text="@{modificaPortataViewModel.getPortata().costo.toString}"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </FrameLayout>
+            <ImageButton
+                android:id="@+id/edit_costo"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="@color/grey_light"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/txt_categoria"
@@ -71,7 +104,7 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/categoria_frame"
             android:layout_width="0dp"
             android:layout_height="wrap_content" >
@@ -81,14 +114,27 @@
                 android:layout_width="150dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:paddingHorizontal="5dp"
-                android:maxLength="100"
-                android:textSize="25dp"
-                android:textColor="@color/black"
                 android:background="@drawable/et_custom"
-                android:ems="10" />
+                android:ems="10"
+                android:maxLength="100"
+                android:paddingHorizontal="5dp"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </FrameLayout>
+            <ImageButton
+                android:id="@+id/edit_categoria"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="@color/grey_light"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/categoria_spinner"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/txt_lista_allergeni"
@@ -98,17 +144,38 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <EditText
-            android:id="@+id/lista_allergeni_text"
-            android:layout_width="wrap_content"
-            android:layout_height= "wrap_content"
-            android:layout_weight="1"
-            android:paddingHorizontal="5dp"
-            android:maxLength="20"
-            android:textSize="25dp"
-            android:background="@drawable/et_custom"
-            android:ems="10"
-            android:inputType="textMultiLine" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/allergeni_frame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/lista_allergeni_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/et_custom"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:maxLength="20"
+                android:paddingHorizontal="5dp"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/edit_allergeni"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="@color/grey_light"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/txt_descrizione"
@@ -118,32 +185,56 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
-        <EditText
-            android:id="@+id/descrizione_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingHorizontal="5dp"
-            android:maxLength="20"
-            android:text="@{modificaPortataViewModel.getPortata().descrizione.toString}"
-            android:textSize="25dp"
-            android:background="@drawable/et_custom"
-            android:ems="10"
-            android:inputType="textMultiLine" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/descrizione_frame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/descrizione_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/et_custom"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:maxLength="20"
+                android:paddingHorizontal="5dp"
+                android:text="@{modificaPortataViewModel.getPortata().descrizione.toString}"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/edit_costo_portata"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="@color/grey_light"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btn_aggiungi"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:textColor="@color/black"
             android:onClick="@{() -> modificaPortataViewModel.modificaPortata(nomeText.getText().toString(),costoText.getText().toString(),modificaPortataViewModel.getCategoriaSelezionata().toString(),descrizioneText.toString())}"
-            android:text="aggiungi" />
+            android:text="Salva" />
 
         <Button
             android:id="@+id/btn_annulla"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:textColor="@color/black"
             android:onClick="@{() -> modificaPortataViewModel.setTornaIndietro()}"
-            android:text="annulla" />
+            android:text="Annulla" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_button"
@@ -157,9 +248,10 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_txt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:layout_marginHorizontal="50dp"
             app:constraint_referenced_ids="txt_nome,txt_costo,txt_categoria,txt_lista_allergeni,txt_descrizione"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toStartOf="@id/flow_et"
@@ -168,10 +260,11 @@
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_et"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:constraint_referenced_ids="nome_text,costo_frame,categoria_frame,lista_allergeni_text,descrizione_text"
+            android:layout_marginHorizontal="50dp"
+            app:constraint_referenced_ids="nome_frame,costo_frame,categoria_frame,allergeni_frame,descrizione_frame"
             app:layout_constraintBottom_toTopOf="@+id/flow_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/flow_txt"
@@ -181,10 +274,10 @@
             android:id="@+id/error_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="700dp"
             android:layout_margin="50dp"
+            android:maxWidth="700dp"
             android:padding="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/nome_text"
+            app:layout_constraintBottom_toTopOf="@+id/nome_frame"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -206,8 +299,8 @@
                 android:layout_width="30dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="10dp"
-                android:visibility="invisible"
                 android:src="@drawable/warning_sign"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/error_message"
                 app:layout_constraintTop_toTopOf="parent" />
