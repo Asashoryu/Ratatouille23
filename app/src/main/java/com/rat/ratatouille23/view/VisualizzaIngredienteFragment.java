@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentVisualizzaIngredienteBinding;
 import com.rat.ratatouille23.viewmodel.VisualizzaIngredienteViewModel;
@@ -22,6 +24,11 @@ public class VisualizzaIngredienteFragment extends Fragment {
     FragmentVisualizzaIngredienteBinding visualizzaIngredienteBinding;
 
     IngredientiItemAdapter ingredientiItemAdapter;
+
+    private boolean nomeDiverso = false;
+    private boolean costoDiverso = false;
+    private boolean quantitaDiversa = false;
+    private boolean descrizioneDiversa = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,10 +41,57 @@ public class VisualizzaIngredienteFragment extends Fragment {
         visualizzaIngredienteViewModel = new ViewModelProvider(this).get(VisualizzaIngredienteViewModel.class);
         visualizzaIngredienteBinding.setVisualizzaIngredienteViewModel(visualizzaIngredienteViewModel);
 
+        visualizzaIngredienteBinding.nomeText.setEnabled(false);
+        visualizzaIngredienteBinding.costoText.setEnabled(false);
+        visualizzaIngredienteBinding.quantitaText.setEnabled(false);
+        visualizzaIngredienteBinding.descrizioneText.setEnabled(false);
+
+        visualizzaIngredienteBinding.btnSalva.setEnabled(false);
+
+        visualizzaIngredienteBinding.nomeText.addTextChangedListener(new TextChangedListener<EditText> (visualizzaIngredienteBinding.nomeText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                String nome = visualizzaIngredienteBinding.nomeText.getText().toString();
+                nomeDiverso = visualizzaIngredienteViewModel.nomeDiverso(nome);
+                visualizzaIngredienteBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
+        visualizzaIngredienteBinding.costoText.addTextChangedListener(new TextChangedListener<EditText> (visualizzaIngredienteBinding.costoText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                Float costo = Float.parseFloat(visualizzaIngredienteBinding.costoText.getText().toString());
+                costoDiverso = visualizzaIngredienteViewModel.costoDiverso(costo);
+                visualizzaIngredienteBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
+        visualizzaIngredienteBinding.quantitaText.addTextChangedListener(new TextChangedListener<EditText> (visualizzaIngredienteBinding.quantitaText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                Float quantita = Float.parseFloat(visualizzaIngredienteBinding.quantitaText.getText().toString());
+                quantitaDiversa = visualizzaIngredienteViewModel.quantitaDiverso(quantita);
+                visualizzaIngredienteBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
+        visualizzaIngredienteBinding.descrizioneText.addTextChangedListener(new TextChangedListener<EditText> (visualizzaIngredienteBinding.descrizioneText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                String descrizione = visualizzaIngredienteBinding.descrizioneText.getText().toString();
+                descrizioneDiversa = visualizzaIngredienteViewModel.descrizioneDiverso(descrizione);
+                visualizzaIngredienteBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
 
         return fragmentView;
+    }
+
+    private boolean almenoUnoDiverso() {
+        return (nomeDiverso || costoDiverso || quantitaDiversa || descrizioneDiversa);
     }
 
     public void osservaSeTornareIndietro() {
@@ -60,5 +114,26 @@ public class VisualizzaIngredienteFragment extends Fragment {
 
     public void visualizzaToastConMessaggio(String messaggio) {
         Toast.makeText(visualizzaIngredienteBinding.getRoot().getContext(), messaggio, Toast.LENGTH_SHORT).show();
+    }
+
+    public abstract class TextChangedListener<T> implements TextWatcher {
+        private T target;
+
+        public TextChangedListener(T target) {
+            this.target = target;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            this.onTextChanged(target, s);
+        }
+
+        public abstract void onTextChanged(T target, Editable s);
     }
 }

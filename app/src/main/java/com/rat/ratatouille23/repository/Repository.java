@@ -595,6 +595,13 @@ public class Repository {
         }
     }
 
+    public void modificaIngrediente (Ingrediente newIng) throws IOException {
+        updateIngredientRetrofit(newIng.getNome(),newIng.getCosto(),newIng.getQuantita(),newIng.getUnitaMisura(),ingredienteSelezionato.getSoglia(),0.0f,newIng.getDescrizione());
+
+        dispensa.remove(ingredienteSelezionato);
+        dispensa.add(newIng);
+    }
+
 
     public void updateIngredientRetrofit(String name, float price, float quantity, String measure,
                                          float threshold, float tolerance, String description) throws IOException {

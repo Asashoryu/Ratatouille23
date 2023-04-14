@@ -35,7 +35,6 @@
             android:layout_weight="1"
             android:background="@drawable/et_custom"
             android:ems="10"
-            android:editable="false"
             android:inputType="textPersonName"
             android:paddingHorizontal="5dp"
             android:text="@{visualizzaIngredienteViewModel.getIngrediente().nome.toString()}"
@@ -68,32 +67,32 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/costo_frame"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" >
-
-            <ImageButton
-                android:id="@+id/edit_costo"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:background="@color/grey_light"
-                android:src="@drawable/baseline_edit_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/costo_text"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/costo_text"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/et_custom"
                 android:ems="10"
-                android:focusable="false"
                 android:inputType="numberDecimal"
                 android:paddingHorizontal="5dp"
                 android:text="@{visualizzaIngredienteViewModel.getIngrediente().costo.toString()}"
                 android:textSize="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/edit_costo"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="@color/grey_light"
+                android:src="@drawable/baseline_edit_24"
+                android:onClick="@{() -> visualizzaIngredienteViewModel.setCostoEditable(costoText)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -111,38 +110,58 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content" >
 
-            <EditText
-                android:focusable="false"
-                android:id="@+id/quantita_text"
-                android:layout_width="50dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/quantita_layout2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="25dp"
-                android:text="@{visualizzaIngredienteViewModel.getIngrediente().quantita.toString()}"
-                android:paddingHorizontal="5dp"
-                android:background="@drawable/et_custom"
-                android:ems="10"
-                android:inputType="numberDecimal"
+                android:layout_marginEnd="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/unitaMisura_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/quantita_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/et_custom"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="5dp"
+                    android:text="@{visualizzaIngredienteViewModel.getIngrediente().quantita.toString()}"
+                    android:textSize="25dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/edit_quantita"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@color/grey_light"
+                    android:src="@drawable/baseline_edit_24"
+                    android:onClick="@{() -> visualizzaIngredienteViewModel.setQuanitaEditable(quantitaText)}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
-                android:focusable="false"
                 android:id="@+id/unitaMisura_text"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25dp"
                 android:background="@color/blue_dark"
-                android:text="@{visualizzaIngredienteViewModel.getIngrediente().unitaMisura.toString()}"
-                android:paddingHorizontal="5dp"
-                android:layout_marginHorizontal="20dp"
-                android:textColor="@color/white"
                 android:ems="10"
                 android:inputType="number"
+                android:paddingHorizontal="5dp"
+                android:text="@{visualizzaIngredienteViewModel.getIngrediente().unitaMisura.toString()}"
+                android:textColor="@color/white"
+                android:textSize="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/quantita_text"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -168,7 +187,6 @@
             android:layout_weight="1"
             android:background="@drawable/et_custom"
             android:ems="10"
-            android:focusable="false"
             android:inputType="textPersonName"
             android:paddingHorizontal="5dp"
             android:text="@{visualizzaIngredienteViewModel.getIngrediente().descrizione.toString()}"
@@ -183,6 +201,7 @@
             android:layout_height="0dp"
             android:background="@color/grey_light"
             android:src="@drawable/baseline_edit_24"
+            android:onClick="@{() -> visualizzaIngredienteViewModel.setDescrizioneEditable(descrizioneText)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -193,15 +212,26 @@
             android:id="@+id/btn_elimina"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:textColor="@color/black"
             android:onClick="@{() -> visualizzaIngredienteViewModel.eliminaIngrediente()}"
             android:text="elimina" />
+
+        <Button
+            android:id="@+id/btn_salva"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_custom"
+            android:textColor="@color/black"
+            android:onClick="@{() -> visualizzaIngredienteViewModel.modificaIngrediente(nomeText.getText().toString(),costoText.getText().toString(),quantitaText.getText().toString(),descrizioneText.getText().toString())}"
+            android:text="Salva" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="25dp"
-            app:constraint_referenced_ids="btn_elimina"
+            app:constraint_referenced_ids="btn_elimina,btn_salva"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
