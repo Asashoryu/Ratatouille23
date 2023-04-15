@@ -1,5 +1,8 @@
 package com.rat.ratatouille23.viewmodel;
 
+import android.widget.EditText;
+import android.widget.Spinner;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -36,6 +39,46 @@ public class ModificaPortataViewModel extends ViewModel {
         repository = Repository.getInstance();
         repository.setModificaPortataViewModel(this);
         portata = repository.getPortataSelezionata();
+    }
+
+    public void setNomeEditabile(EditText nome) {
+        nome.setEnabled(!nome.isEnabled());
+        nome.setText(portata.getNome());
+    }
+
+    public void setCostoEditable(EditText costo) {
+        costo.setEnabled(!costo.isEnabled());
+        costo.setText(portata.getCosto().toString());
+    }
+
+    public void setCategoriaEditable(Spinner categoria) {
+        categoria.setEnabled(!categoria.isEnabled());
+    }
+
+    public void setAllergeniEditable(EditText allergeni) {
+        allergeni.setEnabled(!allergeni.isEnabled());
+        allergeni.setText(portata.getAllergeni());
+    }
+
+    public void setDescrizioneEditable(EditText descrizione) {
+        descrizione.setEnabled(!descrizione.isEnabled());
+        descrizione.setText(portata.getDescrizione());
+    }
+
+    public boolean nomeDiverso(String nome) {
+        return (!nome.equals(portata.getNome()));
+    }
+
+    public boolean costoDiverso(Float costo) {
+        return (!costo.equals(portata.getCosto()));
+    }
+
+    public boolean allergeniDiversi(String allergeni) {
+        return (!allergeni.equals(portata.getAllergeni()));
+    }
+
+    public boolean descrizioneDiversa(String descrizione) {
+        return (!descrizione.equals(portata.getDescrizione()));
     }
 
     public void modificaPortata (String nome, String costo, String categoria, String descrizione) {

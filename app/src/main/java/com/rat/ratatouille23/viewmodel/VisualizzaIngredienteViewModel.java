@@ -51,17 +51,21 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
 
     public void setNomeEditable (EditText nome) {
         nome.setEnabled(!nome.isEnabled());
+        nome.setText(ingrediente.getNome());
     }
 
     public void setCostoEditable (EditText costo) {
         costo.setEnabled(!costo.isEnabled());
+        costo.setText(ingrediente.getCosto().toString());
     }
 
     public void setQuanitaEditable (EditText quantita) {
         quantita.setEnabled(!quantita.isEnabled());
+        quantita.setText(ingrediente.getQuantita().toString());
     }
     public void setDescrizioneEditable (EditText descrizione) {
         descrizione.setEnabled(!descrizione.isEnabled());
+        descrizione.setText(ingrediente.getDescrizione());
     }
 
     public boolean nomeDiverso (String nome) {

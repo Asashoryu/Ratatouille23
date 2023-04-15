@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.rat.ratatouille23.R;
@@ -25,6 +28,11 @@ public class ModificaPortataFragment extends Fragment {
 
     FragmentModificaPortataBinding fragmentModificaPortataBinding;
 
+    private boolean nomeDiverso = false;
+    private boolean costoDiverso = false;
+    private boolean allergeniDiversi = false;
+    private boolean descrizioneDiversa = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,12 +44,60 @@ public class ModificaPortataFragment extends Fragment {
         modificaPortataViewModel = new ViewModelProvider(this).get(ModificaPortataViewModel.class);
         fragmentModificaPortataBinding.setModificaPortataViewModel(modificaPortataViewModel);
 
+        fragmentModificaPortataBinding.nomeText.setEnabled(false);
+        fragmentModificaPortataBinding.costoText.setEnabled(false);
+        fragmentModificaPortataBinding.categoriaSpinner.setEnabled(false);
+        fragmentModificaPortataBinding.listaAllergeniText.setEnabled(false);
+        fragmentModificaPortataBinding.descrizioneText.setEnabled(false);
+
+        fragmentModificaPortataBinding.btnSalva.setEnabled(false);
+
+        fragmentModificaPortataBinding.nomeText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.nomeText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                String nome = fragmentModificaPortataBinding.nomeText.getText().toString();
+                nomeDiverso = modificaPortataViewModel.nomeDiverso(nome);
+                fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
+        fragmentModificaPortataBinding.costoText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.costoText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                Float costo = Float.parseFloat(fragmentModificaPortataBinding.costoText.getText().toString());
+                costoDiverso = modificaPortataViewModel.costoDiverso(costo);
+                fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
+        fragmentModificaPortataBinding.listaAllergeniText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.listaAllergeniText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                String allergeni = fragmentModificaPortataBinding.listaAllergeniText.getText().toString();
+                allergeniDiversi = modificaPortataViewModel.allergeniDiversi(allergeni);
+                fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
+        fragmentModificaPortataBinding.descrizioneText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.descrizioneText) {
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+                String descrizione = fragmentModificaPortataBinding.nomeText.getText().toString();
+                descrizioneDiversa = modificaPortataViewModel.descrizioneDiversa(descrizione);
+                fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
+            }
+        });
+
         osservaSeTornareIndietro();
         osservaMessaggioErrore();
         impostaCategorieSpinner();
 
         return fragmentView;
 
+    }
+
+    private boolean almenoUnoDiverso() {
+        return (nomeDiverso || costoDiverso || allergeniDiversi || descrizioneDiversa);
     }
 
     public void impostaCategorieSpinner() {
@@ -84,5 +140,26 @@ public class ModificaPortataFragment extends Fragment {
                 modificaPortataViewModel.cancellaMessaggioModificaPortata();
             }
         });
+    }
+
+    public abstract class TextChangedListener<T> implements TextWatcher {
+        private T target;
+
+        public TextChangedListener(T target) {
+            this.target = target;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            this.onTextChanged(target, s);
+        }
+
+        public abstract void onTextChanged(T target, Editable s);
     }
 }

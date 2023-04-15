@@ -36,7 +36,7 @@
                 android:background="@drawable/et_custom"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:maxLength="20"
+                android:maxLength="40"
                 android:paddingHorizontal="5dp"
                 android:text="@{modificaPortataViewModel.getPortata().nome.toString}"
                 android:textSize="25dp"
@@ -50,6 +50,7 @@
                 android:layout_height="34dp"
                 android:background="@color/grey_light"
                 android:src="@drawable/baseline_edit_24"
+                android:onClick="@{() -> modificaPortataViewModel.setNomeEditabile(nomeText)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -90,6 +91,7 @@
                 android:layout_height="34dp"
                 android:background="@color/grey_light"
                 android:src="@drawable/baseline_edit_24"
+                android:onClick="@{() -> modificaPortataViewModel.setCostoEditable(costoText)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -130,6 +132,7 @@
                 android:layout_height="34dp"
                 android:background="@color/grey_light"
                 android:src="@drawable/baseline_edit_24"
+                android:onClick="@{() -> modificaPortataViewModel.setCategoriaEditable(categoriaSpinner)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/categoria_spinner"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -171,6 +174,7 @@
                 android:layout_height="34dp"
                 android:background="@color/grey_light"
                 android:src="@drawable/baseline_edit_24"
+                android:onClick="@{() -> modificaPortataViewModel.setAllergeniEditable(listaAllergeniText)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -212,6 +216,7 @@
                 android:layout_height="34dp"
                 android:background="@color/grey_light"
                 android:src="@drawable/baseline_edit_24"
+                android:onClick="@{() -> modificaPortataViewModel.setDescrizioneEditable(descrizioneText)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -219,7 +224,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/btn_aggiungi"
+            android:id="@+id/btn_salva"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_custom"
@@ -240,7 +245,7 @@
             android:id="@+id/flow_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="btn_aggiungi,btn_annulla"
+            app:constraint_referenced_ids="btn_salva,btn_annulla"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
