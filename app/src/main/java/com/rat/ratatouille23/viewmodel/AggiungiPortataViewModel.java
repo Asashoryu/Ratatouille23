@@ -1,7 +1,10 @@
 package com.rat.ratatouille23.viewmodel;
 
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.LiveData;
@@ -41,6 +44,8 @@ public class AggiungiPortataViewModel extends ViewModel {
 
     Portata portata;
 
+    boolean isCliccato = false;
+
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
     public MutableLiveData<String> messaggioAggiungiPortata = new MutableLiveData<>("");
@@ -54,11 +59,15 @@ public class AggiungiPortataViewModel extends ViewModel {
         repository.setAggiungiPortataViewModel(this);
     }
 
-    public void aggiungiPortata(String nome, String costo, String categoria, String allergeni, String descrizione) {
+    public void aggiungiPortata(String nome, String costo, String categoria, String allergeni, String descrizione, String newCat) {
         try {
             portata = null;
             checkPortata(nome,costo,categoria);
-            repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), categoria);
+            if (isCliccato) {
+                repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), newCat);
+            } else {
+                repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), categoria);
+            }
             System.err.println(nome + costo + categoria + descrizione);
             setTornaIndietro();
         } catch (Ratatouille23Exception | IOException | InterruptedException | ExecutionException e) {
@@ -82,6 +91,21 @@ public class AggiungiPortataViewModel extends ViewModel {
 
         if (!controlloStringhe) {
             throw new CampiPortataVuotiException();
+        }
+    }
+
+    public void isCliccato(EditText newCat, Spinner oldCat) {
+        newCat.setEnabled(!newCat.isEnabled());
+        oldCat.setEnabled(!newCat.isEnabled());
+
+        isCliccato = !isCliccato;
+
+        if (newCat.isEnabled()) {
+            newCat.setVisibility(View.VISIBLE);
+        }
+        else {
+            newCat.setVisibility(View.INVISIBLE);
+            newCat.setText("");
         }
     }
 

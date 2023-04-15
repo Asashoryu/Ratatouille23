@@ -39,6 +39,8 @@ public class AggiungiPortataFragment extends Fragment {
         aggiungiPortataViewModel = new ViewModelProvider(this).get(AggiungiPortataViewModel.class);
         aggiungiPortataBinding.setAggiungiPortataViewModel(aggiungiPortataViewModel);
 
+        aggiungiPortataBinding.newCategoriaText.setEnabled(false);
+
         impostaSpinner();
         impostaAutocompletamentoListener();
 
