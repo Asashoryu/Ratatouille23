@@ -82,7 +82,7 @@ public class ModificaPortataFragment extends Fragment {
         fragmentModificaPortataBinding.descrizioneText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.descrizioneText) {
             @Override
             public void onTextChanged(EditText target, Editable s) {
-                String descrizione = fragmentModificaPortataBinding.nomeText.getText().toString();
+                String descrizione = fragmentModificaPortataBinding.descrizioneText.getText().toString();
                 descrizioneDiversa = modificaPortataViewModel.descrizioneDiversa(descrizione);
                 fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
             }
