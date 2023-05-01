@@ -51,7 +51,7 @@ public class ModificaPortataViewModel extends ViewModel {
             icon1Displayed = false;
         } else {
             // Mettere una seconda icona alternativa
-            icon.setImageResource(R.drawable.baseline_add_24);
+            icon.setImageResource(R.drawable.baseline_settings_backup_restore_24);
             icon1Displayed = true;
         }
     }
