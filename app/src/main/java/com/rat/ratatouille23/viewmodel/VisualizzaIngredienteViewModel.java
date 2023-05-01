@@ -81,6 +81,9 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
     }
 
     public boolean descrizioneDiverso (String descrizione) {
+        if (ingrediente.getDescrizione() == null && descrizione.isEmpty()) {
+            return false;
+        }
         return (!descrizione.equals(ingrediente.getDescrizione()));
     }
 
