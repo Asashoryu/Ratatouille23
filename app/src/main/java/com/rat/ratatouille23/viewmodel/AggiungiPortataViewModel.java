@@ -62,10 +62,11 @@ public class AggiungiPortataViewModel extends ViewModel {
     public void aggiungiPortata(String nome, String costo, String categoria, String allergeni, String descrizione, String newCat) {
         try {
             portata = null;
-            checkPortata(nome,costo,categoria);
             if (isCliccato) {
+                checkPortata(nome,costo,newCat);
                 repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), newCat);
             } else {
+                checkPortata(nome,costo,categoria);
                 repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), categoria);
             }
             System.err.println(nome + costo + categoria + descrizione);

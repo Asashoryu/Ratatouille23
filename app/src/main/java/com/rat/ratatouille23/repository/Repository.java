@@ -98,7 +98,7 @@ public class Repository {
     private Ingrediente ingredienteSelezionato;
     private Menu menu;
 
-    private final String baseUrl = "http://192.168.1.8:8080/";
+    private final String baseUrl = "http://192.168.1.9:8080/";
 
     private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
     private static Repository questaRepository = null;
@@ -1077,6 +1077,7 @@ public class Repository {
         try {
             task.get(3, TimeUnit.SECONDS);
             if (task.get() != null && task.get().isSuccessful()) {
+                getMenu().getCategorie().add(new Categoria(categoria));
                 return true;
             } else {
                 throw new IOException("Errore nell'inserimento del piatto");
@@ -1539,7 +1540,6 @@ public class Repository {
                         break;
                     }
                 }
-
             }
         }
         return ordinazioniList;
