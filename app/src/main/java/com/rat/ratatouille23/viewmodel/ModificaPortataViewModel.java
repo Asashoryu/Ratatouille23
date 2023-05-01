@@ -74,10 +74,16 @@ public class ModificaPortataViewModel extends ViewModel {
     }
 
     public boolean allergeniDiversi(String allergeni) {
+        if (portata.getAllergeni() == null && allergeni.isEmpty()) {
+            return false;   //NON sono diversi
+        }
         return (!allergeni.equals(portata.getAllergeni()));
     }
 
     public boolean descrizioneDiversa(String descrizione) {
+        if (portata.getDescrizione() == null && descrizione.isEmpty()) {
+            return false;   //NON sono diversi
+        }
         return (!descrizione.equals(portata.getDescrizione()));
     }
 
