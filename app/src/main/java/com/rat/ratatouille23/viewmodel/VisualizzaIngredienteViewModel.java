@@ -1,10 +1,12 @@
 package com.rat.ratatouille23.viewmodel;
 
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
@@ -18,6 +20,8 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
     public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
 
     public MutableLiveData<String> messaggioVisualizzaIngrediente = new MutableLiveData<>("");
+
+    private boolean icon1Displayed = false;
 
     public VisualizzaIngredienteViewModel() {
         repository = Repository.getInstance();
@@ -49,23 +53,38 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
         setTornaIndietro();
     }
 
-    public void setNomeEditable (EditText nome) {
+    public void alternaIcon(ImageView icon) {
+        if (icon1Displayed) {
+            icon.setImageResource(R.drawable.baseline_edit_24);
+            icon1Displayed = false;
+        } else {
+            // Mettere una seconda icona alternativa
+            icon.setImageResource(R.drawable.baseline_settings_backup_restore_24);
+            icon1Displayed = true;
+        }
+    }
+
+    public void setNomeEditable (ImageView icona, EditText nome) {
         nome.setEnabled(!nome.isEnabled());
         nome.setText(ingrediente.getNome());
+        alternaIcon(icona);
     }
 
-    public void setCostoEditable (EditText costo) {
+    public void setCostoEditable (ImageView icona, EditText costo) {
         costo.setEnabled(!costo.isEnabled());
         costo.setText(ingrediente.getCosto().toString());
+        alternaIcon(icona);
     }
 
-    public void setQuanitaEditable (EditText quantita) {
+    public void setQuanitaEditable (ImageView icona, EditText quantita) {
         quantita.setEnabled(!quantita.isEnabled());
         quantita.setText(ingrediente.getQuantita().toString());
+        alternaIcon(icona);
     }
-    public void setDescrizioneEditable (EditText descrizione) {
+    public void setDescrizioneEditable (ImageView icona, EditText descrizione) {
         descrizione.setEnabled(!descrizione.isEnabled());
         descrizione.setText(ingrediente.getDescrizione());
+        alternaIcon(icona);
     }
 
     public boolean nomeDiverso (String nome) {
