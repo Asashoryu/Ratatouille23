@@ -1,11 +1,13 @@
 package com.rat.ratatouille23.viewmodel;
 
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.eccezioni.rat.menu.CampiPortataVuotiException;
 import com.rat.ratatouille23.eccezioni.rat.menu.PersonalizzaMenuException;
 import com.rat.ratatouille23.model.Allergene;
@@ -35,34 +37,52 @@ public class ModificaPortataViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioModificaPortata = new MutableLiveData<>("");
 
+    private boolean icon1Displayed = false;
+
     public ModificaPortataViewModel() {
         repository = Repository.getInstance();
         repository.setModificaPortataViewModel(this);
         portata = repository.getPortataSelezionata();
     }
 
-    public void setNomeEditabile(EditText nome) {
+    public void alternaIcon(ImageView icon) {
+        if (icon1Displayed) {
+            icon.setImageResource(R.drawable.baseline_edit_24);
+            icon1Displayed = false;
+        } else {
+            // Mettere una seconda icona alternativa
+            icon.setImageResource(R.drawable.baseline_add_24);
+            icon1Displayed = true;
+        }
+    }
+
+    public void setNomeEditabile(ImageView icona, EditText nome) {
         nome.setEnabled(!nome.isEnabled());
         nome.setText(portata.getNome());
+        alternaIcon(icona);
     }
 
-    public void setCostoEditable(EditText costo) {
+    public void setCostoEditable(ImageView icona, EditText costo) {
         costo.setEnabled(!costo.isEnabled());
         costo.setText(portata.getCosto().toString());
+        alternaIcon(icona);
     }
 
-    public void setCategoriaEditable(Spinner categoria) {
+    public void setCategoriaEditable(ImageView icona, Spinner categoria) {
         categoria.setEnabled(!categoria.isEnabled());
+        alternaIcon(icona);
     }
 
-    public void setAllergeniEditable(EditText allergeni) {
+    public void setAllergeniEditable(ImageView icona, EditText allergeni) {
         allergeni.setEnabled(!allergeni.isEnabled());
         allergeni.setText(portata.getAllergeni());
+        alternaIcon(icona);
     }
 
-    public void setDescrizioneEditable(EditText descrizione) {
+    public void setDescrizioneEditable(ImageView icona, EditText descrizione) {
         descrizione.setEnabled(!descrizione.isEnabled());
         descrizione.setText(portata.getDescrizione());
+        alternaIcon(icona);
     }
 
     public boolean nomeDiverso(String nome) {
