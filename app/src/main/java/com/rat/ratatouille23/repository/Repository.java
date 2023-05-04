@@ -1001,11 +1001,14 @@ public class Repository {
 
     public void aggiungiPortataAllaCategoria(Portata portata, String nomeCategoria) throws IOException, CategoriaNonTrovataException, ExecutionException, InterruptedException {
 
-        insertDishRetrofit(portata.getNome(), nomeCategoria, portata.getCosto(), true, "", portata.getDescrizione());
-
-        Categoria categoria = getCategoriaDiNome(nomeCategoria);
-        aggiungiPortataAllaCategoria(portata, categoria);
-        personalizzaMenuViewModel.aggiornaListaPortate(categoria);
+        insertDishRetrofit(portata.getNome(), nomeCategoria, portata.getCosto(), true, portata.getAllergeni(), portata.getDescrizione());
+        try {
+            Categoria categoria = getCategoriaDiNome(nomeCategoria);
+            aggiungiPortataAllaCategoria(portata, categoria);
+            personalizzaMenuViewModel.aggiornaListaPortate(categoria);
+        } catch (CategoriaNonTrovataException e) {
+            getMenu().getCategorie().add(new Categoria(nomeCategoria));
+        }
     }
 
     public boolean insertDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException, ExecutionException, InterruptedException {
@@ -1075,7 +1078,6 @@ public class Repository {
         try {
             task.get(3, TimeUnit.SECONDS);
             if (task.get() != null && task.get().isSuccessful()) {
-                getMenu().getCategorie().add(new Categoria(categoria));
                 return true;
             } else {
                 throw new IOException("Errore nell'inserimento del piatto");
