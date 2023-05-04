@@ -44,7 +44,7 @@ public class PersonalizzaMenuFragment extends Fragment {
         osservaCambientoCategorie();
         osservaCambientoPortate();
 
-        osservaSeCliccato();
+        osservaSeCliccatoOrdina();
 
         osservaSeAggiungerePortata();
 
@@ -80,7 +80,7 @@ public class PersonalizzaMenuFragment extends Fragment {
         });
     }
 
-    public void osservaSeCliccato() {
+    public void osservaSeCliccatoOrdina() {
         personalizzaMenuViewModel.isCliccatoOrdina.observe(getViewLifecycleOwner(), (isCliccato) -> {
             if (isCliccato) {
                 System.err.println("qui il click");
