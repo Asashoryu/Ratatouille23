@@ -30,6 +30,8 @@ public class ModificaPortataFragment extends Fragment {
 
     private boolean nomeDiverso = false;
     private boolean costoDiverso = false;
+
+    private boolean categoriaDiversa = false;
     private boolean allergeniDiversi = false;
     private boolean descrizioneDiversa = false;
 
@@ -97,7 +99,7 @@ public class ModificaPortataFragment extends Fragment {
     }
 
     private boolean almenoUnoDiverso() {
-        return (nomeDiverso || costoDiverso || allergeniDiversi || descrizioneDiversa);
+        return (nomeDiverso || costoDiverso || categoriaDiversa || allergeniDiversi || descrizioneDiversa);
     }
 
     public void impostaCategorieSpinner() {
@@ -107,11 +109,15 @@ public class ModificaPortataFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item,modificaPortataViewModel.getCategoryNames());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoriaSpinner.setAdapter(adapter);
+        modificaPortataViewModel.setIndexCategoriaIniziale(adapter.getPosition(modificaPortataViewModel.getCategoriaIniziale()));
+        categoriaSpinner.setSelection(adapter.getPosition(modificaPortataViewModel.getCategoriaIniziale()));
 
         categoriaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String categoriaSelezionata = categoriaSpinner.getSelectedItem().toString();
+                categoriaDiversa = modificaPortataViewModel.categoriaDiversa(categoriaSelezionata);
+                fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
                 modificaPortataViewModel.setCategoriaSelezionata(categoriaSelezionata);
             }
 

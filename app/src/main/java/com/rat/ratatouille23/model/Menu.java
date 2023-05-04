@@ -36,6 +36,20 @@ public class Menu {
         return categorie;
     }
 
+    public Categoria getCategoriaDaPortata (Portata portata) {
+        for (Categoria categoria : categorie) {
+            if (!categoria.getNome().equals("Tutti")) {
+                for (Portata portataIndex : getPortateDellaCategoria(categoria)) {
+                    if (portataIndex.equals(portata)) {
+                        System.out.println(categoria.getNome());
+                        return categoria;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public void setCategorie(ArrayList<Categoria> categorie) {
         this.categorie = categorie;
     }
