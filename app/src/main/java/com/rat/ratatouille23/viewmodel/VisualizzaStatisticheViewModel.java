@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,19 +84,18 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
+        System.err.println("year: " + year);
         return year;
     }
 
     public int getOffsetDayOfYear(String utcValue) {
         long timestamp = Long.parseLong(utcValue);
-        Date date = new Date(timestamp * 1000);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.setTime(date);
-        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        Instant instant = Instant.ofEpochSecond(timestamp);
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
+        int dayOfYear = zonedDateTime.getDayOfYear();
+        System.err.println("dayOfYear: " + dayOfYear);
         return dayOfYear;
     }
-
 
     public boolean checkEntryExists(float xCoordinate) {
         if (entries == null) {

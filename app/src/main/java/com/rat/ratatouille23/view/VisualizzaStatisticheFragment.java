@@ -297,7 +297,7 @@ public class VisualizzaStatisticheFragment extends Fragment {
 
             @Override
             public String getFormattedValue(float value) {
-                calendar.set(Calendar.DAY_OF_YEAR, (int) value + 1);
+                calendar.set(Calendar.DAY_OF_YEAR, (int) value);
                 Date date = calendar.getTime();
                 return dateFormat.format(date);
             }
@@ -429,7 +429,6 @@ public class VisualizzaStatisticheFragment extends Fragment {
         }
         return sum;
     }
-
 
 
     // Returns the minimum value in the array
