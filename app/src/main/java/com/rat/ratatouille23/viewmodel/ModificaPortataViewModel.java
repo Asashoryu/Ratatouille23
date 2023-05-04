@@ -28,6 +28,10 @@ public class ModificaPortataViewModel extends ViewModel {
 
     String categoriaSelezionata;
 
+    String categoriaIniziale;
+
+    int indexCategoriaIniziale;
+
     ArrayList<Allergene> listaAllergeniSelezionati;
 
     public int indiceCategoria = 0;
@@ -44,6 +48,7 @@ public class ModificaPortataViewModel extends ViewModel {
         repository = Repository.getInstance();
         repository.setModificaPortataViewModel(this);
         portata = repository.getPortataSelezionata();
+        categoriaIniziale = repository.getMenu().getCategoriaDaPortata(portata).getNome();
         System.err.println("Portata: " + portata.getNome() + " e " + portata.getAllergeni() + " e " + portata.getDescrizione());
     }
 
@@ -52,7 +57,6 @@ public class ModificaPortataViewModel extends ViewModel {
             icon.setImageResource(R.drawable.baseline_edit_24);
             icon1Displayed = false;
         } else {
-            // Mettere una seconda icona alternativa
             icon.setImageResource(R.drawable.baseline_settings_backup_restore_24);
             icon1Displayed = true;
         }
@@ -72,6 +76,7 @@ public class ModificaPortataViewModel extends ViewModel {
 
     public void setCategoriaEditable(ImageView icona, Spinner categoria) {
         categoria.setEnabled(!categoria.isEnabled());
+        categoria.setSelection(indexCategoriaIniziale);
         alternaIcon(icona);
     }
 
@@ -95,15 +100,19 @@ public class ModificaPortataViewModel extends ViewModel {
         return (!costo.equals(portata.getCosto()));
     }
 
+    public boolean categoriaDiversa(String categoria) {
+        return (!categoria.equals(categoriaIniziale));
+    }
+
     public boolean allergeniDiversi(String allergeni) {
-        if (portata.getAllergeni() == null && allergeni.isEmpty()) {
+        if (portata.getAllergeni().isEmpty() && allergeni.isEmpty()) {
             return false;   //NON sono diversi
         }
         return (!allergeni.equals(portata.getAllergeni()));
     }
 
     public boolean descrizioneDiversa(String descrizione) {
-        if (portata.getDescrizione() == null && descrizione.isEmpty()) {
+        if (portata.getDescrizione().isEmpty() && descrizione.isEmpty()) {
             return false;   //NON sono diversi
         }
         return (!descrizione.equals(portata.getDescrizione()));
@@ -187,4 +196,15 @@ public class ModificaPortataViewModel extends ViewModel {
         return categoriaSelezionata;
     }
 
+    public String getCategoriaIniziale() {
+        return categoriaIniziale;
+    }
+
+    public int getIndexCategoriaIniziale() {
+        return indexCategoriaIniziale;
+    }
+
+    public void setIndexCategoriaIniziale(int indexCategoriaIniziale) {
+        this.indexCategoriaIniziale = indexCategoriaIniziale;
+    }
 }

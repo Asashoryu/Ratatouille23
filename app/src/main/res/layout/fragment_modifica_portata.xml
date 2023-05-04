@@ -203,7 +203,7 @@
                 android:background="@drawable/et_custom"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:maxLength="20"
+                android:maxLength="100"
                 android:paddingHorizontal="5dp"
                 android:text="@{modificaPortataViewModel.getPortata().descrizione.toString}"
                 android:textSize="25dp"
