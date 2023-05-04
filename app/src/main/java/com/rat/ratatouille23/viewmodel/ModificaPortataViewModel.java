@@ -44,6 +44,7 @@ public class ModificaPortataViewModel extends ViewModel {
         repository = Repository.getInstance();
         repository.setModificaPortataViewModel(this);
         portata = repository.getPortataSelezionata();
+        System.err.println("Portata: " + portata.getNome() + " e " + portata.getAllergeni() + " e " + portata.getDescrizione());
     }
 
     public void alternaIcon(ImageView icon) {

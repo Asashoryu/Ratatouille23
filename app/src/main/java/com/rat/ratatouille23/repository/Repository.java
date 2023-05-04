@@ -148,8 +148,8 @@ public class Repository {
     private static HomeSupervisoreViewModel homeSupervisoreViewModel;
 
     private Repository() {
-        menu = getMenuTest();
-        tavoli = getTavoliTest();
+        menu = new Menu();
+        tavoli = new ArrayList<>();
         storicoOrdinazioniChiuse = StoricoOrdinazioniChiuse.getInstance();
         dispensa = new ArrayList<>();
         //setStoricoOrdinazioniChiuseTest();
@@ -869,8 +869,7 @@ public class Repository {
         menu = getAllDishesRetrofit();
     }
 
-    public Menu
-    getAllDishesRetrofit() throws IOException {
+    public Menu getAllDishesRetrofit() throws IOException {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         // Add an interceptor to the OkHttp client
@@ -940,7 +939,8 @@ public class Repository {
             boolean categoriaFound = false;
             for (Categoria categoria : categorie) {
                 if (categoria.getNome().equals(dish.getCategory())) {
-                    categoria.getPortate().add(new Portata(dish.getName(), dish.getPrice(), dish.getDescription(), null));
+                    categoria.getPortate().add(new Portata(dish.getName(), dish.getPrice(), dish.getDescription(), dish.getAllergy()));
+                    System.out.println("Debug: valori di portata nuova aggiunta: " +dish.getName() +" e " + dish.getDescription() + " e " + dish.getAllergy());
                     categoriaFound = true;
                     break;
                 }
@@ -948,10 +948,12 @@ public class Repository {
 
             if (!categoriaFound) {
                 ArrayList<Portata> portate = new ArrayList<>();
-                portate.add(new Portata(dish.getName(), dish.getPrice(), dish.getDescription(), null));
+                portate.add(new Portata(dish.getName(), dish.getPrice(), dish.getDescription(), dish.getAllergy()));
                 Categoria categoria = new Categoria(dish.getCategory());
                 categoria.setPortate(portate);
                 categorie.add(categoria);
+                System.out.println("Debug: valori di portata nuova aggiunta 2: " +dish.getName() +" e " + dish.getDescription() + " e " + dish.getAllergy());
+
             }
         }
         return categorie;
