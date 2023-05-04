@@ -43,10 +43,13 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
         Float valoreCosto = Float.parseFloat(costo);
         Float valoreQuantita = Float.parseFloat(quantita);
 
-        Ingrediente newIng = new Ingrediente(nome,valoreCosto,valoreQuantita,ingrediente.getUnitaMisura(),ingrediente.getSoglia(),descrizione);
+        ingrediente.setNome(nome);
+        ingrediente.setCosto(valoreCosto);
+        ingrediente.setQuantita(valoreQuantita);
+        ingrediente.setDescrizione(descrizione);
 
         try {
-            repository.modificaIngrediente(newIng);
+            repository.modificaIngrediente(ingrediente);
         } catch (IOException e) {
             setMessaggioVisualizzaIngrediente(e.getMessage());
         }

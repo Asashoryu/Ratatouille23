@@ -595,13 +595,9 @@ public class Repository {
         }
     }
 
-    public void modificaIngrediente (Ingrediente newIng) throws IOException {
-        updateIngredientRetrofit(newIng.getNome(),newIng.getCosto(),newIng.getQuantita(),newIng.getUnitaMisura(),ingredienteSelezionato.getSoglia(),0.0f,newIng.getDescrizione());
-
-        dispensa.remove(ingredienteSelezionato);
-        dispensa.add(newIng);
+    public void modificaIngrediente (Ingrediente ingrediente) throws IOException {
+        updateIngredientRetrofit(ingrediente.getNome(),ingrediente.getCosto(),ingrediente.getQuantita(),ingrediente.getUnitaMisura(),ingredienteSelezionato.getSoglia(),0.0f,ingrediente.getDescrizione());
     }
-
 
     public void updateIngredientRetrofit(String name, float price, float quantity, String measure,
                                          float threshold, float tolerance, String description) throws IOException {
@@ -1089,7 +1085,10 @@ public class Repository {
             e.printStackTrace();
             throw new IOException(e.getMessage());
         }
+    }
 
+    public void modificaPiatto(String nome, float costo, String categoria, String allergeni, String descrizione) throws IOException, InterruptedException {
+        updateDishRetrofit(nome, categoria, costo, true, allergeni, descrizione);
     }
 
     public boolean updateDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException, InterruptedException {

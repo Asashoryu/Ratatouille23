@@ -15,6 +15,7 @@ import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -107,14 +108,19 @@ public class ModificaPortataViewModel extends ViewModel {
         return (!descrizione.equals(portata.getDescrizione()));
     }
 
-    public void modificaPortata (String nome, String costo, String categoria, String descrizione) {
+    public void modificaPortata (String nome, String costo, String categoria, String allergeni, String descrizione) {
         portata = null;
         try {
             portata = null;
             checkPortata(nome,costo,categoria);
             System.err.println(nome + costo + categoria + descrizione);
+            try {
+                repository.modificaPiatto(nome, Float.parseFloat(costo), categoria, allergeni, descrizione);
+            } catch (IOException e) {
+                setMessaggioModificaPortata(e.getMessage());
+            }
             setTornaIndietro();
-        } catch (PersonalizzaMenuException e) {
+        } catch (Exception e) {
             setMessaggioModificaPortata(e.getMessage());
         }
     }
