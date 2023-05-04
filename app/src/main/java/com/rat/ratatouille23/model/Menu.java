@@ -18,20 +18,14 @@ public class Menu {
     public ArrayList<Portata> getTuttePortate() {
         ArrayList<Portata> portate = new ArrayList<>();
         for (Categoria categoria : categorie) {
-            portate.addAll(categoria.getPortate());
+            if (!categoria.getNome().equals("Tutti"))
+                portate.addAll(categoria.getPortate());
         }
         return portate;
     }
 
     public ArrayList<Portata> getPortateOrdinateDellaCategoria(Categoria categoria) {
         ArrayList<Portata> portateOrdinate = getPortateDellaCategoria(categoria);
-//        Collections.sort(portateOrdinate,new Portata.NomeComparator());
-        portateOrdinate = selectionSortPortate(portateOrdinate);
-        return portateOrdinate;
-    }
-
-    public ArrayList<Portata> ordinaPortate() {
-        ArrayList<Portata> portateOrdinate = getTuttePortate();
 //        Collections.sort(portateOrdinate,new Portata.NomeComparator());
         portateOrdinate = selectionSortPortate(portateOrdinate);
         return portateOrdinate;

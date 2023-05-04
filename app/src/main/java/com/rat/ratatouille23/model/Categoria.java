@@ -24,6 +24,11 @@ public class Categoria {
     }
 
     public void setPortate(ArrayList<Portata> portate) {
+        for (Portata portata: portate
+             ) {
+            System.err.println("setPortate : " + portata.getNome());
+
+        }
         this.portate = portate;
     }
 
