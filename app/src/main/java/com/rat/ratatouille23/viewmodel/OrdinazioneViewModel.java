@@ -46,7 +46,6 @@ public class OrdinazioneViewModel extends ViewModel {
         repository = Repository.getInstance();
         repository.setOrdinazioneViewModel(this);
 
-
         menu = repository.getMenu();
 
         tavolo = repository.getTavoloSelezionato();
@@ -121,15 +120,26 @@ public class OrdinazioneViewModel extends ViewModel {
 
     public void salvaOrdinazione() {
         try {
-            repository.salvaOrdinazioneTavoloSelezionato();
-            tavolo.occupaTavoloConOrdinazione(ordinazione);
-            ordinazioniTutte.add(ordinazione);
-            setTornaIndietro();
+            if (isOrdinazioneInputValido()) {
+                repository.salvaOrdinazioneTavoloSelezionato();
+                tavolo.occupaTavoloConOrdinazione(ordinazione);
+                ordinazioniTutte.add(ordinazione);
+                setTornaIndietro();
+            }
         } catch (IOException e) {
             System.err.println("ordinazione messaggio: "+ e.getMessage());
             setMessaggioOrdinazione(e.getMessage());
         }
     }
+
+    private boolean isOrdinazioneInputValido() {
+        if (ordinazione == null || ordinazione.getPortateOrdine().isEmpty()) {
+            setMessaggioOrdinazione("L'ordinazione non può essere vuota");
+            return false;
+        }
+        return true;
+    }
+
 
     public void setTornaIndietro() {
         tornaIndietro.setValue(true);
