@@ -98,7 +98,7 @@ public class Repository {
     private Ingrediente ingredienteSelezionato;
     private Menu menu;
 
-    private final String baseUrl = "http://192.168.1.3:8080/";
+    private final String baseUrl = "http://192.168.1.9:8080/";
 
     private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
     private static Repository questaRepository = null;
@@ -1195,6 +1195,19 @@ public class Repository {
         }
     }
 
+    public void eliminaPiattoSelezionato() { /*
+        deleteDishRetrofit(portataSelezionata);
+
+        Categoria vecchiaCategoria = menu.getCategoriaDaPortata(portata);
+        Categoria categoria = getCategoriaDiNome(nomeCategoria);
+        if (!categoria.getPortate().contains(portata)) {
+            vecchiaCategoria.getPortate().remove(portata);
+            aggiungiPortataAllaCategoria(portata, categoria);
+        }
+        personalizzaMenuViewModel.aggiornaListaPortate(categoria);
+        */
+    }
+
 
     public Categoria getCategoriaDiNome(String nomeCategoria) throws CategoriaNonTrovataException {
         List<Categoria> listaCategorieTrovate;
@@ -2167,4 +2180,5 @@ public class Repository {
     public void setHomeSupervisoreViewModel(HomeSupervisoreViewModel homeSupervisoreViewModel) {
         this.homeSupervisoreViewModel = homeSupervisoreViewModel;
     }
+
 }

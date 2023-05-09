@@ -127,6 +127,15 @@ public class ModificaPortataViewModel extends ViewModel {
         }
     }
 
+    public void eliminaPortata() {
+        try {
+            repository.eliminaPiattoSelezionato();
+            // setTornaIndietro();
+        } catch (Exception e) {
+            setMessaggioModificaPortata(e.getMessage());
+        }
+    }
+
     public void checkPortata(String nome, String costo, String categoria) throws CampiPortataVuotiException {
         boolean controlloStringhe = true;
         Set<String> stringSet = new HashSet<>();
