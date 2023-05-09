@@ -98,7 +98,7 @@ public class Repository {
     private Ingrediente ingredienteSelezionato;
     private Menu menu;
 
-    private final String baseUrl = "http://192.168.1.9:8080/";
+    private final String baseUrl = "http://192.168.1.3:8080/";
 
     private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
     private static Repository questaRepository = null;
@@ -1007,7 +1007,10 @@ public class Repository {
             aggiungiPortataAllaCategoria(portata, categoria);
             personalizzaMenuViewModel.aggiornaListaPortate(categoria);
         } catch (CategoriaNonTrovataException e) {
-            getMenu().getCategorie().add(new Categoria(nomeCategoria));
+            Categoria nuovaCat = new Categoria(nomeCategoria);
+            getMenu().getCategorie().add(nuovaCat);
+            aggiungiPortataAllaCategoria(portata, nuovaCat);
+            personalizzaMenuViewModel.aggiornaListaPortate(nuovaCat);
         }
     }
 
@@ -1091,8 +1094,25 @@ public class Repository {
         }
     }
 
-    public void modificaPiatto(String nome, float costo, String categoria, String allergeni, String descrizione) throws IOException, InterruptedException {
-        updateDishRetrofit(nome, categoria, costo, true, allergeni, descrizione);
+    public void modificaPiatto(String nome, float costo, String nomeCategoria, String allergeni, String descrizione) throws IOException, InterruptedException {
+        updateDishRetrofit(nome, nomeCategoria, costo, true, allergeni, descrizione);
+
+        Portata portata = getPortataSelezionata();
+        portata.setCosto(costo);
+        portata.setAllergeni(allergeni);
+        portata.setDescrizione(descrizione);
+
+        try {
+            Categoria vecchiaCategoria = menu.getCategoriaDaPortata(portata);
+            Categoria categoria = getCategoriaDiNome(nomeCategoria);
+            if (!categoria.getPortate().contains(portata)) {
+                vecchiaCategoria.getPortate().remove(portata);
+                aggiungiPortataAllaCategoria(portata, categoria);
+            }
+            personalizzaMenuViewModel.aggiornaListaPortate(categoria);
+        } catch (CategoriaNonTrovataException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean updateDishRetrofit(String nome, String categoria, float prezzo, Boolean ordinabile, String allergie, String descrizione) throws IOException, InterruptedException {
