@@ -7,6 +7,7 @@ import com.rat.ratatouille23.DTO.Dish_DTO;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -31,5 +32,9 @@ public interface DishService {
                             @Path("ordinabile") Boolean ordinabile,
                             @Path("allergie") String allergie,
                             @Path("descrizione") String descrizione);
+
+    @DELETE("/Dish/delete_piatto/{nome}")
+    Call<Void> deletePiatto(@Path("nome") String nome);
+
 }
 
