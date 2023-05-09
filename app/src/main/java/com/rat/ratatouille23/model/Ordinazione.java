@@ -91,6 +91,7 @@ public class Ordinazione {
                     // Otherwise, decrement the quantity by 1
                     currentPortataOrdine.decrementaQuantita();
                 }
+                aggiornaCostoTotalePortateOrdine();
                 return;
             }
         }
