@@ -28,31 +28,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content" >
 
-            <EditText
+            <TextView
                 android:id="@+id/nome_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/et_custom"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:maxLength="40"
                 android:paddingHorizontal="5dp"
                 android:text="@{modificaPortataViewModel.getPortata().nome.toString}"
                 android:textSize="25dp"
+                android:textColor="@color/grey_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/edit_nome"
-                android:layout_width="wrap_content"
-                android:layout_height="34dp"
-                android:background="@color/grey_light"
-                android:src="@drawable/baseline_edit_24"
-                android:onClick="@{() -> modificaPortataViewModel.setNomeEditabile(editNome, nomeText)}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -234,19 +222,19 @@
             android:text="Salva" />
 
         <Button
-            android:id="@+id/btn_annulla"
+            android:id="@+id/btn_elimina"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_custom"
             android:textColor="@color/black"
             android:onClick="@{() -> modificaPortataViewModel.setTornaIndietro()}"
-            android:text="Annulla" />
+            android:text="Elimina" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="btn_salva,btn_annulla"
+            app:constraint_referenced_ids="btn_salva,btn_elimina"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

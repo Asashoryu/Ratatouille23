@@ -28,7 +28,6 @@ public class ModificaPortataFragment extends Fragment {
 
     FragmentModificaPortataBinding fragmentModificaPortataBinding;
 
-    private boolean nomeDiverso = false;
     private boolean costoDiverso = false;
 
     private boolean categoriaDiversa = false;
@@ -46,22 +45,12 @@ public class ModificaPortataFragment extends Fragment {
         modificaPortataViewModel = new ViewModelProvider(this).get(ModificaPortataViewModel.class);
         fragmentModificaPortataBinding.setModificaPortataViewModel(modificaPortataViewModel);
 
-        fragmentModificaPortataBinding.nomeText.setEnabled(false);
         fragmentModificaPortataBinding.costoText.setEnabled(false);
         fragmentModificaPortataBinding.categoriaSpinner.setEnabled(false);
         fragmentModificaPortataBinding.listaAllergeniText.setEnabled(false);
         fragmentModificaPortataBinding.descrizioneText.setEnabled(false);
 
         fragmentModificaPortataBinding.btnSalva.setEnabled(false);
-
-        fragmentModificaPortataBinding.nomeText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.nomeText) {
-            @Override
-            public void onTextChanged(EditText target, Editable s) {
-                String nome = fragmentModificaPortataBinding.nomeText.getText().toString();
-                nomeDiverso = modificaPortataViewModel.nomeDiverso(nome);
-                fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
-            }
-        });
 
         fragmentModificaPortataBinding.costoText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.costoText) {
             @Override
@@ -104,7 +93,7 @@ public class ModificaPortataFragment extends Fragment {
     }
 
     private boolean almenoUnoDiverso() {
-        return (nomeDiverso || costoDiverso || categoriaDiversa || allergeniDiversi || descrizioneDiversa);
+        return (costoDiverso || categoriaDiversa || allergeniDiversi || descrizioneDiversa);
     }
 
     public void impostaCategorieSpinner() {

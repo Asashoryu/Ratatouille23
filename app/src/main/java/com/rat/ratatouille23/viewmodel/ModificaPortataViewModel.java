@@ -62,12 +62,6 @@ public class ModificaPortataViewModel extends ViewModel {
         }
     }
 
-    public void setNomeEditabile(ImageView icona, EditText nome) {
-        nome.setEnabled(!nome.isEnabled());
-        nome.setText(portata.getNome());
-        alternaIcon(icona);
-    }
-
     public void setCostoEditable(ImageView icona, EditText costo) {
         costo.setEnabled(!costo.isEnabled());
         costo.setText(portata.getCosto().toString());
