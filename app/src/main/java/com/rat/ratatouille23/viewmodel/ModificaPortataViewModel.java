@@ -119,9 +119,7 @@ public class ModificaPortataViewModel extends ViewModel {
     }
 
     public void modificaPortata (String nome, String costo, String categoria, String allergeni, String descrizione) {
-        portata = null;
         try {
-            portata = null;
             checkPortata(nome,costo,categoria);
             System.err.println(nome + costo + categoria + descrizione);
             try {

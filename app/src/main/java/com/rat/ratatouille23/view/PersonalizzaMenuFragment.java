@@ -60,8 +60,8 @@ public class PersonalizzaMenuFragment extends Fragment {
 
     public void ImpostaPortateItemAdapter() {
         portateItemAdapter = new PortateItemAdapter((portata) -> {
-            Navigation.findNavController(fragmentView).navigate(R.id.action_personalizzaMenuFragment_to_modificaPortataFragment);
             personalizzaMenuViewModel.impostaPortataSelezionata(portata);
+            Navigation.findNavController(fragmentView).navigate(R.id.action_personalizzaMenuFragment_to_modificaPortataFragment);
         });
         personalizzaMenuBinding.listaPortate.setAdapter(portateItemAdapter);
     }
