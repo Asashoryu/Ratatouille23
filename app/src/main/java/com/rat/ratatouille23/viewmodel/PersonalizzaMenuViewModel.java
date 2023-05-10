@@ -31,6 +31,8 @@ public class PersonalizzaMenuViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> vaiAdAggiungiPortata = new MutableLiveData<>(false);
 
+    public MutableLiveData<Boolean> tornaIndietro = new MutableLiveData<>(false);
+
     public MutableLiveData<String> messaggioPersonalizzaMenu = new MutableLiveData<>("");
 
     public PersonalizzaMenuViewModel() {
@@ -106,6 +108,14 @@ public class PersonalizzaMenuViewModel extends ViewModel {
     }
     public void setFalseVaiAdAggiungiPortata() {
         vaiAdAggiungiPortata.setValue(false);
+    }
+
+    public void setTornaIndietro() {
+        tornaIndietro.setValue(true);
+    }
+
+    public void setFalseTornaIndietro() {
+        tornaIndietro.setValue(false);
     }
 
     public void setMessaggioPersonalizzaMenu(String nuovoMessaggioPersonalizzaMenu) {
