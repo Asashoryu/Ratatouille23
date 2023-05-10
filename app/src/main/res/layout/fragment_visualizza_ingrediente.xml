@@ -28,30 +28,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content" >
 
-        <EditText
+        <TextView
             android:id="@+id/nome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/et_custom"
             android:ems="10"
             android:inputType="textPersonName"
             android:paddingHorizontal="5dp"
             android:text="@{visualizzaIngredienteViewModel.getIngrediente().nome.toString()}"
             android:textSize="25dp"
+            android:textColor="@color/grey_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/edit_nome"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="@color/grey_light"
-            android:src="@drawable/baseline_edit_24"
-            android:onClick="@{() -> visualizzaIngredienteViewModel.setNomeEditable(editNome, nomeText)}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -269,6 +258,44 @@
             android:onClick="@{() -> visualizzaIngredienteViewModel.setTornaIndietro()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/error_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="50dp"
+            android:maxWidth="700dp"
+            android:padding="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/nome_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="500dp"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/error_sign"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/warning_sign"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/error_message"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

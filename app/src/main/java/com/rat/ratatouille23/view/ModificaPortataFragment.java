@@ -56,10 +56,10 @@ public class ModificaPortataFragment extends Fragment {
             @Override
             public void onTextChanged(EditText target, Editable s) {
 
-                String stringaSpaccimmaCosto = fragmentModificaPortataBinding.costoText.getText().toString();
+                String stringaCosto = fragmentModificaPortataBinding.costoText.getText().toString();
                 float costo = -1.0f;
-                if (!stringaSpaccimmaCosto.isEmpty()) {
-                    costo = Float.parseFloat(stringaSpaccimmaCosto);
+                if (!stringaCosto.isEmpty()) {
+                    costo = Float.parseFloat(stringaCosto);
                 }
                 costoDiverso = modificaPortataViewModel.costoDiverso(costo);
                 fragmentModificaPortataBinding.btnSalva.setEnabled(almenoUnoDiverso());
