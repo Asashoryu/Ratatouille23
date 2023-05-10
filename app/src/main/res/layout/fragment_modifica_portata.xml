@@ -227,7 +227,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_custom"
             android:textColor="@color/black"
-            android:onClick="@{() -> modificaPortataViewModel.setTornaIndietro()}"
+            android:onClick="@{() -> modificaPortataViewModel.eliminaPortata()}"
             android:text="Elimina" />
 
         <androidx.constraintlayout.helper.widget.Flow

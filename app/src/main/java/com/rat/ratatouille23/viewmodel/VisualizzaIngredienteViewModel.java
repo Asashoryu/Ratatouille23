@@ -7,10 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.R;
+import com.rat.ratatouille23.eccezioni.rat.dispensa.PersonalizzaDispensaException;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class VisualizzaIngredienteViewModel extends ViewModel {
     Repository repository;
@@ -40,20 +43,40 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
     }
 
     public void modificaIngrediente(String nome, String costo, String quantita, String descrizione) {
-        Float valoreCosto = Float.parseFloat(costo);
-        Float valoreQuantita = Float.parseFloat(quantita);
-
-        ingrediente.setNome(nome);
-        ingrediente.setCosto(valoreCosto);
-        ingrediente.setQuantita(valoreQuantita);
-        ingrediente.setDescrizione(descrizione);
 
         try {
+            checkIngrediente(costo,quantita);
+            Float valoreCosto = Float.parseFloat(costo);
+            Float valoreQuantita = Float.parseFloat(quantita);
+
+            ingrediente.setNome(nome);
+            ingrediente.setCosto(valoreCosto);
+            ingrediente.setQuantita(valoreQuantita);
+            ingrediente.setDescrizione(descrizione);
+
             repository.modificaIngrediente(ingrediente);
-        } catch (IOException e) {
+            setTornaIndietro();
+        } catch (PersonalizzaDispensaException | IOException e) {
             setMessaggioVisualizzaIngrediente(e.getMessage());
         }
-        setTornaIndietro();
+    }
+
+    public void checkIngrediente (String costo, String quantita) throws PersonalizzaDispensaException {
+        boolean controlloStringhe = true;
+        Set<String> stringSet = new HashSet<>();
+        stringSet.add(costo);
+        stringSet.add(quantita);
+
+        for (String string: stringSet) {
+            if (string == null || string.trim().isEmpty()) {
+                controlloStringhe = false;
+                break;
+            }
+        }
+
+        if (!controlloStringhe) {
+            throw new PersonalizzaDispensaException();
+        }
     }
 
     public void alternaIcon(ImageView icon) {
@@ -65,12 +88,6 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
             icon.setImageResource(R.drawable.baseline_settings_backup_restore_24);
             icon1Displayed = true;
         }
-    }
-
-    public void setNomeEditable (ImageView icona, EditText nome) {
-        nome.setEnabled(!nome.isEnabled());
-        nome.setText(ingrediente.getNome());
-        alternaIcon(icona);
     }
 
     public void setCostoEditable (ImageView icona, EditText costo) {

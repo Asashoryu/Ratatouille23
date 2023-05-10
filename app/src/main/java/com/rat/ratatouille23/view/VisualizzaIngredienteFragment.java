@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentVisualizzaIngredienteBinding;
 import com.rat.ratatouille23.viewmodel.VisualizzaIngredienteViewModel;
@@ -25,7 +26,6 @@ public class VisualizzaIngredienteFragment extends Fragment {
 
     IngredientiItemAdapter ingredientiItemAdapter;
 
-    private boolean nomeDiverso = false;
     private boolean costoDiverso = false;
     private boolean quantitaDiversa = false;
     private boolean descrizioneDiversa = false;
@@ -41,26 +41,20 @@ public class VisualizzaIngredienteFragment extends Fragment {
         visualizzaIngredienteViewModel = new ViewModelProvider(this).get(VisualizzaIngredienteViewModel.class);
         visualizzaIngredienteBinding.setVisualizzaIngredienteViewModel(visualizzaIngredienteViewModel);
 
-        visualizzaIngredienteBinding.nomeText.setEnabled(false);
         visualizzaIngredienteBinding.costoText.setEnabled(false);
         visualizzaIngredienteBinding.quantitaText.setEnabled(false);
         visualizzaIngredienteBinding.descrizioneText.setEnabled(false);
 
         visualizzaIngredienteBinding.btnSalva.setEnabled(false);
 
-        visualizzaIngredienteBinding.nomeText.addTextChangedListener(new TextChangedListener<EditText> (visualizzaIngredienteBinding.nomeText) {
-            @Override
-            public void onTextChanged(EditText target, Editable s) {
-                String nome = visualizzaIngredienteBinding.nomeText.getText().toString();
-                nomeDiverso = visualizzaIngredienteViewModel.nomeDiverso(nome);
-                visualizzaIngredienteBinding.btnSalva.setEnabled(almenoUnoDiverso());
-            }
-        });
-
         visualizzaIngredienteBinding.costoText.addTextChangedListener(new TextChangedListener<EditText> (visualizzaIngredienteBinding.costoText) {
             @Override
             public void onTextChanged(EditText target, Editable s) {
-                Float costo = Float.parseFloat(visualizzaIngredienteBinding.costoText.getText().toString());
+                String stringaCosto = visualizzaIngredienteBinding.costoText.getText().toString();
+                float costo = -1.0f;
+                if (!stringaCosto.isEmpty()) {
+                    costo = Float.parseFloat(stringaCosto);
+                }
                 costoDiverso = visualizzaIngredienteViewModel.costoDiverso(costo);
                 visualizzaIngredienteBinding.btnSalva.setEnabled(almenoUnoDiverso());
             }
@@ -69,7 +63,11 @@ public class VisualizzaIngredienteFragment extends Fragment {
         visualizzaIngredienteBinding.quantitaText.addTextChangedListener(new TextChangedListener<EditText> (visualizzaIngredienteBinding.quantitaText) {
             @Override
             public void onTextChanged(EditText target, Editable s) {
-                Float quantita = Float.parseFloat(visualizzaIngredienteBinding.quantitaText.getText().toString());
+                String stringaQuantita = visualizzaIngredienteBinding.quantitaText.getText().toString();
+                float quantita = -1.0f;
+                if (!stringaQuantita.isEmpty()) {
+                    quantita = Float.parseFloat(stringaQuantita);
+                }
                 quantitaDiversa = visualizzaIngredienteViewModel.quantitaDiverso(quantita);
                 visualizzaIngredienteBinding.btnSalva.setEnabled(almenoUnoDiverso());
             }
@@ -91,7 +89,7 @@ public class VisualizzaIngredienteFragment extends Fragment {
     }
 
     private boolean almenoUnoDiverso() {
-        return (nomeDiverso || costoDiverso || quantitaDiversa || descrizioneDiversa);
+        return (costoDiverso || quantitaDiversa || descrizioneDiversa);
     }
 
     public void osservaSeTornareIndietro() {
@@ -106,7 +104,9 @@ public class VisualizzaIngredienteFragment extends Fragment {
     public void osservaMessaggioErrore() {
         visualizzaIngredienteViewModel.messaggioVisualizzaIngrediente.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (visualizzaIngredienteViewModel.isNuovoMessaggioVisualizzaIngrediente()) {
-                visualizzaToastConMessaggio(messaggio);
+                visualizzaIngredienteBinding.errorFrame.setBackgroundResource(R.drawable.error_background);
+                visualizzaIngredienteBinding.errorMessage.setText(messaggio);
+                visualizzaIngredienteBinding.errorSign.setVisibility(View.VISIBLE);
                 visualizzaIngredienteViewModel.cancellaMessaggioVisualizzaIngrediente();
             }
         });
