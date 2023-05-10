@@ -66,6 +66,9 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
 
     public void setTornaIndietro() {
         tornaIndietro.setValue(true);
-        tornaIndietro.setValue(true);
+    }
+
+    public void setFalseTornaIndietro() {
+        tornaIndietro.setValue(false);
     }
 }
