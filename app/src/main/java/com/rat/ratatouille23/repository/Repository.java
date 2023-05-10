@@ -1195,18 +1195,89 @@ public class Repository {
         }
     }
 
-    public void eliminaPiattoSelezionato() { /*
+    public void eliminaPiattoSelezionato() throws IOException {
         deleteDishRetrofit(portataSelezionata);
-
-        Categoria vecchiaCategoria = menu.getCategoriaDaPortata(portata);
-        Categoria categoria = getCategoriaDiNome(nomeCategoria);
-        if (!categoria.getPortate().contains(portata)) {
-            vecchiaCategoria.getPortate().remove(portata);
-            aggiungiPortataAllaCategoria(portata, categoria);
+        Categoria categoriaPortata = menu.getCategoriaDaPortata(portataSelezionata);
+        categoriaPortata.getPortate().remove(portataSelezionata);
+        // eliminazione categoria vuota
+        if (categoriaPortata.getPortate().isEmpty()) {
+            menu.getCategorie().remove(categoriaPortata);
         }
-        personalizzaMenuViewModel.aggiornaListaPortate(categoria);
-        */
+        personalizzaMenuViewModel.aggiornaListaPortate(categoriaPortata);
     }
+
+    private void deleteDishRetrofit(Portata portata) throws IOException {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        // Add an interceptor to the OkHttp client
+        httpClient.addInterceptor(new Interceptor() {
+            @NotNull
+            @Override
+            public okhttp3.Response intercept(@NotNull Chain chain) throws IOException {
+                // Get the request
+                Request request = chain.request();
+
+                // Get the URL as a string and print it
+                String url = request.url().toString();
+                System.out.println("Request URL: " + url);
+
+                // Proceed with the request
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        DishService service = retrofit.create(DishService.class);
+
+        Call<Void> call = service.deletePiatto(portata.getNome());
+
+        AsyncTask<Void, Void, Response<Void>> task = new AsyncTask<Void, Void, Response<Void>>() {
+            @Override
+            protected Response<Void> doInBackground(Void... voids) {
+                try {
+                    Response<Void> response = call.execute();
+                    return response;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Response<Void> response) {
+                if (response != null && response.isSuccessful()) {
+                    System.out.println("Piatto eliminato con successo");
+                } else {
+                    int statusCode = response != null ? response.code() : -1;
+                    String message = "Errore nell'eliminazione del piatto. Status code: " + statusCode;
+                    System.out.println(message);
+                }
+            }
+        };
+        task.execute();
+
+        // Wait for the response for a maximum of 3 seconds
+        try {
+            task.get(3, TimeUnit.SECONDS);
+            if (task.get() != null && task.get().isSuccessful()) {
+                System.out.println("Piatto eliminato con successo");
+            } else {
+                throw new IOException("Errore nell'eliminazione del piatto");
+            }
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            throw new IOException("Timeout nell'eliminazione del piatto");
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
+
 
 
     public Categoria getCategoriaDiNome(String nomeCategoria) throws CategoriaNonTrovataException {
