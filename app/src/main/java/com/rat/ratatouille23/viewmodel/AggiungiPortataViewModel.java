@@ -170,7 +170,6 @@ public class AggiungiPortataViewModel extends ViewModel {
             for (JsonElement productElement : products) {
                 if (productElement != null && productElement.isJsonObject()) {
                     JsonObject product = productElement.getAsJsonObject();
-
                     if (product.has("product_name") && !product.get("product_name").isJsonNull()) {
                         String suggestion = product.get("product_name").getAsString();
                         if (!suggestionSet.contains(suggestion)) {
