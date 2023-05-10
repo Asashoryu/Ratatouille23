@@ -1202,8 +1202,11 @@ public class Repository {
         // eliminazione categoria vuota
         if (categoriaPortata.getPortate().isEmpty()) {
             menu.getCategorie().remove(categoriaPortata);
+            personalizzaMenuViewModel.aggiornaListaPortate(null);
         }
-        personalizzaMenuViewModel.aggiornaListaPortate(categoriaPortata);
+        else {
+            personalizzaMenuViewModel.aggiornaListaPortate(categoriaPortata);
+        }
     }
 
     private void deleteDishRetrofit(Portata portata) throws IOException {

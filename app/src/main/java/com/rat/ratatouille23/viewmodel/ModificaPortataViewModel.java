@@ -130,6 +130,7 @@ public class ModificaPortataViewModel extends ViewModel {
     public void eliminaPortata() {
         try {
             repository.eliminaPiattoSelezionato();
+            System.err.println("raggiunto ultimo rigo di eliminaPortata()");
             setTornaIndietro();
         } catch (Exception e) {
             setMessaggioModificaPortata(e.getMessage());

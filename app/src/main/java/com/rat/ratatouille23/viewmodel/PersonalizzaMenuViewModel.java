@@ -61,7 +61,7 @@ public class PersonalizzaMenuViewModel extends ViewModel {
     }
 
     public void aggiornaListaPortate(Categoria categoriaSelezionata) {
-        if (categoriaSelezionata == tutti) {
+        if (categoriaSelezionata == tutti || categoriaSelezionata == null) {
             tutti.setPortate(menu.getTuttePortate());
             listaPortate.setValue(menu.getPortateDellaCategoria(tutti));
         }
