@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
+import com.rat.ratatouille23.adapter.IngredientiPortataItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentAssociaIngredientiBinding;
 import com.rat.ratatouille23.viewmodel.AssociaIngredientiViewModel;
 
@@ -22,7 +23,7 @@ public class AssociaIngredientiFragment extends Fragment {
     View fragmentView;
     FragmentAssociaIngredientiBinding associaIngredientiBinding;
 
-    IngredientiItemAdapter ingredientiPortataItemAdapter;
+    IngredientiPortataItemAdapter ingredientiPortataItemAdapter;
 
     IngredientiItemAdapter ingredientiNonPortataItemAdapter;
 
@@ -48,7 +49,7 @@ public class AssociaIngredientiFragment extends Fragment {
     }
 
     public void impostaIngredientiPortataItemAdapter() {
-        ingredientiPortataItemAdapter = new IngredientiItemAdapter((ingrediente)-> {});
+        ingredientiPortataItemAdapter = new IngredientiPortataItemAdapter((ingrediente)-> {});
         associaIngredientiBinding.listaIngredientiPortata.setAdapter(ingredientiPortataItemAdapter);
     }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.model.IngredientePortata;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
 
@@ -13,7 +14,7 @@ public class AssociaIngredientiViewModel extends ViewModel {
     Repository repository;
 
     Portata portata;
-    public MutableLiveData<ArrayList<Ingrediente>> listaIngredientiPortata = new MutableLiveData<ArrayList<Ingrediente>>();
+    public MutableLiveData<ArrayList<IngredientePortata>> listaIngredientiPortata = new MutableLiveData<ArrayList<IngredientePortata>>();
 
     public MutableLiveData<ArrayList<Ingrediente>> listaIngredientiNonPortata = new MutableLiveData<ArrayList<Ingrediente>>();
 
@@ -42,7 +43,7 @@ public class AssociaIngredientiViewModel extends ViewModel {
     }
 
     public void aggiornaListaIngredientiPortata() {
-        listaIngredientiPortata.setValue(portata.getIngredienti());
+        listaIngredientiPortata.setValue(portata.getIngredientiPortata());
     }
 
     public void aggiornaListaIngredientiNonPortata() {
