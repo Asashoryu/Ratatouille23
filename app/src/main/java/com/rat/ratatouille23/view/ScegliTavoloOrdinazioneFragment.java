@@ -83,6 +83,7 @@ public class ScegliTavoloOrdinazioneFragment extends Fragment {
     public void osservaSeTornareIndietro() {
         scegliTavoloOrdinazioneViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (tornaIndietro) -> {
             if (tornaIndietro) {
+                scegliTavoloOrdinazioneViewModel.setFalseTornaIndietro();
                 Navigation.findNavController(fragmentView).popBackStack();
             }
         });
