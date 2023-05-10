@@ -99,7 +99,7 @@ public class OrdinazioneViewModel extends ViewModel {
                         if (portataOrdine.getPortata().getIngredientiPortata().contains(ingredientePortata)) {
                             float quantitaUsata = portataOrdine.getQuantitaIngredienteUsata(ingrediente);
                             quantitaIngredienteDisponibile -= quantitaUsata;
-                            if (quantitaIngredienteDisponibile < ingrediente.getSoglia()) {
+                            if (quantitaIngredienteDisponibile < 0.0f) {
                                 ordinazione.decrementaPortata(portata);
                                 return false;
                             }
