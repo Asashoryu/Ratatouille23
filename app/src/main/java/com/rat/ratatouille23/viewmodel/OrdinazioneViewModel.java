@@ -88,16 +88,19 @@ public class OrdinazioneViewModel extends ViewModel {
     public boolean isIngredientiDisponibiliPerPortata(Portata portata) {
         Set<Ordinazione> allOrdinazioni = new HashSet<>(ordinazioniTutte);
         allOrdinazioni.add(ordinazione);
+        ordinazione.incrementaPortata(portata);
         for (IngredientePortata ingredientePortata : portata.getIngredientiPortata()) {
             Ingrediente ingrediente = ingredientePortata.getIngrediente();
+            System.err.println("Ingrediente : " +ingrediente.getNome() + " " + ingrediente.getQuantita() + " " + ingrediente.getSoglia());
             float quantitaIngredienteDisponibile = ingrediente.getQuantita();
             for (Ordinazione unaOrdinazione : allOrdinazioni) {
                 if (!unaOrdinazione.getChiusa()) {
                     for (PortataOrdine portataOrdine : unaOrdinazione.getPortateOrdine()) {
-                        if (portataOrdine.getPortata().equals(portata)) {
+                        if (portataOrdine.getPortata().getIngredientiPortata().contains(ingredientePortata)) {
                             float quantitaUsata = portataOrdine.getQuantitaIngredienteUsata(ingrediente);
                             quantitaIngredienteDisponibile -= quantitaUsata;
-                            if (quantitaIngredienteDisponibile < ingredientePortata.getQuantita()) {
+                            if (quantitaIngredienteDisponibile < ingrediente.getSoglia()) {
+                                ordinazione.decrementaPortata(portata);
                                 return false;
                             }
                         }
@@ -105,6 +108,7 @@ public class OrdinazioneViewModel extends ViewModel {
                 }
             }
         }
+        ordinazione.decrementaPortata(portata);
         return true;
     }
 
