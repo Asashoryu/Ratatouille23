@@ -47,6 +47,7 @@ public class PersonalizzaMenuFragment extends Fragment {
         osservaSeCliccatoOrdina();
 
         osservaSeAggiungerePortata();
+        osservaSeTornareIndietro();
 
         return fragmentView;
     }
@@ -99,9 +100,18 @@ public class PersonalizzaMenuFragment extends Fragment {
 
     public void osservaSeAggiungerePortata() {
         personalizzaMenuViewModel.vaiAdAggiungiPortata.observe(getViewLifecycleOwner(), (isVaiAvanti) -> {
-            if (isVaiAvanti == true) {
+            if (isVaiAvanti) {
                 personalizzaMenuViewModel.setFalseVaiAdAggiungiPortata();
                 Navigation.findNavController(fragmentView).navigate(R.id.action_personalizzaMenuFragment_to_aggiungiPortataFragment);
+            }
+        });
+    }
+
+    public void osservaSeTornareIndietro() {
+        personalizzaMenuViewModel.tornaIndietro.observe(getViewLifecycleOwner(), (isTornaIndietro) -> {
+            if (isTornaIndietro) {
+                personalizzaMenuViewModel.setFalseTornaIndietro();
+                Navigation.findNavController(fragmentView).popBackStack();
             }
         });
     }

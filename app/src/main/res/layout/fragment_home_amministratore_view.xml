@@ -74,9 +74,9 @@
             android:layout_height="70dp"
             android:layout_margin="20dp"
             android:background="@drawable/btn_custom"
-            android:src="@drawable/baseline_logout_24"
             android:onClick="@{() -> homeAmministratoreViewModel.setLogOut()}"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/baseline_logout_24"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
