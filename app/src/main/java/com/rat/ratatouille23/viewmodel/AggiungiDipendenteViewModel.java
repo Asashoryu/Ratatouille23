@@ -11,6 +11,7 @@ import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +46,7 @@ public class AggiungiDipendenteViewModel extends ViewModel {
             repository.aggiungiDipendente(dipendente);
             System.err.println(nome + cognome + username + ruolo + password);
             setTornaIndietro();
-        } catch (AggiungiDipendenteException e) {
+        } catch (AggiungiDipendenteException | IOException e) {
             setMessaggioAggiungiDipendente(e.getMessage());
         }
     }

@@ -1331,12 +1331,12 @@ public class Repository {
         }
     }
 
-    public void aggiungiDipendente(Dipendente dipendente) throws AggiungiDipendenteException {
+    public void aggiungiDipendente(Dipendente dipendente) throws AggiungiDipendenteException, IOException {
         //TODO: inserire il dipendente nel backend
         creaDipendenteRetrofit(dipendente.getUsername(), dipendente.getPassword(), dipendente.getNome(), dipendente.getCognome(), dipendente.getRuolo().toString(), String.valueOf((dipendente.getReimpostata())));
     }
 
-    public void creaDipendenteRetrofit(String username, String password, String nome, String cognome, String ruolo, String isReimpostata) throws AggiungiDipendenteException {
+    public void creaDipendenteRetrofit(String username, String password, String nome, String cognome, String ruolo, String isReimpostata) throws AggiungiDipendenteException, IOException {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         // Add an interceptor to the OkHttp client
@@ -1366,31 +1366,48 @@ public class Repository {
 
         Call<Void> call = service.crea(username, password, nome, cognome, ruolo, isReimpostata);
 
+        AsyncTask<Void, Void, Response<Void>> task = new AsyncTask<Void, Void, Response<Void>>() {
+            @Override
+            protected Response<Void> doInBackground(Void... voids) {
+                try {
+                    Response<Void> response = call.execute();
+                    return response;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Response<Void> response) {
+                if (response != null && response.isSuccessful()) {
+                    System.out.println("Dipendente creato con successo");
+                } else {
+                    int statusCode = response != null ? response.code() : -1;
+                    String message = "Errore nella creazione del dipendente. Status code: " + statusCode;
+                    System.out.println(message);
+                }
+            }
+        };
+        task.execute();
+
+        // Wait for the response for a maximum of 3 seconds
         try {
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        System.out.println("Dipendente creato con successo");
-                    } else {
-                        System.out.println("Errore nella creazione del dipendente");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-
-            // Wait for the response for a maximum of 3 seconds
-            Thread.sleep(3000);
-
-        } catch (InterruptedException e) {
+            task.get(3, TimeUnit.SECONDS);
+            if (task.get() != null && task.get().isSuccessful()) {
+                System.out.println("Dipendente creato con successo");
+            } else {
+                throw new IOException("Errore nella creazione del dipendente");
+            }
+        } catch (TimeoutException e) {
             e.printStackTrace();
-            throw new AggiungiDipendenteException(e.getMessage());
+            throw new IOException("Timeout nella creazione del dipendente");
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
         }
     }
+
 
 
     public void aggiungiPortataAllaCategoria(Portata portata, Categoria Categoria) {

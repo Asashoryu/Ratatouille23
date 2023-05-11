@@ -15,7 +15,7 @@ public interface IngridientService {
     @GET("/Ingridient/get_all_ingridients")
     Call<List<Ingridient_DTO>> getAllIngredients();
 
-    @POST("/Ingridient/save_ingridient/{name}/{price}/{quantity}/{misura}/{soglia}/{tolleranza}/{description}")
+    @POST("/Ingridient/insert_ingridient/{name}/{price}/{quantity}/{misura}/{soglia}/{tolleranza}/{description}")
     Call<Void> insertIngredient(@Path("name") String nome, @Path("price") float prezzo,
                                 @Path("quantity") float quantita, @Path("misura") String misura,
                                 @Path("soglia") float soglia, @Path("tolleranza") float tolleranza,
