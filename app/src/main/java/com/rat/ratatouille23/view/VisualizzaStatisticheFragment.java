@@ -248,7 +248,7 @@ public class VisualizzaStatisticheFragment extends Fragment {
 
         // Create data sets for each month with a specific color
         ArrayList<BarDataSet> dataSets = new ArrayList<>();
-        int[] colors = new int[]{Color.WHITE, Color.BLUE};
+        int[] colors = new int[]{Color.WHITE, Color.CYAN};
         int monthIndex = -1;
         BarDataSet dataSet = null;
 
@@ -292,6 +292,10 @@ public class VisualizzaStatisticheFragment extends Fragment {
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
         xAxis.setCenterAxisLabels(false);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setTextSize(20);
+        xAxis.setAvoidFirstLastClipping(true);
+        xAxis.setXOffset(10);
         xAxis.setValueFormatter(new ValueFormatter() {
             private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
 
@@ -306,6 +310,8 @@ public class VisualizzaStatisticheFragment extends Fragment {
         // Set Y-axis attributes
         YAxis yAxisLeft = chart.getAxisLeft();
         yAxisLeft.setAxisMinimum(0f);
+        yAxisLeft.setTextColor(Color.WHITE);
+        yAxisLeft.setTextSize(20);
 
         YAxis yAxisRight = chart.getAxisRight();
         yAxisRight.setEnabled(false);
