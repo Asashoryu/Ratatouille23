@@ -1,16 +1,12 @@
 package com.rat.ratatouille23.view;
 
-import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,51 +17,28 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.utils.Utils;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentVisualizzaStatisticheBinding;
 import com.rat.ratatouille23.viewmodel.VisualizzaStatisticheViewModel;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 
 public class VisualizzaStatisticheFragment extends Fragment {
@@ -99,40 +72,41 @@ public class VisualizzaStatisticheFragment extends Fragment {
     }
 
     public void impostaSpinnerAnniCheImpostaGrafico() {
-        // Define the spinner
-        Spinner yearSpinner = visualizzaStatisticheBinding.yearSpinner;
+        // Definisci lo spinner
+        Spinner spinnerAnno = visualizzaStatisticheBinding.yearSpinner;
 
-        // Create an ArrayAdapter to populate the spinner
+        // Crea un ArrayAdapter per popolare lo spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
                 R.array.year_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        yearSpinner.setAdapter(adapter);
+        spinnerAnno.setAdapter(adapter);
 
-        // Set the initial year to the first item in the spinner
-        int initialYear = Integer.parseInt(yearSpinner.getSelectedItem().toString());
+        // Imposta l'anno iniziale al primo elemento dello spinner
+        int annoIniziale = Integer.parseInt(spinnerAnno.getSelectedItem().toString());
 
-        // Set the chart for the initial year
-        impostaBarChart6(initialYear);
+        // Imposta il grafico per l'anno iniziale
+        impostaBarChart(annoIniziale);
 
-        // Update the chart when a new year is selected in the spinner
-        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Aggiorna il grafico quando viene selezionato un nuovo anno nello spinner
+        spinnerAnno.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int year = Integer.parseInt(parent.getItemAtPosition(position).toString());
-                impostaBarChart6(year);
+                int anno = Integer.parseInt(parent.getItemAtPosition(position).toString());
+                impostaBarChart(anno);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
+                // Non fare nulla
             }
         });
     }
 
-    public static boolean isLeapYear(int year) {
-        if (year % 4 == 0) {
-            if (year % 100 == 0) {
-                return year % 400 == 0;
+
+    public static boolean isAnnoBisestile(int anno) {
+        if (anno % 4 == 0) {
+            if (anno % 100 == 0) {
+                return anno % 400 == 0;
             } else {
                 return true;
             }
@@ -141,200 +115,111 @@ public class VisualizzaStatisticheFragment extends Fragment {
         }
     }
 
+    public void impostaBarChart(int anno) {
+        BarChart grafico = visualizzaStatisticheBinding.chart;
 
-    public void impostaBarChart5(int year) {
-        BarChart chart = visualizzaStatisticheBinding.chart;
+        grafico.setDrawBarShadow(false);
+        grafico.setDrawValueAboveBar(true);
+        grafico.setMaxVisibleValueCount(50);
+        grafico.setPinchZoom(false);
+        grafico.setDrawGridBackground(false);
 
-        chart.setDrawBarShadow(false);
-        chart.setDrawValueAboveBar(true);
-        chart.setMaxVisibleValueCount(50);
-        chart.setPinchZoom(false);
-        chart.setDrawGridBackground(false);
+        // Crea voci di dati per ogni giorno dell'anno
+        Calendar calendario = Calendar.getInstance();
+        float[] voci = new float[calendario.getActualMaximum(Calendar.DAY_OF_YEAR)];
+        calendario.set(Calendar.YEAR, anno);
+        calendario.set(Calendar.DAY_OF_YEAR, 1);
 
-        // Create data entries for every day of the year
-        Calendar calendar = Calendar.getInstance();
-        float[] entries = new float[calendar.getActualMaximum(Calendar.DAY_OF_YEAR)];
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.DAY_OF_YEAR, 1);
+        // Crea set di dati per ogni mese con un colore specifico
+        ArrayList<BarDataSet> setDati = new ArrayList<>();
+        int[] colori = new int[]{Color.WHITE, Color.CYAN};
+        int indiceMese = -1;
+        BarDataSet setDato = null;
 
-        // Create data sets for each month with a specific color
-        ArrayList<BarDataSet> dataSets = new ArrayList<>();
-        int[] colors = new int[]{Color.WHITE, Color.BLUE};
-        int monthIndex = -1;
-        BarDataSet dataSet = null;
+        visualizzaStatisticheViewModel.loadEntries(anno);
 
-        for (int i = 0; i < entries.length; i++) {
-            int month = calendar.get(Calendar.MONTH);
+        for (int i = 0; i < voci.length; i++) {
+            int mese = calendario.get(Calendar.MONTH);
 
-            if (monthIndex != month) {
-                monthIndex = month;
-                dataSet = new BarDataSet(new ArrayList<BarEntry>(), new DateFormatSymbols(Locale.getDefault()).getMonths()[month]);
-                dataSet.setColor(colors[monthIndex % colors.length]);
-                dataSet.setValueTextColor(Color.GREEN);
-                dataSet.setDrawValues(false);
-                dataSets.add(dataSet);
+            if (indiceMese != mese) {
+                indiceMese = mese;
+                setDato = new BarDataSet(new ArrayList<BarEntry>(), new DateFormatSymbols(Locale.getDefault()).getMonths()[mese]);
+                setDato.setColor(colori[indiceMese % colori.length]);
+                setDato.setValueTextColor(Color.GREEN);
+                setDato.setDrawValues(false);
+                setDati.add(setDato);
             }
-
-            entries[i] = new Random().nextInt((1500 - 100) + 1) + 100;
-            dataSet.addEntry(new BarEntry(i, entries[i]));
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-
-            // Handle leap year
-            if (calendar.get(Calendar.YEAR) != year && isLeapYear(year)) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
-                calendar.set(Calendar.DAY_OF_MONTH, 29);
-            }
-        }
-
-        // Create a data object from the data sets
-        BarData lineData = new BarData(dataSets.toArray(new BarDataSet[0]));
-
-        // Set X-axis attributes
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
-        xAxis.setCenterAxisLabels(false);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
-
-            @Override
-            public String getFormattedValue(float value) {
-                calendar.set(Calendar.DAY_OF_YEAR, (int) value + 1);
-                Date date = calendar.getTime();
-                return dateFormat.format(date);
-            }
-        });
-
-        // Set Y-axis attributes
-        YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setAxisMinimum(0f);
-
-        YAxis yAxisRight = chart.getAxisRight();
-        yAxisRight.setEnabled(false);
-
-        // Set legend and description attributes
-        Legend legend = chart.getLegend();
-        legend.setEnabled(false);
-
-        Description description = chart.getDescription();
-        description.setEnabled(false);
-
-        // Set data and invalidate chart
-        chart.setData(lineData);
-        chart.animateY(1000);
-
-        // Setup chart gesture listener
-        setupChartGestureListener(chart, entries);
-
-        chart.invalidate();
-    }
-
-    public void impostaBarChart6(int year) {
-        BarChart chart = visualizzaStatisticheBinding.chart;
-
-        chart.setDrawBarShadow(false);
-        chart.setDrawValueAboveBar(true);
-        chart.setMaxVisibleValueCount(50);
-        chart.setPinchZoom(false);
-        chart.setDrawGridBackground(false);
-
-        // Create data entries for every day of the year
-        Calendar calendar = Calendar.getInstance();
-        float[] entries = new float[calendar.getActualMaximum(Calendar.DAY_OF_YEAR)];
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.DAY_OF_YEAR, 1);
-
-        // Create data sets for each month with a specific color
-        ArrayList<BarDataSet> dataSets = new ArrayList<>();
-        int[] colors = new int[]{Color.WHITE, Color.CYAN};
-        int monthIndex = -1;
-        BarDataSet dataSet = null;
-
-        visualizzaStatisticheViewModel.loadEntries(year);
-
-        for (int i = 0; i < entries.length; i++) {
-            int month = calendar.get(Calendar.MONTH);
-
-            if (monthIndex != month) {
-                monthIndex = month;
-                dataSet = new BarDataSet(new ArrayList<BarEntry>(), new DateFormatSymbols(Locale.getDefault()).getMonths()[month]);
-                dataSet.setColor(colors[monthIndex % colors.length]);
-                dataSet.setValueTextColor(Color.GREEN);
-                dataSet.setDrawValues(false);
-                dataSets.add(dataSet);
-            }
-            if (visualizzaStatisticheViewModel.checkEntryExists((float) i)) {
-                entries[i] = visualizzaStatisticheViewModel.getYCoordinateFromXCoordinate((float) i);
+            if (visualizzaStatisticheViewModel.verificaSeEntryEsiste((float) i)) {
+                voci[i] = visualizzaStatisticheViewModel.getCoordinataYDaCoordinataX((float) i);
             }
             else {
-                entries[i] = 0;
+                voci[i] = 0;
             }
 
-            dataSet.addEntry(new BarEntry(i, entries[i]));
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            setDato.addEntry(new BarEntry(i, voci[i]));
+            calendario.add(Calendar.DAY_OF_YEAR, 1);
 
-            // Handle leap year
-            if (calendar.get(Calendar.YEAR) != year && isLeapYear(year)) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
-                calendar.set(Calendar.DAY_OF_MONTH, 29);
+            // Gestisce l'anno bisestile
+            if (calendario.get(Calendar.YEAR) != anno && isAnnoBisestile(anno)) {
+                calendario.set(Calendar.YEAR, anno);
+                calendario.set(Calendar.MONTH, Calendar.FEBRUARY);
+                calendario.set(Calendar.DAY_OF_MONTH, 29);
             }
         }
 
-        // Create a data object from the data sets
-        BarData lineData = new BarData(dataSets.toArray(new BarDataSet[0]));
+        // Crea un oggetto dati dai set di dati
+        BarData datiGrafico = new BarData(setDati.toArray(new BarDataSet[0]));
 
-        // Set X-axis attributes
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
-        xAxis.setCenterAxisLabels(false);
-        xAxis.setTextColor(Color.WHITE);
-        xAxis.setTextSize(20);
-        xAxis.setAvoidFirstLastClipping(true);
-        xAxis.setXOffset(10);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
+        // Imposta attributi asse X
+        XAxis asseX = grafico.getXAxis();
+        asseX.setPosition(XAxis.XAxisPosition.BOTTOM);
+        asseX.setGranularity(1f);
+        asseX.setGranularityEnabled(true);
+        asseX.setCenterAxisLabels(false);
+        asseX.setTextColor(Color.WHITE);
+        asseX.setTextSize(10);
+        asseX.setAvoidFirstLastClipping(true);
+        asseX.setXOffset(10);
+        asseX.setValueFormatter(new ValueFormatter() {
+            private final SimpleDateFormat formatoData = new SimpleDateFormat("dd MMM", Locale.getDefault());
 
             @Override
-            public String getFormattedValue(float value) {
-                calendar.set(Calendar.DAY_OF_YEAR, (int) value);
-                Date date = calendar.getTime();
-                return dateFormat.format(date);
+            public String getFormattedValue(float valore) {
+                calendario.set(Calendar.DAY_OF_YEAR, (int) valore);
+                Date data = calendario.getTime();
+                return formatoData.format(data);
             }
         });
 
-        // Set Y-axis attributes
-        YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setAxisMinimum(0f);
-        yAxisLeft.setTextColor(Color.WHITE);
-        yAxisLeft.setTextSize(20);
+        // Imposta attributi asse Y
+        YAxis asseYSinistro = grafico.getAxisLeft();
+        asseYSinistro.setAxisMinimum(0f);
+        asseYSinistro.setTextColor(Color.WHITE);
+        asseYSinistro.setTextSize(10);
 
-        YAxis yAxisRight = chart.getAxisRight();
-        yAxisRight.setEnabled(false);
+        YAxis asseYDestro = grafico.getAxisRight();
+        asseYDestro.setEnabled(false);
 
-        // Set legend and description attributes
-        Legend legend = chart.getLegend();
-        legend.setEnabled(false);
+        // Imposta attributi legenda e descrizione
+        Legend legenda = grafico.getLegend();
+        legenda.setEnabled(false);
 
-        Description description = chart.getDescription();
-        description.setEnabled(false);
+        Description descrizione = grafico.getDescription();
+        descrizione.setEnabled(false);
 
-        // Set data and invalidate chart
-        chart.setData(lineData);
-        chart.animateY(1000);
+        // Imposta dati e invalida il grafico
+        grafico.setData(datiGrafico);
+        grafico.animateY(1000);
 
-        // Setup chart gesture listener
-        setupChartGestureListener(chart, entries);
+        // Imposta il listener per i gesti sul grafico
+        avviaChartGestureListener(grafico, voci);
+        aggiornaChartInfo(grafico, voci);
 
-        chart.invalidate();
+        grafico.invalidate();
     }
 
 
-    private void setupChartGestureListener(final BarChart chart, final float[] entries) {
+    private void avviaChartGestureListener(final BarChart chart, final float[] entries) {
         chart.setOnChartGestureListener(new OnChartGestureListener() {
             @Override
             public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
@@ -342,6 +227,7 @@ public class VisualizzaStatisticheFragment extends Fragment {
 
             @Override
             public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+                aggiornaChartInfo(chart, entries);
             }
 
             @Override
@@ -362,131 +248,131 @@ public class VisualizzaStatisticheFragment extends Fragment {
 
             @Override
             public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-                updateChartInfo(chart, entries);
+
             }
 
             @Override
             public void onChartTranslate(MotionEvent me, float dX, float dY) {
-                updateChartInfo(chart, entries);
+                aggiornaChartInfo(chart, entries);
             }
         });
     }
 
 
 
-    private void updateChartInfo(BarChart chart, float[] data) {
-        // Get the X-axis range of the chart
-        float xMin = chart.getLowestVisibleX();
-        float xMax = chart.getHighestVisibleX();
+    private void aggiornaChartInfo(BarChart grafico, float[] dati) {
+        // Ottieni l'intervallo sull'asse X del grafico
+        float xMin = grafico.getLowestVisibleX();
+        float xMax = grafico.getHighestVisibleX();
 
-        // Display the starting and ending X-axis values
-        XAxis xAxis = chart.getXAxis();
-        ValueFormatter formatter = xAxis.getValueFormatter();
-        String startXValue = formatter.getFormattedValue(xMin);
-        String endXValue = formatter.getFormattedValue(xMax);
-        TextView startXTextView = visualizzaStatisticheBinding.dalValue;
-        startXTextView.setText(String.format(Locale.getDefault(), "Start giorno: %s", startXValue));
-        TextView endXTextView = visualizzaStatisticheBinding.alValue;
-        endXTextView.setText(String.format(Locale.getDefault(), "End giorno: %s", endXValue));
+        // Mostra i valori di inizio e fine sull'asse X
+        XAxis asseX = grafico.getXAxis();
+        ValueFormatter formatter = asseX.getValueFormatter();
+        String valoreXInizio = formatter.getFormattedValue(xMin);
+        String valoreXFine = formatter.getFormattedValue(xMax);
+        TextView textViewXInizio = visualizzaStatisticheBinding.dalValue;
+        textViewXInizio.setText(String.format(Locale.getDefault(), "Giorno inizio: %s", valoreXInizio));
+        TextView textViewXFine = visualizzaStatisticheBinding.alValue;
+        textViewXFine.setText(String.format(Locale.getDefault(), "Giorno fine: %s", valoreXFine));
 
-        // Find the indices of the data array corresponding to the visible range
-        int startIndex = (int) Math.ceil(xMin);
-        int endIndex = (int) Math.floor(xMax);
+        // Trova gli indici dell'array dati corrispondenti all'intervallo visibile
+        int indiceInizio = (int) Math.ceil(xMin);
+        int indiceFine = (int) Math.floor(xMax);
 
-        // Ensure that the indices are within the bounds of the data array
-        if (startIndex >= data.length) {
-            startIndex = data.length - 1;
-        } else if (startIndex < 0) {
-            startIndex = 0;
+        // Assicurati che gli indici siano all'interno dei limiti dell'array dati
+        if (indiceInizio >= dati.length) {
+            indiceInizio = dati.length - 1;
+        } else if (indiceInizio < 0) {
+            indiceInizio = 0;
         }
-        if (endIndex >= data.length) {
-            endIndex = data.length - 1;
-        } else if (endIndex < 0) {
-            endIndex = 0;
+        if (indiceFine >= dati.length) {
+            indiceFine = dati.length - 1;
+        } else if (indiceFine < 0) {
+            indiceFine = 0;
         }
 
-        // Extract the data points within the visible range
-        float[] visibleData = Arrays.copyOfRange(data, startIndex, endIndex + 1);
+        // Estrai i punti dati all'interno dell'intervallo visibile
+        float[] datiVisibili = Arrays.copyOfRange(dati, indiceInizio, indiceFine + 1);
 
-        // Calculate the maximum, minimum, and median values based on the visible data
-        float max = getMaximum(visibleData);
-        float min = getMinimum(visibleData);
-        float median = getMedian(visibleData);
-        float sum = getSum(visibleData);
+        // Calcola i valori massimi, minimi e medi basati sui dati visibili
+        float massimo = getMassimo(datiVisibili);
+        float minimo = getMinimo(datiVisibili);
+        float somma = getSomma(datiVisibili);
+        float mediana = getMedia(datiVisibili, somma);
 
-        // Update the TextViews in the layout
-        TextView maxTextView = visualizzaStatisticheBinding.maxValue;
-        maxTextView.setText(String.format(Locale.getDefault(), "Max: %.2f", max));
+        // Aggiorna le TextView nel layout
+        TextView textViewMassimo = visualizzaStatisticheBinding.maxValue;
+        textViewMassimo.setText(String.format(Locale.getDefault(), "Massimo: %.2f", massimo));
 
-        TextView minTextView = visualizzaStatisticheBinding.minValue;
-        minTextView.setText(String.format(Locale.getDefault(), "Min: %.2f", min));
+        TextView textViewMinimo = visualizzaStatisticheBinding.minValue;
+        textViewMinimo.setText(String.format(Locale.getDefault(), "Minimo: %.2f", minimo));
 
-        TextView medianTextView = visualizzaStatisticheBinding.medianValue;
-        medianTextView.setText(String.format(Locale.getDefault(), "Medium: %.2f", median));
+        TextView textViewMediana = visualizzaStatisticheBinding.medianValue;
+        textViewMediana.setText(String.format(Locale.getDefault(), "Medio: %.2f", mediana));
 
-        TextView sumTextView = visualizzaStatisticheBinding.sommaValue;
-        sumTextView.setText(String.format(Locale.getDefault(), "Somma: %.2f", sum));
+        TextView textViewSomma = visualizzaStatisticheBinding.sommaValue;
+        textViewSomma.setText(String.format(Locale.getDefault(), "Totale intervallo: %.2f", somma));
     }
 
-    private float getSum(float[] data) {
+
+    private float getSomma(float[] dati) {
         float sum = 0;
-        for (float value : data) {
-            sum += value;
+        for (float dato : dati) {
+            sum += dato;
         }
         return sum;
     }
 
-
-    // Returns the minimum value in the array
-    private float getMinimum(float[] data) {
-        if (data == null || data.length == 0) {
+    private float getMinimo(float[] dati) {
+        if (dati == null || dati.length == 0) {
             return 0;
         }
 
         float min = Float.MAX_VALUE;
-        boolean hasNonZeroValue = false;
+        boolean haValoreNonZero  = false;
 
-        for (float value : data) {
-            if (value != 0) {
-                hasNonZeroValue = true;
-                if (value < min) {
-                    min = value;
+        for (float dato : dati) {
+            if (dato != 0) {
+                haValoreNonZero  = true;
+                if (dato < min) {
+                    min = dato;
                 }
             }
         }
 
-        return hasNonZeroValue ? min : 0;
+        return haValoreNonZero  ? min : 0;
     }
 
-    private float getMedian(float[] data) {
-        float[] nonZeroData = new float[data.length];
+    private float getMedia(float[] dati, float somma) {
+        float[] datiNonZero = new float[dati.length];
         int count = 0;
-        for (float value : data) {
-            if (value != 0) {
-                nonZeroData[count++] = value;
+        for (float dato : dati ) {
+            if (dato != 0) {
+                datiNonZero[count++] = dato;
             }
         }
         if (count == 0) {
             return 0;
         }
-        nonZeroData = Arrays.copyOfRange(nonZeroData, 0, count);
-        Arrays.sort(nonZeroData);
-        int length = nonZeroData.length;
+
+        datiNonZero = Arrays.copyOfRange(datiNonZero, 0, count);
+        Arrays.sort(datiNonZero);
+        int length = datiNonZero.length;
         if (length % 2 == 0) {
-            return (nonZeroData[length / 2] + nonZeroData[length / 2 - 1]) / 2;
+            return somma / length;
         } else {
-            return nonZeroData[length / 2];
+            return datiNonZero[length / 2];
         }
     }
 
-    public static float getMaximum(float[] values) {
-        if (values == null || values.length == 0) {
+    public static float getMassimo(float[] dati) {
+        if (dati == null || dati.length == 0) {
             return 0;
         }
         float max = Float.MIN_VALUE;
-        for (float value : values) {
-            if (value > max) {
-                max = value;
+        for (float dato : dati) {
+            if (dato > max) {
+                max = dato;
             }
         }
         return max;

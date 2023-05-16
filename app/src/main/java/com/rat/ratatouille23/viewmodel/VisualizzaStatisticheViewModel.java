@@ -9,10 +9,6 @@ import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.repository.Repository;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -34,7 +30,7 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioVisualizzaStatistiche = new MutableLiveData<>("");
 
-    public MutableLiveData<List<Entry>> entries = new MutableLiveData<>();
+    public MutableLiveData<List<Entry>> entriesGrafico = new MutableLiveData<>();
 
     public VisualizzaStatisticheViewModel() {
         repository = Repository.getInstance();
@@ -43,82 +39,79 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
         storicoOrdinazioniChiuse = repository.getStoricoOrdinazioniChiuse();
     }
 
-    public LiveData<List<Entry>> getEntries() {
-        return entries;
+    public LiveData<List<Entry>> getEntriesGrafico() {
+        return entriesGrafico;
     }
 
-    public void loadEntries(int year) {
-        List<Entry> entryList = new ArrayList<>();
+    public void loadEntries(int anno) {
+        List<Entry> listaVociDati = new ArrayList<>();
         String tempoOrdinazione;
-
         storicoOrdinazioniChiuse.getOrdinazioni().forEach(ordinazione -> System.out.println(ordinazione.getCostoTotalePortateOrdine()));
 
-        // Replace the following loop with code that fetches real data from a database or API
-        Map<Integer, Float> dailyTotals = new HashMap<>();
+        // Recupera dati
+        Map<Integer, Float> totaliGiornalieri = new HashMap<>();
         for (Ordinazione ordinazione : storicoOrdinazioniChiuse.getOrdinazioni()) {
             tempoOrdinazione = ordinazione.getMinutaggioChiusuraConto();
-            int yearOfOrder = getYearFromUTC(tempoOrdinazione);
-            if (yearOfOrder == year) {
-                int dayOfYear = getOffsetDayOfYear(tempoOrdinazione);
+            int annoOrdine = getAnnoDaUTC(tempoOrdinazione);
+            if (annoOrdine == anno) {
+                int giornoAnno = getGiornoAnnoOffset(tempoOrdinazione);
                 float costoPortate = ordinazione.getCostoTotalePortateOrdine();
-                if (dailyTotals.containsKey(dayOfYear)) {
-                    costoPortate += dailyTotals.get(dayOfYear);
+                if (totaliGiornalieri.containsKey(giornoAnno)) {
+                    costoPortate += totaliGiornalieri.get(giornoAnno);
                 }
-                dailyTotals.put(dayOfYear, costoPortate);
+                totaliGiornalieri.put(giornoAnno, costoPortate);
             }
         }
 
-        // Convert the daily totals to a list of entries
-        for (Map.Entry<Integer, Float> entry : dailyTotals.entrySet()) {
-            entryList.add(new Entry(entry.getKey(), entry.getValue()));
-            System.err.println("Y: " + entry.getValue() + ", X: " + entry.getKey());
+        // Converti i totali giornalieri in una lista di voci dati
+        for (Map.Entry<Integer, Float> voce : totaliGiornalieri.entrySet()) {
+            listaVociDati.add(new Entry(voce.getKey(), voce.getValue()));
+            System.err.println("Y: " + voce.getValue() + ", X: " + voce.getKey());
         }
 
-        entries.setValue(entryList);
+        entriesGrafico.setValue(listaVociDati);
     }
 
-    private int getYearFromUTC(String utcValue) {
-        long timestamp = Long.parseLong(utcValue);
-        Date date = new Date(timestamp * 1000);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        System.err.println("year: " + year);
-        return year;
+    private int getAnnoDaUTC(String valoreUTC) {
+        long timestamp = Long.parseLong(valoreUTC);
+        Date data = new Date(timestamp * 1000);
+        Calendar calendario = Calendar.getInstance();
+        calendario.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendario.setTime(data);
+        int anno = calendario.get(Calendar.YEAR);
+        System.err.println("anno: " + anno);
+        return anno;
     }
 
-    public int getOffsetDayOfYear(String utcValue) {
-        long timestamp = Long.parseLong(utcValue);
-        Instant instant = Instant.ofEpochSecond(timestamp);
-        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
-        int dayOfYear = zonedDateTime.getDayOfYear();
-        System.err.println("dayOfYear: " + dayOfYear);
-        return dayOfYear;
+    public int getGiornoAnnoOffset(String valoreUTC) {
+        long timestamp = Long.parseLong(valoreUTC);
+        Instant istante = Instant.ofEpochSecond(timestamp);
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(istante, ZoneOffset.UTC);
+        int giornoAnno = zonedDateTime.getDayOfYear();
+        System.err.println("giornoAnno: " + giornoAnno);
+        return giornoAnno;
     }
 
-    public boolean checkEntryExists(float xCoordinate) {
-        if (entries == null) {
+    public boolean verificaSeEntryEsiste(float coordinataX) {
+        if (entriesGrafico == null) {
             return false;
         }
-        for (Entry entry : entries.getValue()) {
-            if (entry.getX() == xCoordinate) {
+        for (Entry voce : entriesGrafico.getValue()) {
+            if (voce.getX() == coordinataX) {
                 return true;
             }
         }
         return false;
     }
 
-    public float getYCoordinateFromXCoordinate(float xCoordinate) {
-        for (Entry entry : entries.getValue()) {
-            if (entry.getX() == xCoordinate) {
-                return entry.getY();
+    public float getCoordinataYDaCoordinataX(float coordinataX) {
+        for (Entry voce : entriesGrafico.getValue()) {
+            if (voce.getX() == coordinataX) {
+                return voce.getY();
             }
         }
-        return -1; // If entry with given x-coordinate is not found, return -1 or any other appropriate value
+        return -1; // Se la voce con la coordinata x fornita non viene trovata, restituisci -1 o un altro valore appropriato
     }
-
-
 
     public void setTornaIndietro() {
         tornaIndietro.setValue(true);

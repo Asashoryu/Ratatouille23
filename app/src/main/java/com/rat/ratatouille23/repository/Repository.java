@@ -239,8 +239,6 @@ public class Repository {
     }
 
 
-
-
     public String generaFCMToken() {
         Task<String> task = FirebaseMessaging.getInstance().getToken();
         while (!task.isComplete()) {

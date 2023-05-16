@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp"
-            android:text="Select year:"
+            android:text="Scegli anno:"
             android:textColor="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_annulla"

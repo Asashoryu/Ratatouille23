@@ -36,13 +36,14 @@ public class ReimpostaPasswordViewModel extends ViewModel {
     }
 
     public void reimpostaPassword(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) {
-        if (isReimpostaInputValido(vecchiaPassword, nuovaPassword, confermaNuovaPassword))
-        try {
-            repository.reimpostaPassword(vecchiaPassword, nuovaPassword);
-            repository.setLoginViewModelVaiAvanti();
-            setTornaIndietro();
-        } catch (ReimpostaPasswordException e) {
-            setMessaggioReimpostaPassword(e.getMessage());
+        if (isReimpostaInputValido(vecchiaPassword, nuovaPassword, confermaNuovaPassword)) {
+            try {
+                repository.reimpostaPassword(vecchiaPassword, nuovaPassword);
+                repository.setLoginViewModelVaiAvanti();
+                setTornaIndietro();
+            } catch (ReimpostaPasswordException e) {
+                setMessaggioReimpostaPassword(e.getMessage());
+            }
         }
     }
 
@@ -138,6 +139,29 @@ public class ReimpostaPasswordViewModel extends ViewModel {
 
         return true;
     }
+
+    /*private boolean isStrongPassword(String password, String caratteriSpeciali, int numeroCaratteriSpeciali) throws PasswordNonForteException {
+
+        if (password == null || caratteriSpeciali == null || numeroCaratteriSpeciali <= 0) {
+            throw new PasswordNonForteException();
+        }
+
+        int conteggioCaratteriSpeciali = 0;
+        for (int i = 0; i < password.length(); i++) {
+            char carattere = password.charAt(i);
+            if (caratteriSpeciali.contains(String.valueOf(carattere))) {
+                conteggioCaratteriSpeciali++;
+            }
+        }
+
+        if (conteggioCaratteriSpeciali < numeroCaratteriSpeciali) {
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }*/
 
     public void setMessaggioReimpostaPassword(String nuovoMessaggioReimpostaPassword) {
         messaggioReimpostaPassword.setValue(nuovoMessaggioReimpostaPassword);
