@@ -98,7 +98,7 @@ public class Repository {
     private Ingrediente ingredienteSelezionato;
     private Menu menu;
 
-    private final String baseUrl = "http://192.168.1.9:8080/";
+    private final String baseUrl = "http://13.49.231.123:8080/";
 
     private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
     private static Repository questaRepository = null;
@@ -299,7 +299,7 @@ public class Repository {
                         return null;
                     }
                 }
-            }.execute().get(3, TimeUnit.SECONDS);
+            }.execute().get(5, TimeUnit.SECONDS);
 
             if (dipendente_dto == null) {
                 System.out.println("Dip non trovato = null in Retrofit");
