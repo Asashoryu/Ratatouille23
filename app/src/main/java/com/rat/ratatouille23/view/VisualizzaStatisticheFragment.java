@@ -30,6 +30,7 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentVisualizzaStatisticheBinding;
+import com.rat.ratatouille23.eccezioni.rat.visualizzastatistiche.VisualizzaStatisticheException;
 import com.rat.ratatouille23.viewmodel.VisualizzaStatisticheViewModel;
 
 import java.text.DateFormatSymbols;
@@ -298,7 +299,12 @@ public class VisualizzaStatisticheFragment extends Fragment {
         float massimo = getMassimo(datiVisibili);
         float minimo = getMinimo(datiVisibili);
         float somma = getSomma(datiVisibili);
-        float mediana = getMedia(datiVisibili, somma);
+        float media = 0;
+        try {
+            media = getMedia(datiVisibili, somma);
+        } catch (VisualizzaStatisticheException e) {
+            media = 0.0f;
+        }
 
         // Aggiorna le TextView nel layout
         TextView textViewMassimo = visualizzaStatisticheBinding.maxValue;
@@ -308,7 +314,7 @@ public class VisualizzaStatisticheFragment extends Fragment {
         textViewMinimo.setText(String.format(Locale.getDefault(), "Minimo: %.2f", minimo));
 
         TextView textViewMediana = visualizzaStatisticheBinding.medianValue;
-        textViewMediana.setText(String.format(Locale.getDefault(), "Medio: %.2f", mediana));
+        textViewMediana.setText(String.format(Locale.getDefault(), "Medio: %.2f", media));
 
         TextView textViewSomma = visualizzaStatisticheBinding.sommaValue;
         textViewSomma.setText(String.format(Locale.getDefault(), "Totale intervallo: %.2f", somma));
@@ -343,7 +349,18 @@ public class VisualizzaStatisticheFragment extends Fragment {
         return haValoreNonZero  ? min : 0;
     }
 
-    private float getMedia(float[] dati, float somma) {
+    private float getMedia(float[] dati, float somma) throws VisualizzaStatisticheException {
+        // check somma non negativa
+        if (somma < 0 ) {
+            throw new VisualizzaStatisticheException("La somma non può essere negativa");
+        }
+        // check neanche un dato negativo
+        for (float number : dati) {
+            if (number < 0) {
+                throw new VisualizzaStatisticheException("Trovato un dato negativo nel calcolo della media");
+            }
+        }
+
         float[] datiNonZero = new float[dati.length];
         int count = 0;
         for (float dato : dati ) {

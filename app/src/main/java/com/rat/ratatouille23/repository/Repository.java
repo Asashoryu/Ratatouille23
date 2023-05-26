@@ -25,6 +25,7 @@ import com.rat.ratatouille23.eccezioni.rat.creadipendente.AggiungiDipendenteExce
 import com.rat.ratatouille23.eccezioni.rat.menu.CategoriaNonTrovataException;
 import com.rat.ratatouille23.eccezioni.rat.login.DipendenteNonTrovatoException;
 import com.rat.ratatouille23.eccezioni.rat.login.ReimpostaPasswordException;
+import com.rat.ratatouille23.eccezioni.rat.tavoli.IndiceNegativoException;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.model.Ingrediente;
@@ -2142,20 +2143,30 @@ public class Repository {
         Collections.sort(tavoli, new Comparator<Tavolo>() {
             @Override
             public int compare(Tavolo tavolo1, Tavolo tavolo2) {
-                int tavolo1Index = 0;
-                int tavolo2Index = 0;
                 try {
-                    tavolo1Index = tavolo1.getId();
-                    tavolo2Index = tavolo2.getId();
-                } catch (NumberFormatException e) {
-                    // Ignore tavoli with non-integer names
+                    return Repository.this.compare(tavolo1.getId(), tavolo2.getId());
+                } catch (IndiceNegativoException e) {
+                    throw new RuntimeException(e);
                 }
-                return tavolo1Index - tavolo2Index;
             }
         });
 
         // aggiorna view
         modificaTavoliViewModel.aggiornaListaTavoli();
+    }
+
+    public int compare(int indiceTavolo1, int indiceTavolo2) throws IndiceNegativoException {
+        if (indiceTavolo1 < 0 || indiceTavolo2 < 0) {
+            throw new IndiceNegativoException();
+        }
+
+        int tavolo1Index = 0;
+        int tavolo2Index = 0;
+
+        tavolo1Index = indiceTavolo1;
+        tavolo2Index = indiceTavolo2;
+
+        return tavolo1Index - tavolo2Index;
     }
 
     public int getMinimoIndiceTavolo(ArrayList<Tavolo> tavoli) {

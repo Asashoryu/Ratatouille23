@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.rat.ratatouille23.eccezioni.rat.login.PasswordNonForteException;
 import com.rat.ratatouille23.eccezioni.rat.login.ReimpostaPasswordException;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.Repository;
@@ -36,18 +37,23 @@ public class ReimpostaPasswordViewModel extends ViewModel {
     }
 
     public void reimpostaPassword(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) {
-        if (isReimpostaInputValido(vecchiaPassword, nuovaPassword, confermaNuovaPassword)) {
-            try {
+        try {
+            if (isReimpostaInputValido(vecchiaPassword, nuovaPassword, confermaNuovaPassword)) {
                 repository.reimpostaPassword(vecchiaPassword, nuovaPassword);
                 repository.setLoginViewModelVaiAvanti();
                 setTornaIndietro();
-            } catch (ReimpostaPasswordException e) {
-                setMessaggioReimpostaPassword(e.getMessage());
             }
+        } catch (ReimpostaPasswordException e) {
+            setMessaggioReimpostaPassword(e.getMessage());
         }
     }
 
-    public boolean isReimpostaInputValido(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) {
+    public boolean isReimpostaInputValido(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) throws ReimpostaPasswordException {
+
+        if (vecchiaPassword == null || nuovaPassword == null || confermaNuovaPassword == null) {
+            throw new ReimpostaPasswordException("Una stringa passata è null");
+        }
+
         if (TextUtils.isEmpty(vecchiaPassword)) {
             setMessaggioReimpostaPassword("Inserisci la vecchia password");
             return false;
@@ -140,9 +146,9 @@ public class ReimpostaPasswordViewModel extends ViewModel {
         return true;
     }
 
-    /*private boolean isStrongPassword(String password, String caratteriSpeciali, int numeroCaratteriSpeciali) throws PasswordNonForteException {
+    private boolean isStrongPassword(String password, String caratteriSpeciali, int numeroCaratteriSpeciali) throws PasswordNonForteException {
 
-        if (password == null || caratteriSpeciali == null || numeroCaratteriSpeciali <= 0) {
+        if (password == null || caratteriSpeciali == null || numeroCaratteriSpeciali < 0) {
             throw new PasswordNonForteException();
         }
 
@@ -161,7 +167,7 @@ public class ReimpostaPasswordViewModel extends ViewModel {
             return true;
         }
 
-    }*/
+    }
 
     public void setMessaggioReimpostaPassword(String nuovoMessaggioReimpostaPassword) {
         messaggioReimpostaPassword.setValue(nuovoMessaggioReimpostaPassword);
