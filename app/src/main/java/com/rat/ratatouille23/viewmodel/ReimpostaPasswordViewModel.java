@@ -54,7 +54,7 @@ public class ReimpostaPasswordViewModel extends ViewModel {
             throw new ReimpostaPasswordException("Una stringa passata è null");
         }
 
-        if (TextUtils.isEmpty(vecchiaPassword)) {
+        if (vecchiaPassword.isEmpty()) {
             setMessaggioReimpostaPassword("Inserisci la vecchia password");
             return false;
         }
@@ -64,12 +64,12 @@ public class ReimpostaPasswordViewModel extends ViewModel {
             return false;
         }
 
-        if (TextUtils.isEmpty(nuovaPassword)) {
+        if (nuovaPassword.isEmpty()) {
             setMessaggioReimpostaPassword("Inserisci la nuova password");
             return false;
         }
 
-        if (TextUtils.isEmpty(confermaNuovaPassword)) {
+        if (confermaNuovaPassword.isEmpty()) {
             setMessaggioReimpostaPassword("Inserisci la conferma della nuova password");
             return false;
         }
@@ -84,6 +84,35 @@ public class ReimpostaPasswordViewModel extends ViewModel {
 //            setMessaggioReimpostaPassword("La nuova password non è abbastanza forte");
 //            return false;
 //        }
+
+        return true;
+    }
+
+    public boolean reimpostaPasswordNuova (String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) throws ReimpostaPasswordException {
+
+        if (vecchiaPassword == null || nuovaPassword == null || confermaNuovaPassword == null) {
+            throw new ReimpostaPasswordException("Una stringa passata è null");
+        }
+
+        if (vecchiaPassword.isEmpty()) {
+            return false;
+        }
+
+        if (nuovaPassword.isEmpty()) {
+            return false;
+        }
+
+        if (confermaNuovaPassword.isEmpty()) {
+            return false;
+        }
+
+        if (nuovaPassword.equals(vecchiaPassword)) {
+            return false;
+        }
+
+        if (!nuovaPassword.equals(confermaNuovaPassword)) {
+            return false;
+        }
 
         return true;
     }
@@ -146,7 +175,7 @@ public class ReimpostaPasswordViewModel extends ViewModel {
         return true;
     }
 
-    private boolean isStrongPassword(String password, String caratteriSpeciali, int numeroCaratteriSpeciali) throws PasswordNonForteException {
+    public boolean isStrongPassword(String password, String caratteriSpeciali, int numeroCaratteriSpeciali) throws PasswordNonForteException {
 
         if (password == null || caratteriSpeciali == null || numeroCaratteriSpeciali < 0) {
             throw new PasswordNonForteException();
