@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.rat.ratatouille23.eccezioni.rat.dispensa.PersonalizzaDispensaException;
 import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.repository.IngredientiRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.util.Set;
 public class AggiungiIngredienteViewModel extends ViewModel {
 
     Repository repository;
+
+    IngredientiRepository ingredientiRepository;
 
     Ingrediente ingrediente;
 
@@ -28,7 +31,8 @@ public class AggiungiIngredienteViewModel extends ViewModel {
 
     public AggiungiIngredienteViewModel() {
         repository = Repository.getInstance();
-        repository.setAggiungiIngredienteViewModel(this);
+        Repository.aggiungiIngredienteViewModel = this;
+        ingredientiRepository = new IngredientiRepository();
         generaUnitaDiMisura();
     }
 
@@ -44,13 +48,19 @@ public class AggiungiIngredienteViewModel extends ViewModel {
 
             try {
                 checkIngrediente(nome,costo,quantita,unitaMisura);
-                repository.aggiungiIngrediente(ingrediente);
+                aggiungiIngrediente(ingrediente);
                 repository.aggiornaListaIngredienti();
                 setTornaIndietro();
             } catch (IOException | PersonalizzaDispensaException e) {
                 setMessaggioAggiungiIngrediente(e.getMessage());
             }
         }
+    }
+
+    public void aggiungiIngrediente(Ingrediente ingrediente) throws IOException {
+        ingredientiRepository.insertIngredienteBackend(ingrediente.getNome(), ingrediente.getCosto(), ingrediente.getQuantita(),ingrediente.getUnitaMisura(), ingrediente.getSoglia(), 0.0f, ingrediente.getDescrizione());
+
+        repository.getDispensa().add(ingrediente);
     }
 
     public void checkIngrediente (String nome, String costo, String quantita, String unitaMisura) throws PersonalizzaDispensaException {

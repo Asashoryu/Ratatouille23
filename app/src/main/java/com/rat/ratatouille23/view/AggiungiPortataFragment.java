@@ -17,6 +17,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentAggiungiPortataBinding;
@@ -49,6 +50,18 @@ public class AggiungiPortataFragment extends Fragment {
 
         return fragmentView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Aggiungi Portata");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "AggiungiPortataFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+    }
+
 
     public void impostaSpinner() {
 

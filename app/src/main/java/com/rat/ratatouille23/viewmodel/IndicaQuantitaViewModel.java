@@ -7,6 +7,7 @@ import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantiaIngrediente
 import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantitaIngredienteNegativaException;
 import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantitaIngredienteNullException;
 import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.repository.IngredientiRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
@@ -14,6 +15,8 @@ import java.io.IOException;
 public class IndicaQuantitaViewModel extends ViewModel {
 
     Repository repository;
+
+    IngredientiRepository ingredientiRepository;
 
     Ingrediente ingrediente;
 
@@ -23,7 +26,8 @@ public class IndicaQuantitaViewModel extends ViewModel {
 
     public IndicaQuantitaViewModel() {
         repository = Repository.getInstance();
-        repository.setIndicaQuantitaViewModel(this);
+        Repository.indicaQuantitaViewModel = this;
+        ingredientiRepository = new IngredientiRepository();
 
         ingrediente = repository.getIngredienteSelezionato();
     }
@@ -32,11 +36,16 @@ public class IndicaQuantitaViewModel extends ViewModel {
         try {
             checkQuantitaNull(quantita);
             checkQuantitaNegativa(Float.parseFloat(quantita));
-            repository.aggiungiIngredienteAllaPortataSelezionata(ingrediente, Float.parseFloat(quantita));
+            aggiungiIngredienteAllaPortataSelezionata(ingrediente, Float.parseFloat(quantita));
             setTornaIndietro();
         } catch (IOException | QuantiaIngredienteException e) {
             setMessaggioIndicaQuantita(e.getMessage());
         }
+    }
+
+    public void aggiungiIngredienteAllaPortataSelezionata(Ingrediente ingrediente, Float quantita) throws IOException {
+        ingredientiRepository.associaIngridientToDishBackend(quantita, ingrediente.getNome(), repository.getPortataSelezionata().getNome());
+        Repository.associaIngredientiViewModel.aggiungiIngredienteAllaPortata(ingrediente, quantita);
     }
 
     public void checkQuantitaNull (String quantita) throws QuantitaIngredienteNullException {

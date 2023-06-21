@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.adapter.IngredientiPortataItemAdapter;
@@ -47,6 +48,18 @@ public class AssociaIngredientiFragment extends Fragment {
 
         return fragmentView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Associa Ingredienti");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "AggiungiIngredientiFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+    }
+
 
     public void impostaIngredientiPortataItemAdapter() {
         ingredientiPortataItemAdapter = new IngredientiPortataItemAdapter((ingrediente)-> {});

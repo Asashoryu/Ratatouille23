@@ -5,18 +5,20 @@ import static org.junit.Assert.*;
 
 import com.rat.ratatouille23.eccezioni.rat.tavoli.IndiceNegativoException;
 import com.rat.ratatouille23.repository.Repository;
+import com.rat.ratatouille23.viewmodel.ModificaTavoliViewModel;
+import com.rat.ratatouille23.viewmodel.ReimpostaPasswordViewModel;
 
 
 public class TestCompareTavoli {
 
-    Repository repository = Repository.getInstance();
+    ModificaTavoliViewModel viewModel = new ModificaTavoliViewModel();
 
     @Test(expected = IndiceNegativoException.class)
     public void testCompareTavoliException1() throws IndiceNegativoException {
         int indice1 = -2;
         int indice2 = -3;
 
-        repository.compare(indice1,indice2);
+        viewModel.compare(indice1,indice2);
     }
 
     @Test(expected = IndiceNegativoException.class)
@@ -24,7 +26,7 @@ public class TestCompareTavoli {
         int indice1 = -2;
         int indice2 = 3;
 
-        repository.compare(indice1,indice2);
+        viewModel.compare(indice1,indice2);
     }
 
     @Test(expected = IndiceNegativoException.class)
@@ -32,7 +34,7 @@ public class TestCompareTavoli {
         int indice1 = 2;
         int indice2 = -3;
 
-        repository.compare(indice1,indice2);
+        viewModel.compare(indice1,indice2);
     }
 
     @Test(expected = IndiceNegativoException.class)
@@ -40,7 +42,7 @@ public class TestCompareTavoli {
         int indice1 = 0;
         int indice2 = -3;
 
-        repository.compare(indice1,indice2);
+        viewModel.compare(indice1,indice2);
     }
 
     @Test(expected = IndiceNegativoException.class)
@@ -48,7 +50,7 @@ public class TestCompareTavoli {
         int indice1 = -2;
         int indice2 = 0;
 
-        repository.compare(indice1,indice2);
+        viewModel.compare(indice1,indice2);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -60,7 +62,7 @@ public class TestCompareTavoli {
         int result;
 
         try {
-            result = repository.compare(indice1,indice2);
+            result = viewModel.compare(indice1,indice2);
             assertEquals(indice1-indice2,result);
         } catch (IndiceNegativoException e) {
             throw new RuntimeException(e);
@@ -74,7 +76,7 @@ public class TestCompareTavoli {
         int result;
 
         try {
-            result = repository.compare(indice1,indice2);
+            result = viewModel.compare(indice1,indice2);
             assertEquals(indice1-indice2,result);
         } catch (IndiceNegativoException e) {
             throw new RuntimeException(e);
@@ -88,7 +90,7 @@ public class TestCompareTavoli {
         int result;
 
         try {
-            result = repository.compare(indice1,indice2);
+            result = viewModel.compare(indice1,indice2);
             assertEquals(0,result);
         } catch (IndiceNegativoException e) {
             throw new RuntimeException(e);
@@ -102,7 +104,7 @@ public class TestCompareTavoli {
         int result;
 
         try {
-            result = repository.compare(indice1,indice2);
+            result = viewModel.compare(indice1,indice2);
             assertEquals(0,result);
         } catch (IndiceNegativoException e) {
             throw new RuntimeException(e);
@@ -116,7 +118,7 @@ public class TestCompareTavoli {
         int result;
 
         try {
-            result = repository.compare(indice1,indice2);
+            result = viewModel.compare(indice1,indice2);
             assertEquals(indice1-indice2,result);
         } catch (IndiceNegativoException e) {
             throw new RuntimeException(e);
@@ -130,7 +132,7 @@ public class TestCompareTavoli {
         int result;
 
         try {
-            result = repository.compare(indice1,indice2);
+            result = viewModel.compare(indice1,indice2);
             assertEquals(indice1,result);
         } catch (IndiceNegativoException e) {
             throw new RuntimeException(e);

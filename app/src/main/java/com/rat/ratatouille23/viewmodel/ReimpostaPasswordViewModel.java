@@ -8,11 +8,14 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.eccezioni.rat.login.PasswordNonForteException;
 import com.rat.ratatouille23.eccezioni.rat.login.ReimpostaPasswordException;
 import com.rat.ratatouille23.model.Dipendente;
+import com.rat.ratatouille23.repository.LoginRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 public class ReimpostaPasswordViewModel extends ViewModel {
 
     Repository repository;
+
+    LoginRepository loginRepository;
 
     Dipendente dipendente;
 
@@ -24,7 +27,8 @@ public class ReimpostaPasswordViewModel extends ViewModel {
 
     public ReimpostaPasswordViewModel() {
         repository = Repository.getInstance();
-        repository.setReimpostaPasswordViewModel(this);
+        Repository.reimpostaPasswordViewModel = this;
+        loginRepository = new LoginRepository();
 
         dipendente = repository.getDipendente();
     }
@@ -39,13 +43,22 @@ public class ReimpostaPasswordViewModel extends ViewModel {
     public void reimpostaPassword(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) {
         try {
             if (isReimpostaInputValido(vecchiaPassword, nuovaPassword, confermaNuovaPassword)) {
-                repository.reimpostaPassword(vecchiaPassword, nuovaPassword);
-                repository.setLoginViewModelVaiAvanti();
+                reimpostaPassword(vecchiaPassword, nuovaPassword);
+                setLoginViewModelVaiAvanti();
                 setTornaIndietro();
             }
         } catch (ReimpostaPasswordException e) {
             setMessaggioReimpostaPassword(e.getMessage());
         }
+    }
+
+    public void reimpostaPassword(String vecchiaPassword, String nuovaPassword) throws ReimpostaPasswordException {
+        loginRepository.cambiaPasswordBackend(nuovaPassword);
+        dipendente.reimpostaPassword(nuovaPassword);
+    }
+
+    public void setLoginViewModelVaiAvanti() {
+        Repository.loginViewModel.setIsVaiAvanti();
     }
 
     public boolean isReimpostaInputValido(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) throws ReimpostaPasswordException {

@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentAggiungiDipendenteBinding;
 import com.rat.ratatouille23.viewmodel.AggiungiDipendenteViewModel;
@@ -42,6 +43,18 @@ public class AggiungiDipendenteFragment extends Fragment {
 
         return fragmentView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Aggiungi Dipendente");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "AggiungiDipendenteFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+    }
+
 
     public void impostaSpinner() {
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentLoginViewBinding;
 import com.rat.ratatouille23.viewmodel.LoginViewModel;
@@ -34,6 +35,8 @@ public class LoginFragment extends Fragment {
         osservaSeAndareAvanti();
         osservaSeReimpostarePassword();
         osservaMessaggioErrore();
+
+        aggiungiAdAnalytics();
 
         return fragmentView;
     }
@@ -77,6 +80,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
+
     public void osservaMessaggioErrore() {
         loginViewModel.messaggioLogin.observe(getViewLifecycleOwner(), (messaggio) -> {
             if (loginViewModel.isNuovoMessaggioLogin()) {
@@ -87,6 +91,14 @@ public class LoginFragment extends Fragment {
                 loginViewModel.cancellaMessaggioLogin();
             }
         });
+    }
+
+    public void aggiungiAdAnalytics() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "btn_login");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button");
+        FirebaseAnalytics.getInstance(this.getContext()).logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
     }
 
     /*public void visualizzaToastConMessaggio(String messaggio) {

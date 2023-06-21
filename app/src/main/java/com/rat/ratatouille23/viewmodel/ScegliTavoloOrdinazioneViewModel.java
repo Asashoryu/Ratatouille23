@@ -22,7 +22,7 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
 
     public ScegliTavoloOrdinazioneViewModel() {
         repository = Repository.getInstance();
-        repository.setScegliTavoloOrdinazioneViewModel(this);
+        Repository.scegliTavoloOrdinazioneViewModel = this;
 
         setListaTavoli();
     }

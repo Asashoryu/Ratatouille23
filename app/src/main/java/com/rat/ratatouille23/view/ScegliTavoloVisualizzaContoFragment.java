@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.TavoliItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentScegliTavoloVisualizzaContoBinding;
@@ -42,6 +43,17 @@ public class ScegliTavoloVisualizzaContoFragment extends Fragment {
         osservaSeTornareIndietro();
 
         return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Scegli Tavolo Visualizza Conto Fragment");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "ScegliTavoloVisualizzaContoFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
     }
 
     public void impostaTavoliItemAdapter() {

@@ -3,13 +3,13 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.repository.Repository;
+import com.rat.ratatouille23.repository.LoadRepository;
 
 import java.io.IOException;
 
 public class HomeAddettoSalaViewModel extends ViewModel {
 
-    Repository repository;
+    LoadRepository loadRepository;
 
     public MutableLiveData<Boolean> vaiARegistraOrdinazione = new MutableLiveData<>(false);
 
@@ -18,17 +18,16 @@ public class HomeAddettoSalaViewModel extends ViewModel {
     public MutableLiveData<Boolean> logOut = new MutableLiveData<>(false);
 
     public HomeAddettoSalaViewModel() {
-        repository = Repository.getInstance();
-        repository.setHomeAddettoSalaViewModel(this);
+        loadRepository = new LoadRepository();
     }
 
     public void loadPerRegistrareOrdinazione() throws IOException{
-        repository.loadTavoli();
-        repository.loadMenu();
-        repository.loadOrdinazioniAndStoricoOrdinazioni();
-        repository.loadPortateOrdine();
-        repository.loadIngredienti();
-        repository.loadAssociazioniPiattiIngredienti();
+        loadRepository.loadTavoliBackend();
+        loadRepository.loadMenuBackend();
+        loadRepository.loadOrdinazioniEStoricoOrdinazioniBackend();
+        loadRepository.loadPiattiOrdinatiBackend();
+        loadRepository.loadIngredientiBackend();
+        loadRepository.loadAssociazioniPiattiIngredientiBackend();
     }
 
     public void setVaiARegistraOrdinazione() {

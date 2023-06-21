@@ -17,19 +17,23 @@ import com.google.gson.JsonObject;
 import com.rat.ratatouille23.backendAPI.OpenFoodFactsService;
 import com.rat.ratatouille23.eccezioni.rat.Ratatouille23Exception;
 import com.rat.ratatouille23.eccezioni.rat.menu.CampiPortataVuotiException;
+import com.rat.ratatouille23.eccezioni.rat.menu.CategoriaNonTrovataException;
 import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Portata;
+import com.rat.ratatouille23.repository.PortateRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +43,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AggiungiPortataViewModel extends ViewModel {
     Repository repository;
+
+    PortateRepository portateRepository;
 
     String nomeTutti = "Tutti";
 
@@ -56,7 +62,8 @@ public class AggiungiPortataViewModel extends ViewModel {
 
     public AggiungiPortataViewModel() {
         repository = Repository.getInstance();
-        repository.setAggiungiPortataViewModel(this);
+        Repository.aggiungiPortataViewModel = this;
+        portateRepository = new PortateRepository();
     }
 
     public void aggiungiPortata(String nome, String costo, String categoria, String allergeni, String descrizione, String newCat) {
@@ -64,15 +71,42 @@ public class AggiungiPortataViewModel extends ViewModel {
             portata = null;
             if (isCliccato) {
                 checkPortata(nome,costo,newCat);
-                repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), newCat);
+                aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), newCat);
             } else {
                 checkPortata(nome,costo,categoria);
-                repository.aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), categoria);
+                aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), categoria);
             }
             System.err.println(nome + costo + categoria + descrizione);
             setTornaIndietro();
         } catch (Ratatouille23Exception | IOException | InterruptedException | ExecutionException e) {
             setMessaggioAggiungiPortata(e.getMessage());
+        }
+    }
+
+    public void aggiungiPortataAllaCategoria(Portata portata, String nomeCategoria) throws IOException, CategoriaNonTrovataException, ExecutionException, InterruptedException {
+
+        portateRepository.insertDishBackend(portata.getNome(), nomeCategoria, portata.getCosto(), true, portata.getAllergeni(), portata.getDescrizione());
+
+        try {
+            Categoria categoria = getCategoriaDiNome(nomeCategoria);
+            categoria.getPortate().add(portata);
+            Repository.personalizzaMenuViewModel.aggiornaListaPortate(categoria);
+        } catch (CategoriaNonTrovataException e) {
+            Categoria nuovaCat = new Categoria(nomeCategoria);
+            repository.getMenu().getCategorie().add(nuovaCat);
+            nuovaCat.getPortate().add(portata);
+            Repository.personalizzaMenuViewModel.aggiornaListaPortate(nuovaCat);
+        }
+    }
+
+    public Categoria getCategoriaDiNome(String nomeCategoria) throws CategoriaNonTrovataException {
+        List<Categoria> listaCategorieTrovate;
+        listaCategorieTrovate = repository.getMenu().getCategorie().stream().filter(categoria -> categoria.getNome().equals(nomeCategoria)).collect(Collectors.toList());
+        if (listaCategorieTrovate.equals(Collections.emptyList())) {
+            throw new CategoriaNonTrovataException();
+        }
+        else {
+            return listaCategorieTrovate.get(0);
         }
     }
 

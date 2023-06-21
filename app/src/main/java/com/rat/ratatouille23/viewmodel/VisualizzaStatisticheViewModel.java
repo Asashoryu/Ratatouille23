@@ -34,7 +34,7 @@ public class VisualizzaStatisticheViewModel extends ViewModel {
 
     public VisualizzaStatisticheViewModel() {
         repository = Repository.getInstance();
-        repository.setVisualizzaStatisticheViewModel(this);
+        Repository.visualizzaStatisticheViewModel = this;
 
         storicoOrdinazioniChiuse = repository.getStoricoOrdinazioniChiuse();
     }

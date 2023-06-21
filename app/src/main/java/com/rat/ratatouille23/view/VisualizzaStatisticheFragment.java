@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentVisualizzaStatisticheBinding;
 import com.rat.ratatouille23.eccezioni.rat.visualizzastatistiche.VisualizzaStatisticheException;
@@ -67,9 +68,18 @@ public class VisualizzaStatisticheFragment extends Fragment {
 
         impostaSpinnerAnniCheImpostaGrafico();
 
-
-
         return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Visualizza Statistiche Fragment");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "VisualizzaStatisticheFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
     }
 
     public void impostaSpinnerAnniCheImpostaGrafico() {

@@ -37,7 +37,7 @@ public class PersonalizzaMenuViewModel extends ViewModel {
 
     public PersonalizzaMenuViewModel() {
         repository = Repository.getInstance();
-        repository.setPersonalizzaMenuViewModel(this);
+        Repository.personalizzaMenuViewModel = this;
 
         menu = repository.getMenu();
 

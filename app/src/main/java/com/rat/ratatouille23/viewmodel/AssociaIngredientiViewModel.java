@@ -9,6 +9,7 @@ import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class AssociaIngredientiViewModel extends ViewModel {
     Repository repository;
@@ -24,7 +25,7 @@ public class AssociaIngredientiViewModel extends ViewModel {
 
     public AssociaIngredientiViewModel() {
         repository = Repository.getInstance();
-        repository.setAssociaIngredientiViewModel(this);
+        Repository.associaIngredientiViewModel = this;
 
         portata = repository.getPortataSelezionata();
 
@@ -47,7 +48,23 @@ public class AssociaIngredientiViewModel extends ViewModel {
     }
 
     public void aggiornaListaIngredientiNonPortata() {
-        listaIngredientiNonPortata.setValue(repository.getIngredientiNonAssociatiAllaPortata(portata));
+        listaIngredientiNonPortata.setValue(getIngredientiNonAssociatiAllaPortata(portata));
+    }
+
+    public ArrayList<Ingrediente> getIngredientiNonAssociatiAllaPortata(Portata portata) {
+        ArrayList<Ingrediente> ingredientiPortata;
+        ArrayList<Ingrediente> ingredientiNonPortata;
+
+        ingredientiPortata = portata.getIngredienti();
+        ingredientiNonPortata = new ArrayList<>();
+
+        for (Ingrediente ingredienteDispensa : repository.getDispensa()) {
+            if (ingredientiPortata.stream().filter(ingredientePortata -> ingredienteDispensa.getNome().equals(ingredientePortata.getNome())).collect(Collectors.toList()).isEmpty()) {
+                ingredientiNonPortata.add(ingredienteDispensa);
+            }
+        }
+
+        return ingredientiNonPortata;
     }
 
     public void setVaiAdAggiungiIngrediente() {

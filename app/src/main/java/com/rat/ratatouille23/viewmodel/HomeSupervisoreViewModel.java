@@ -2,14 +2,13 @@ package com.rat.ratatouille23.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.rat.ratatouille23.repository.Repository;
+import com.rat.ratatouille23.repository.LoadRepository;
 
 import java.io.IOException;
 
 public class HomeSupervisoreViewModel extends ViewModel {
 
-    Repository repository;
+    LoadRepository loadRepository;
     public MutableLiveData<Boolean> vaiAlMenu = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> vaiAllaDispensa = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> vaiAlConto = new MutableLiveData<>(false);
@@ -20,8 +19,7 @@ public class HomeSupervisoreViewModel extends ViewModel {
     public MutableLiveData<Boolean> logOut = new MutableLiveData<>(false);
 
     public HomeSupervisoreViewModel() {
-        repository = Repository.getInstance();
-        repository.setHomeSupervisoreViewModel(this);
+        loadRepository = new LoadRepository();
     }
 
     public void setVaiAlMenu() {
@@ -67,25 +65,25 @@ public class HomeSupervisoreViewModel extends ViewModel {
     }
 
     public void loadPerVisualizzareConto() throws IOException {
-        repository.loadTavoli();
-        repository.loadMenu();
-        repository.loadIngredienti();
-        repository.loadOrdinazioniAndStoricoOrdinazioni();
-        repository.loadPortateOrdine();
-        repository.loadAssociazioniPiattiIngredienti();
+        loadRepository.loadTavoliBackend();
+        loadRepository.loadMenuBackend();
+        loadRepository.loadIngredientiBackend();
+        loadRepository.loadOrdinazioniEStoricoOrdinazioniBackend();
+        loadRepository.loadPiattiOrdinatiBackend();
+        loadRepository.loadAssociazioniPiattiIngredientiBackend();
     }
 
     public void loadPerAssociaIngredienti() throws IOException {
-        repository.loadMenu();
-        repository.loadIngredienti();
-        repository.loadAssociazioniPiattiIngredienti();
+        loadRepository.loadMenuBackend();
+        loadRepository.loadIngredientiBackend();
+        loadRepository.loadAssociazioniPiattiIngredientiBackend();
     }
 
     public void loadPerPersonalizzaMenu() throws IOException {
-        repository.loadMenu();
+        loadRepository.loadMenuBackend();
     }
 
     public void loadPerDispensa() throws IOException {
-        repository.loadIngredienti();
+        loadRepository.loadIngredientiBackend();
     }
 }

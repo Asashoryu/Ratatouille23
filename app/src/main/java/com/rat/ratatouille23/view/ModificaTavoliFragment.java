@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.TavoliItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentModificaTavoliBinding;
@@ -45,6 +46,17 @@ public class ModificaTavoliFragment extends Fragment {
         osservaSeTornareIndietro();
 
         return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Modifica Tavoli Fragment");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "ModificaTavoliFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
     }
 
     public void impostaTavoliItemAdapter() {

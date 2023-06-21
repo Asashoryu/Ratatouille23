@@ -3,6 +3,7 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.rat.ratatouille23.DTO.Ordered_Dish_DTO;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Ingrediente;
 import com.rat.ratatouille23.model.IngredientePortata;
@@ -11,16 +12,21 @@ import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.model.PortataOrdine;
 import com.rat.ratatouille23.model.Tavolo;
+import com.rat.ratatouille23.repository.OrdinazioniRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class OrdinazioneViewModel extends ViewModel {
 
     private Repository repository;
+
+    private OrdinazioniRepository ordinazioniRepository;
 
     private Tavolo tavolo;
 
@@ -44,7 +50,8 @@ public class OrdinazioneViewModel extends ViewModel {
 
     public OrdinazioneViewModel() {
         repository = Repository.getInstance();
-        repository.setOrdinazioneViewModel(this);
+        Repository.ordinazioneViewModel = this;
+        ordinazioniRepository = new OrdinazioniRepository();
 
         menu = repository.getMenu();
 
@@ -125,7 +132,7 @@ public class OrdinazioneViewModel extends ViewModel {
     public void salvaOrdinazione() {
         try {
             if (isOrdinazioneInputValido()) {
-                repository.salvaOrdinazioneTavoloSelezionato();
+                salvaOrdinazioneTavoloSelezionato();
                 tavolo.occupaTavoloConOrdinazione(ordinazione);
                 ordinazioniTutte.add(ordinazione);
                 setTornaIndietro();
@@ -134,6 +141,40 @@ public class OrdinazioneViewModel extends ViewModel {
             System.err.println("ordinazione messaggio: "+ e.getMessage());
             setMessaggioOrdinazione(e.getMessage());
         }
+    }
+
+    public void salvaOrdinazioneTavoloSelezionato() throws IOException {
+        int nuovoId;
+        Tavolo tavoloSelezionato = repository.getTavoloSelezionato();
+        if (tavoloSelezionato.getOrdinazione().getId() == -1) {
+            nuovoId = ordinazioniRepository.getNewOrdinazioneIdBackend();
+            tavoloSelezionato.getOrdinazione().setId(nuovoId);
+        }
+        else {
+            nuovoId = tavoloSelezionato.getOrdinazione().getId();
+            ordinazioniRepository.deleteContoBackend(nuovoId);
+        }
+        System.out.println("Il nuovo id ottenuto è " + nuovoId);
+        ordinazioniRepository.saveContoBackend(nuovoId, getMinutaggioAdesso(), tavoloSelezionato.getOrdinazione().getCostoTotalePortateOrdine(), false, tavoloSelezionato.getId(), convertPortataOrdineToOrdered_Dish_DTO(tavoloSelezionato.getOrdinazione().getPortateOrdine(), nuovoId));
+    }
+
+    public List<Ordered_Dish_DTO> convertPortataOrdineToOrdered_Dish_DTO(ArrayList<PortataOrdine> portataOrdineList, int contoId) {
+        List<Ordered_Dish_DTO> orderedDishDTOList = new ArrayList<>();
+
+        for (PortataOrdine portataOrdine : portataOrdineList) {
+            Ordered_Dish_DTO orderedDishDTO = new Ordered_Dish_DTO(
+                    portataOrdine.getQuantita(),
+                    contoId,
+                    portataOrdine.getPortata().getNome()
+            );
+            orderedDishDTOList.add(orderedDishDTO);
+        }
+
+        return orderedDishDTOList;
+    }
+
+    public int getMinutaggioAdesso() {
+        return Integer.parseInt(String.valueOf(Instant.now().getEpochSecond()));
     }
 
     private boolean isOrdinazioneInputValido() {

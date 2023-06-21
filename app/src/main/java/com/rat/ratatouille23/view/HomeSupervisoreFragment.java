@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentHomeSupervisoreViewBinding;
 import com.rat.ratatouille23.viewmodel.HomeSupervisoreViewModel;
@@ -42,6 +43,17 @@ public class HomeSupervisoreFragment extends Fragment {
         osservaMessaggioErrore();
 
         return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Home Supervisore");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "HomeSupervisoreFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
     }
 
     public void osservaSeAndareAlMenu() {

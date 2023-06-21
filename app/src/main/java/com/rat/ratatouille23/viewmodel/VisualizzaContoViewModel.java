@@ -11,10 +11,15 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.model.IngredientePortata;
 import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
+import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.model.PortataOrdine;
 import com.rat.ratatouille23.model.Tavolo;
+import com.rat.ratatouille23.repository.IngredientiRepository;
+import com.rat.ratatouille23.repository.OrdinazioniRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.File;
@@ -27,6 +32,10 @@ import java.util.Random;
 
 public class VisualizzaContoViewModel extends ViewModel {
     private Repository repository;
+
+    private OrdinazioniRepository ordinazioniRepository;
+
+    private IngredientiRepository ingredientiRepository;
 
     private Tavolo tavolo;
 
@@ -45,7 +54,9 @@ public class VisualizzaContoViewModel extends ViewModel {
 
     public VisualizzaContoViewModel() {
         repository = Repository.getInstance();
-        repository.setVisualizzaContoViewModel(this);
+        Repository.visualizzaContoViewModel = this;
+        ordinazioniRepository = new OrdinazioniRepository();
+        ingredientiRepository = new IngredientiRepository();
 
         menu = repository.getMenu();
 
@@ -119,10 +130,36 @@ public class VisualizzaContoViewModel extends ViewModel {
 
     public void chiudiConto() {
         try {
-            repository.chiudiConto(ordinazione);
+            chiudiConto(ordinazione);
             setTornaIndietro();
         } catch (IOException e) {
             setMessaggioVisualizzaConto(e.getMessage());
+        }
+    }
+
+    public void chiudiConto(Ordinazione ordinazione) throws IOException {
+        ordinazioniRepository.updateContoIsChiusoBackend(ordinazione.getId(), true);
+        repository.getStoricoOrdinazioniChiuse().chiudiOrdinazione(ordinazione);
+
+        riduciQuantitaIngredientiOrdinazione(ordinazione);
+    }
+
+    public void riduciQuantitaIngredientiOrdinazione(Ordinazione ordinazione) throws IOException {
+        for (PortataOrdine portataOrdine : ordinazione.getPortateOrdine()) {
+            Portata portata = portataOrdine.getPortata();
+            System.err.println("Nome portata: " + portata.getNome());
+            System.out.println("ecco i suoi ingredienti");
+            portata.getIngredientiPortata().forEach(ingredientePortata -> System.out.println(ingredientePortata.getIngrediente().getNome()));
+            System.out.println("fine ingredienti");
+            for (IngredientePortata ingredientePortata : portata.getIngredientiPortata()) {
+                System.err.println("Nome ingrediente: " + ingredientePortata.getIngrediente().getNome());
+                Ingrediente ingrediente = ingredientePortata.getIngrediente();
+                float quantitaIngrediente = ingrediente.getQuantita();
+                quantitaIngrediente = quantitaIngrediente - (portataOrdine.getQuantita() * ingredientePortata.getQuantita());
+                // riduci in backend
+                ingredientiRepository.updateIngredientQuantityBackend(ingrediente.getNome(), quantitaIngrediente);
+                ingrediente.setQuantita(quantitaIngrediente);
+            }
         }
     }
 

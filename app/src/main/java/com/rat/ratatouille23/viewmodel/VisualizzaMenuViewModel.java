@@ -28,7 +28,7 @@ public class VisualizzaMenuViewModel extends ViewModel {
 
     public VisualizzaMenuViewModel() {
         repository = Repository.getInstance();
-        repository.setVisualizzaMenuViewModel(this);
+        Repository.visualizzaMenuViewModel = this;
 
         menu = repository.getMenu();
         aggiornaListaCategorie();

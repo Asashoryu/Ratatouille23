@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.eccezioni.rat.dispensa.PersonalizzaDispensaException;
 import com.rat.ratatouille23.model.Ingrediente;
+import com.rat.ratatouille23.repository.IngredientiRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.util.Set;
 
 public class VisualizzaIngredienteViewModel extends ViewModel {
     Repository repository;
+
+    IngredientiRepository ingredientiRepository;
 
     Ingrediente ingrediente;
 
@@ -28,18 +31,27 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
 
     public VisualizzaIngredienteViewModel() {
         repository = Repository.getInstance();
-        repository.setVisualizzaIngredienteViewModel(this);
+        Repository.visualizzaIngredienteViewModel = this;
+        ingredientiRepository = new IngredientiRepository();
 
         ingrediente = repository.getIngredienteSelezionato();
     }
 
     public void eliminaIngrediente() {
         try {
-            repository.eliminaIngredienteSelezionato();
+            eliminaIngredienteSelezionato();
         } catch (IOException e) {
             setMessaggioVisualizzaIngrediente(e.getMessage());
         }
         setTornaIndietro();
+    }
+
+    public void eliminaIngredienteSelezionato() throws IOException {
+        Ingrediente ingredienteSelezionato = repository.getIngredienteSelezionato();
+        if (ingredienteSelezionato != null) {
+            ingredientiRepository.deleteIngridientBackend(ingredienteSelezionato.getNome());
+            repository.getDispensa().remove(ingredienteSelezionato);
+        }
     }
 
     public void modificaIngrediente(String nome, String costo, String quantita, String descrizione) {
@@ -54,7 +66,7 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
             ingrediente.setQuantita(valoreQuantita);
             ingrediente.setDescrizione(descrizione);
 
-            repository.modificaIngrediente(ingrediente);
+            ingredientiRepository.updateIngredientBackend(ingrediente);
             setTornaIndietro();
         } catch (PersonalizzaDispensaException | IOException e) {
             setMessaggioVisualizzaIngrediente(e.getMessage());

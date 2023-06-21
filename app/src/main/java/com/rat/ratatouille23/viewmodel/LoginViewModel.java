@@ -3,13 +3,18 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.rat.ratatouille23.model.Dipendente;
+import com.rat.ratatouille23.repository.LoginRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 public class LoginViewModel extends ViewModel {
 
     private Dipendente dipendente;
     private Repository repository;
+
+    private LoginRepository loginRepository;
 
     public MutableLiveData<Boolean> isVaiAvanti = new MutableLiveData<>(false);
 
@@ -19,14 +24,14 @@ public class LoginViewModel extends ViewModel {
 
     public LoginViewModel() {
         repository = Repository.getInstance();
-        repository.setLoginViewModel(this);
+        Repository.loginViewModel = this;
+        loginRepository = new LoginRepository();
     }
 
     public void login(String nome, String password) {
         if (isLoginInputValido(nome, password)) {
             try {
-                repository.login(nome, password);
-                dipendente = repository.getDipendente();
+                dipendente = registraUtente(nome, password);
                 if (dipendente.getReimpostata()) {
                     setIsVaiAvanti();
                 }
@@ -37,6 +42,34 @@ public class LoginViewModel extends ViewModel {
                 dnte.printStackTrace();
                 setMessaggioLogin(dnte.getMessage());
             }
+        }
+    }
+
+    public Dipendente registraUtente(String username, String password) throws Exception {
+
+        repository.setDipendente(loginRepository.loginBackend(username, password));
+
+        Dipendente nuovoDipendente = repository.getDipendente();
+
+        if (nuovoDipendente.getToken() == null) {
+            String token = generaFCMToken();
+            loginRepository.setTokenBackend(nuovoDipendente.getUsername(), token);
+        }
+
+        return nuovoDipendente;
+    }
+
+    public String generaFCMToken() {
+        Task<String> task = FirebaseMessaging.getInstance().getToken();
+        while (!task.isComplete()) {
+            // Wait for the task to complete
+        }
+        if (task.isSuccessful()) {
+            String token = task.getResult();
+            return token;
+        } else {
+            // Handle error
+            return null;
         }
     }
 

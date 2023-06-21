@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.adapter.CategorieItemAdapter;
 import com.rat.ratatouille23.adapter.PortateContoItemAdapter;
@@ -63,6 +64,17 @@ public class OrdinazioneFragment extends Fragment {
             System.err.println("Letto tutta la lambda di categorie item adapter");
         });
         ordinazioneBinding.listaCategorie.setAdapter(categorieItemAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Schermata Ordinazione Fragment");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "OrdinazioneFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
     }
 
     public void ImpostaPortateItemAdapter() {

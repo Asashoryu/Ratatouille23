@@ -3,13 +3,13 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.repository.Repository;
+import com.rat.ratatouille23.repository.LoadRepository;
 
 import java.io.IOException;
 
 public class HomeAmministratoreViewModel extends ViewModel {
 
-    Repository repository;
+    LoadRepository loadRepository;
     public MutableLiveData<Boolean> vaiAlMenu = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> vaiAlleStatistiche = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> vaiAdAggiungiDipendente = new MutableLiveData<>(false);
@@ -20,8 +20,7 @@ public class HomeAmministratoreViewModel extends ViewModel {
     public MutableLiveData<Boolean> logOut = new MutableLiveData<>(false);
 
     public HomeAmministratoreViewModel() {
-        repository = Repository.getInstance();
-        repository.setHomeAmministratoreViewModel(this);
+        loadRepository = new LoadRepository();
     }
 
     public void setVaiAlMenu() {
@@ -62,23 +61,22 @@ public class HomeAmministratoreViewModel extends ViewModel {
     }
 
     public void loadPerStatistiche() throws IOException {
-        repository.loadMenu();
-        repository.loadTavoli();
-        repository.loadOrdinazioniAndStoricoOrdinazioni();
-        repository.loadPortateOrdine();
-
+        loadRepository.loadMenuBackend();
+        loadRepository.loadTavoliBackend();
+        loadRepository.loadOrdinazioniEStoricoOrdinazioniBackend();
+        loadRepository.loadPiattiOrdinatiBackend();
     }
 
     public void loadPerAggiuntadipendente() throws IOException {
     }
 
     public void loadPerGestioneTavolo() throws IOException {
-        repository.loadTavoli();
+        loadRepository.loadTavoliBackend();
 
     }
 
     public void loadPerPersonalizzaMenu() throws IOException {
-        repository.loadMenu();
+        loadRepository.loadMenuBackend();
 
     }
 

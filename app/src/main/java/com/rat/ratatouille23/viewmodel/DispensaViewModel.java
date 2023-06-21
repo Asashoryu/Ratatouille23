@@ -22,7 +22,7 @@ public class DispensaViewModel extends ViewModel {
 
     public DispensaViewModel() {
         repository = Repository.getInstance();
-        repository.setDispensaViewModel(this);
+        Repository.dispensaViewModel = this;
 
         setListaIngredienti();
     }

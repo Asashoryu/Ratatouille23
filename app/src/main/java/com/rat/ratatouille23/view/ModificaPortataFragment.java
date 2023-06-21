@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.databinding.FragmentModificaPortataBinding;
 import com.rat.ratatouille23.viewmodel.ModificaPortataViewModel;
@@ -66,6 +67,7 @@ public class ModificaPortataFragment extends Fragment {
             }
         });
 
+
         fragmentModificaPortataBinding.listaAllergeniText.addTextChangedListener(new TextChangedListener<EditText> (fragmentModificaPortataBinding.listaAllergeniText) {
             @Override
             public void onTextChanged(EditText target, Editable s) {
@@ -89,7 +91,17 @@ public class ModificaPortataFragment extends Fragment {
         impostaCategorieSpinner();
 
         return fragmentView;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Modifica Portata Fragment");
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "ModificaPortataFragment");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
     }
 
     private boolean almenoUnoDiverso() {

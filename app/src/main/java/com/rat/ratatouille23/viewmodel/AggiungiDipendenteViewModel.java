@@ -9,6 +9,7 @@ import com.rat.ratatouille23.eccezioni.rat.creadipendente.CammpiDipendenteVuotiE
 import com.rat.ratatouille23.eccezioni.rat.creadipendente.RuoloNonTrovatoException;
 import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Dipendente;
+import com.rat.ratatouille23.repository.LoginRepository;
 import com.rat.ratatouille23.repository.Repository;
 
 import java.io.IOException;
@@ -18,6 +19,8 @@ import java.util.Set;
 
 public class AggiungiDipendenteViewModel extends ViewModel {
     Repository repository;
+
+    LoginRepository loginRepository;
 
     Dipendente dipendente;
 
@@ -35,7 +38,8 @@ public class AggiungiDipendenteViewModel extends ViewModel {
 
     public AggiungiDipendenteViewModel() {
         repository = Repository.getInstance();
-        repository.setAggiungiDipendenteViewModel(this);
+        Repository.aggiungiDipendenteViewModel = this;
+        loginRepository = new LoginRepository();
     }
 
     public void aggiungiDipendente(String nome, String cognome, String username, String ruolo, String password) {
@@ -43,7 +47,7 @@ public class AggiungiDipendenteViewModel extends ViewModel {
             dipendente = null;
             checkCampi(nome,cognome,username,password);
             dipendente = new Dipendente(nome, cognome, username, validaRuolo(ruolo), password, false, null);
-            repository.aggiungiDipendente(dipendente);
+            loginRepository.creaDipendenteBackend(dipendente.getUsername(), dipendente.getPassword(), dipendente.getNome(), dipendente.getCognome(), dipendente.getRuolo().toString(), String.valueOf((dipendente.getReimpostata())));
             System.err.println(nome + cognome + username + ruolo + password);
             setTornaIndietro();
         } catch (AggiungiDipendenteException | IOException e) {

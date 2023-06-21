@@ -22,7 +22,7 @@ public class ScegliTavoloVisualizzaContoViewModel extends ViewModel {
 
     public ScegliTavoloVisualizzaContoViewModel() {
         repository = Repository.getInstance();
-        repository.setScegliTavoloVisualizzaContoViewModel(this);
+        Repository.scegliTavoloVisualizzaContoViewModel = this;
 
         setListaTavoli();
     }
