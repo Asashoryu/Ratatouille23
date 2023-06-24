@@ -384,8 +384,7 @@ public class VisualizzaStatisticheFragment extends Fragment {
 
         datiNonZero = Arrays.copyOfRange(datiNonZero, 0, count);
         Arrays.sort(datiNonZero);
-        int length = datiNonZero.length;
-        return somma / length;
+        return somma / count;
     }
 
     public static float getMassimo(float[] dati) {
