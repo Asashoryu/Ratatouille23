@@ -370,20 +370,15 @@ public class VisualizzaStatisticheFragment extends Fragment {
                 throw new VisualizzaStatisticheException("Trovato un dato negativo nel calcolo della media");
             }
         }
-
-        float[] datiNonZero = new float[dati.length];
         int count = 0;
         for (float dato : dati ) {
             if (dato != 0) {
-                datiNonZero[count++] = dato;
+                count+;
             }
         }
         if (count == 0) {
             return 0;
         }
-
-        datiNonZero = Arrays.copyOfRange(datiNonZero, 0, count);
-        Arrays.sort(datiNonZero);
         return somma / count;
     }
 
