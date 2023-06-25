@@ -371,13 +371,18 @@ public class VisualizzaStatisticheFragment extends Fragment {
             }
         }
         int count = 0;
+        int sum=0;
         for (float dato : dati ) {
             if (dato != 0) {
-                count+;
+                count++;
+                sum+=dato;
             }
         }
         if (count == 0) {
             return 0;
+        }
+        if(sum != somma){
+             throw new VisualizzaStatisticheException("La somma non calcolata non combacia con la somma pasata");
         }
         return somma / count;
     }
