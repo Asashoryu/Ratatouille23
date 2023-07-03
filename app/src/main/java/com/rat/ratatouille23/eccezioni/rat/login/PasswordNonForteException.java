@@ -6,6 +6,7 @@ public class PasswordNonForteException extends ReimpostaPasswordException {
     public PasswordNonForteException(String s) {
         super(s);
     }
+
     public PasswordNonForteException() {
         super(messaggioDefault);
     }

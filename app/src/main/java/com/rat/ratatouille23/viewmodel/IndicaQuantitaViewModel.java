@@ -3,7 +3,7 @@ package com.rat.ratatouille23.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantiaIngredienteException;
+import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantitaIngredienteException;
 import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantitaIngredienteNegativaException;
 import com.rat.ratatouille23.eccezioni.rat.associaingredienti.QuantitaIngredienteNullException;
 import com.rat.ratatouille23.model.Ingrediente;
@@ -38,7 +38,7 @@ public class IndicaQuantitaViewModel extends ViewModel {
             checkQuantitaNegativa(Float.parseFloat(quantita));
             aggiungiIngredienteAllaPortataSelezionata(ingrediente, Float.parseFloat(quantita));
             setTornaIndietro();
-        } catch (IOException | QuantiaIngredienteException e) {
+        } catch (IOException | QuantitaIngredienteException e) {
             setMessaggioIndicaQuantita(e.getMessage());
         }
     }

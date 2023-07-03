@@ -71,6 +71,7 @@ public class OrdinazioneViewModel extends ViewModel {
         listaCategorie.setValue(menu.getCategorie());
         menu.getCategorie().forEach(categoria -> {System.out.println(categoria.getNome());});
     }
+
     public void aggiornaListaPortate(Categoria categoriaSelezionata) {
         listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
     }

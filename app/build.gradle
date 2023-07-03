@@ -4,6 +4,11 @@ plugins {
     // Add the Google services Gradle plugin
     id 'com.google.gms.google-services'
 
+    // Add the Performance Monitoring Gradle plugin
+    id("com.google.firebase.firebase-perf")
+
+    // Add the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -96,4 +101,13 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
+    implementation 'nl.talsmasoftware:umldoclet:2.1.0'
+
+    // Add the dependency for the Performance Monitoring library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-perf")
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-crashlytics")
 }

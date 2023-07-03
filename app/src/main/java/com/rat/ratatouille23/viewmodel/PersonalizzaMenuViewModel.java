@@ -106,6 +106,7 @@ public class PersonalizzaMenuViewModel extends ViewModel {
     public void setVaiAdAggiungiPortata() {
         vaiAdAggiungiPortata.setValue(true);
     }
+
     public void setFalseVaiAdAggiungiPortata() {
         vaiAdAggiungiPortata.setValue(false);
     }

@@ -23,6 +23,7 @@ public class PortateItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public PortateItemAdapter(OnPortataCliccata onPortataCliccata) {
         this.onPortataCliccata = onPortataCliccata;
     }
+
     public void setData(ArrayList<Portata> data) {
         this.data = data;
         notifyDataSetChanged();

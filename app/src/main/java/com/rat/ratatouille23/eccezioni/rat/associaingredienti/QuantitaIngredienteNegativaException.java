@@ -1,6 +1,6 @@
 package com.rat.ratatouille23.eccezioni.rat.associaingredienti;
 
-public class QuantitaIngredienteNegativaException extends QuantiaIngredienteException {
+public class QuantitaIngredienteNegativaException extends QuantitaIngredienteException {
 
     private static String messaggioDefault = "Quantita inserita negativa";
 

@@ -10,8 +10,6 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.R;
 import com.rat.ratatouille23.eccezioni.rat.menu.CampiPortataVuotiException;
 import com.rat.ratatouille23.eccezioni.rat.menu.CategoriaNonTrovataException;
-import com.rat.ratatouille23.eccezioni.rat.menu.PersonalizzaMenuException;
-import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.PortateRepository;
@@ -39,7 +37,6 @@ public class ModificaPortataViewModel extends ViewModel {
 
     int indexCategoriaIniziale;
 
-    ArrayList<Allergene> listaAllergeniSelezionati;
 
     public int indiceCategoria = 0;
 

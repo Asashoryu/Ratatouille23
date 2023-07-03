@@ -39,6 +39,7 @@ public class DispensaViewModel extends ViewModel {
     public void setVaiAdAggiungiIngrediente() {
         vaiAdAggiungiIngrediente.setValue(true);
     }
+
     public void setFalseVaiAdAggiungiIngrediente() {
         vaiAdAggiungiIngrediente.setValue(false);
     }

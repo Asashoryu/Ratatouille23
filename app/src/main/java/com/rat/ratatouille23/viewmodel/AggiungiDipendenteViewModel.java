@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import com.rat.ratatouille23.eccezioni.rat.creadipendente.AggiungiDipendenteException;
 import com.rat.ratatouille23.eccezioni.rat.creadipendente.CammpiDipendenteVuotiException;
 import com.rat.ratatouille23.eccezioni.rat.creadipendente.RuoloNonTrovatoException;
-import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Dipendente;
 import com.rat.ratatouille23.repository.LoginRepository;
 import com.rat.ratatouille23.repository.Repository;
@@ -27,8 +26,6 @@ public class AggiungiDipendenteViewModel extends ViewModel {
     private final String termineSupervisore = "Supervisore";
     private final String termineAddettoSala = "Addetto sala";
     private final String termineAddettoCucina = "Addetto cucina";
-
-    ArrayList<Allergene> listaAllergeniSelezionati;
 
     public final ObservableField<String> selectedRuolo = new ObservableField<>("");
 

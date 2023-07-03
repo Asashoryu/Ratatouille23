@@ -39,6 +39,7 @@ public class VisualizzaMenuViewModel extends ViewModel {
         menu.getCategorie().forEach(categoria -> {System.out.println(categoria.getNome());});
 
     }
+
     public void aggiornaListaPortate(Categoria categoriaSelezionata) {
         listaPortate.setValue(menu.getPortateDellaCategoria(categoriaSelezionata));
     }

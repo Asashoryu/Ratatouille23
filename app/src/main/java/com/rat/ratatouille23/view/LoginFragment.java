@@ -57,6 +57,7 @@ public class LoginFragment extends Fragment {
             }
         });
     }
+
     public void osservaSeAndareAvanti() {
         loginViewModel.isVaiAvanti.observe(getViewLifecycleOwner(), (isVaiAvanti) -> {
             if (isVaiAvanti == true) {

@@ -36,6 +36,7 @@ public class ReimpostaPasswordViewModel extends ViewModel {
     public void setTornaIndietro() {
         tornaIndietro.setValue(true);
     }
+
     public void setFalseTornaIndietro() {
         tornaIndietro.setValue(false);
     }
@@ -101,7 +102,7 @@ public class ReimpostaPasswordViewModel extends ViewModel {
         return true;
     }
 
-    public boolean reimpostaPasswordNuova (String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) throws ReimpostaPasswordException {
+    public boolean reimpostaPasswordNuova(String vecchiaPassword, String nuovaPassword, String confermaNuovaPassword) throws ReimpostaPasswordException {
 
         if (vecchiaPassword == null || nuovaPassword == null || confermaNuovaPassword == null) {
             throw new ReimpostaPasswordException("Una stringa passata è null");

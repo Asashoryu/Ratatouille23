@@ -9,6 +9,7 @@ public class ReimpostaPasswordException extends Ratatouille23Exception {
     public ReimpostaPasswordException(String s) {
         super(s);
     }
+
     public ReimpostaPasswordException() {
         super(messaggioDefault);
     }

@@ -70,14 +70,13 @@ public class AssociaIngredientiViewModel extends ViewModel {
     public void setVaiAdAggiungiIngrediente() {
         vaiAdAggiungiIngrediente.setValue(true);
     }
+
     public void setFalseVaiAdAggiungiIngrediente() {
         vaiAdAggiungiIngrediente.setValue(false);
     }
 
     public void aggiungiIngredienteAllaPortata(Ingrediente ingrediente, Float quantita) {
-        Ingrediente ingredienteAssociato;
-        ingredienteAssociato = new Ingrediente(ingrediente.getNome(), ingrediente.getCosto(), quantita, ingrediente.getUnitaMisura(), ingrediente.getSoglia(), ingrediente.getDescrizione());
-        portata.aggiungiIngrediente(ingredienteAssociato, quantita);
+        portata.aggiungiIngrediente(ingrediente, quantita);
         aggiornaListaIngredientiPortata();
         aggiornaListaIngredientiNonPortata();
     }

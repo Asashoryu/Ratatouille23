@@ -108,11 +108,12 @@ public class VisualizzaIngredienteViewModel extends ViewModel {
         alternaIcon(icona);
     }
 
-    public void setQuanitaEditable (ImageView icona, EditText quantita) {
+    public void setQuantitaEditable(ImageView icona, EditText quantita) {
         quantita.setEnabled(!quantita.isEnabled());
         quantita.setText(ingrediente.getQuantita().toString());
         alternaIcon(icona);
     }
+
     public void setDescrizioneEditable (ImageView icona, EditText descrizione) {
         descrizione.setEnabled(!descrizione.isEnabled());
         descrizione.setText(ingrediente.getDescrizione());

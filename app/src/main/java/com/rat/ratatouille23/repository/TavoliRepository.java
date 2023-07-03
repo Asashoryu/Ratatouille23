@@ -59,7 +59,6 @@ public class TavoliRepository {
     }
 
 
-
     public void addTableBackend(int id) throws IOException {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(chain -> {

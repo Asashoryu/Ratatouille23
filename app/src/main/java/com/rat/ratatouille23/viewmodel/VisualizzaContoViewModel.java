@@ -17,6 +17,7 @@ import com.rat.ratatouille23.model.Menu;
 import com.rat.ratatouille23.model.Ordinazione;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.model.PortataOrdine;
+import com.rat.ratatouille23.model.StoricoOrdinazioniChiuse;
 import com.rat.ratatouille23.model.Tavolo;
 import com.rat.ratatouille23.repository.IngredientiRepository;
 import com.rat.ratatouille23.repository.OrdinazioniRepository;
@@ -38,10 +39,9 @@ public class VisualizzaContoViewModel extends ViewModel {
     private IngredientiRepository ingredientiRepository;
 
     private Tavolo tavolo;
-
-    private Menu menu;
-
     private Ordinazione ordinazione;
+
+    private StoricoOrdinazioniChiuse storicoOrdinazioniChiuse;
 
     private Context context;
     public MutableLiveData<ArrayList<PortataOrdine>> listaPortateConto = new MutableLiveData<ArrayList<PortataOrdine>>();
@@ -58,10 +58,10 @@ public class VisualizzaContoViewModel extends ViewModel {
         ordinazioniRepository = new OrdinazioniRepository();
         ingredientiRepository = new IngredientiRepository();
 
-        menu = repository.getMenu();
-
         tavolo = repository.getTavoloSelezionato();
         ordinazione = tavolo.getOrdinazione();
+        storicoOrdinazioniChiuse = repository.getStoricoOrdinazioniChiuse();
+
         aggiornaListaPortateConto();
         aggiornaCostoTotaleConto();
     }
@@ -139,7 +139,7 @@ public class VisualizzaContoViewModel extends ViewModel {
 
     public void chiudiConto(Ordinazione ordinazione) throws IOException {
         ordinazioniRepository.updateContoIsChiusoBackend(ordinazione.getId(), true);
-        repository.getStoricoOrdinazioniChiuse().chiudiOrdinazione(ordinazione);
+        storicoOrdinazioniChiuse.chiudiOrdinazione(ordinazione);
 
         riduciQuantitaIngredientiOrdinazione(ordinazione);
     }

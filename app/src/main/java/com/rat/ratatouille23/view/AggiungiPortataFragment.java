@@ -15,11 +15,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rat.ratatouille23.R;
-import com.rat.ratatouille23.adapter.IngredientiItemAdapter;
 import com.rat.ratatouille23.databinding.FragmentAggiungiPortataBinding;
 import com.rat.ratatouille23.viewmodel.AggiungiPortataViewModel;
 
@@ -91,7 +89,7 @@ public class AggiungiPortataFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()) {
-                    aggiungiPortataViewModel.searchFoodInfo(s.toString(), autoCompleteTextView);
+                    aggiungiPortataViewModel.autocompletaFoodInfo(s.toString(), autoCompleteTextView);
                 }
             }
 

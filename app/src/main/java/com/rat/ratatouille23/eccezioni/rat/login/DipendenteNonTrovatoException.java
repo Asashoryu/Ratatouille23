@@ -9,6 +9,7 @@ public class DipendenteNonTrovatoException extends LoginException {
     public DipendenteNonTrovatoException(String s) {
         super(s);
     }
+
     public DipendenteNonTrovatoException() {
         super(messaggioDefault);
     }

@@ -101,9 +101,11 @@ public class LoginViewModel extends ViewModel {
     public void cancellaMessaggioLogin() {
         messaggioLogin.setValue("");
     }
+
     public void setIsVaiAvanti() {
         isVaiAvanti.setValue(true);
     }
+
     public void setFalseIsVaiAvanti() {
         isVaiAvanti.setValue(false);
     }
@@ -111,6 +113,7 @@ public class LoginViewModel extends ViewModel {
     public void setIsVaiAReimpostaPassword() {
         isVaiAReimpostaPassword.setValue(true);
     }
+
     public void setFalseIsVaiAReimpostaPassword() {
         isVaiAReimpostaPassword.setValue(false);
     }

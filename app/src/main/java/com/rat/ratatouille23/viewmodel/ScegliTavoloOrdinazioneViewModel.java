@@ -39,6 +39,7 @@ public class ScegliTavoloOrdinazioneViewModel extends ViewModel {
     public void setVaiAdAggiungiTavolo() {
         vaiAdAggiungiTavolo.setValue(true);
     }
+
     public void setFalseVaiAdAggiungiTavolo() {
         vaiAdAggiungiTavolo.setValue(false);
     }

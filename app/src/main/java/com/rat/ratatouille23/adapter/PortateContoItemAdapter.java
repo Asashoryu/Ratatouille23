@@ -21,6 +21,7 @@ public class PortateContoItemAdapter extends RecyclerView.Adapter<RecyclerView.V
     public PortateContoItemAdapter(PortateContoItemAdapter.OnPortataOrdineContoCliccata onPortataOrdineContoCliccata) {
         this.onPortataOrdineContoCliccata = onPortataOrdineContoCliccata;
     }
+
     public void setData(ArrayList<PortataOrdine> data) {
         this.data = data;
         notifyDataSetChanged();

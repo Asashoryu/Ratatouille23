@@ -373,7 +373,7 @@ public class VisualizzaStatisticheFragment extends Fragment {
         int count = 0;
         for (float dato : dati ) {
             if (dato != 0) {
-                count+;
+                count++;
             }
         }
         if (count == 0) {

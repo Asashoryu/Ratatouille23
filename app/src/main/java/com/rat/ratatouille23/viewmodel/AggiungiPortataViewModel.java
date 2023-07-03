@@ -18,7 +18,6 @@ import com.rat.ratatouille23.backendAPI.OpenFoodFactsService;
 import com.rat.ratatouille23.eccezioni.rat.Ratatouille23Exception;
 import com.rat.ratatouille23.eccezioni.rat.menu.CampiPortataVuotiException;
 import com.rat.ratatouille23.eccezioni.rat.menu.CategoriaNonTrovataException;
-import com.rat.ratatouille23.model.Allergene;
 import com.rat.ratatouille23.model.Categoria;
 import com.rat.ratatouille23.model.Portata;
 import com.rat.ratatouille23.repository.PortateRepository;
@@ -56,7 +55,7 @@ public class AggiungiPortataViewModel extends ViewModel {
 
     public MutableLiveData<String> messaggioAggiungiPortata = new MutableLiveData<>("");
 
-    public final ObservableField<String> selectedCategory = new ObservableField<>("");
+    public final ObservableField<String> categoriaSelezionata = new ObservableField<>("");
 
     private MutableLiveData<JsonObject> foodInfo = new MutableLiveData<>();
 
@@ -66,12 +65,12 @@ public class AggiungiPortataViewModel extends ViewModel {
         portateRepository = new PortateRepository();
     }
 
-    public void aggiungiPortata(String nome, String costo, String categoria, String allergeni, String descrizione, String newCat) {
+    public void aggiungiPortata(String nome, String costo, String categoria, String allergeni, String descrizione, String nuovaCategoria) {
         try {
             portata = null;
             if (isCliccato) {
-                checkPortata(nome,costo,newCat);
-                aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), newCat);
+                checkPortata(nome,costo,nuovaCategoria);
+                aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), nuovaCategoria);
             } else {
                 checkPortata(nome,costo,categoria);
                 aggiungiPortataAllaCategoria(new Portata(nome, Float.parseFloat(costo), descrizione, allergeni), categoria);
@@ -129,18 +128,18 @@ public class AggiungiPortataViewModel extends ViewModel {
         }
     }
 
-    public void isCliccato(EditText newCat, Spinner oldCat) {
-        newCat.setEnabled(!newCat.isEnabled());
-        oldCat.setEnabled(!newCat.isEnabled());
+    public void isCliccato(EditText nuovaCategoria, Spinner vecchiaCategoria) {
+        nuovaCategoria.setEnabled(!nuovaCategoria.isEnabled());
+        vecchiaCategoria.setEnabled(!nuovaCategoria.isEnabled());
 
         isCliccato = !isCliccato;
 
-        if (newCat.isEnabled()) {
-            newCat.setVisibility(View.VISIBLE);
+        if (nuovaCategoria.isEnabled()) {
+            nuovaCategoria.setVisibility(View.VISIBLE);
         }
         else {
-            newCat.setVisibility(View.INVISIBLE);
-            newCat.setText("");
+            nuovaCategoria.setVisibility(View.INVISIBLE);
+            nuovaCategoria.setText("");
         }
     }
 
@@ -148,7 +147,7 @@ public class AggiungiPortataViewModel extends ViewModel {
         return foodInfo;
     }
 
-    public void searchFoodInfo(String foodName, AutoCompleteTextView autoCompleteTextView) {
+    public void autocompletaFoodInfo(String foodName, AutoCompleteTextView autoCompleteTextView) {
         if (foodName.length() > 0) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("https://it.openfoodfacts.org")
@@ -258,10 +257,10 @@ public class AggiungiPortataViewModel extends ViewModel {
     }
 
     public ObservableField<String> getSelectedCategory() {
-        return selectedCategory;
+        return categoriaSelezionata;
     }
 
     public String getSelectedCategoryName() {
-        return selectedCategory.get();
+        return categoriaSelezionata.get();
     }
 }
